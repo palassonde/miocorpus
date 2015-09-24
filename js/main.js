@@ -1,67 +1,98 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game',
-               {preload: preload, create: create, update: update, render: render});
+var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
-var server = 'http://localhost:8080/'
+var server = 'http://localhost:8080/';
+var player;
+var cursors;
+var platforms;
 
 function preload() {
 
-	game.load.image('wallh', server+'assets/wallh.png');
-	game.load.image('wallv', server+'assets/wallv.png');
-	game.load.image('ball', server+'assets/ball.png');
+    // Sprites
+	game.load.image('platform', server+'assets/platform.png');
+	game.load.image('player', server+'assets/player.png');
 }
-
-var ball;
 
 function create() {
 
+    // Game stage
+    game.stage.backgroundColor = '#AAAAAA';
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    //  This creates a simple sprite that is using our loaded image and displays it on-screen and assign it to a variable
-    wallh = game.add.sprite(0, 0, 'wallh');
-    wallvr = game.add.sprite(600, 0, 'wallv');
-    wallhd = game.add.sprite(0, 670, 'wallh');
-    wallv = game.add.sprite(0, 0, 'wallv');
+    //game.physics.arcade.gravity.y = 600;
+    game.world.setBounds(0, 0, 2000, 2000);
+
+    // Platforms
+    platforms = game.add.group();
+    platforms.enableBody = true;
+
+    //// Ground
+    var ground = platforms.create(0,1910,'platform');
+    ground.scale.setTo(10,3);
+
+    //// Ledges
+    platforms.create(200,1850,'platform');
+    platforms.create(580,1790,'platform');
+    platforms.setAll('body.immovable', true);
+    platforms.setAll('body.checkCollision.down', false);
+    platforms.setAll('body.checkCollision.left', false);
+    platforms.setAll('body.checkCollision.right', false);
     
-
-    ball = game.add.sprite(0,0, 'ball');
-
-    game.physics.enable(ball, Phaser.Physics.ARCADE);
-    game.stage.backgroundColor = '#DDDDDD';
-    //  This gets it moving
-    ball.body.velocity.setTo(200, 200);
+    // Player
+    player = game.add.sprite(5,1800, 'player');
+    game.camera.follow(player);
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.body.gravity.y = 500;
+    player.body.collideWorldBounds = true;
     
-    //  This makes the game world bounce-able
-    ball.body.collideWorldBounds = true;
-    
-    //  This sets the image bounce energy for the horizontal  and vertical vectors (as an x,y point). "1" is 100% energy return
-    ball.body.bounce.set(0.8);
-
-    ball.body.gravity.set(0, 180);
-
-    game.physics.enable(wallh, Phaser.Physics.ARCADE);
-    wallh.body.immovable = true;
-
-    game.physics.enable(wallv, Phaser.Physics.ARCADE);
-    wallv.body.immovable = true;
-
-    game.physics.enable(wallhd, Phaser.Physics.ARCADE);
-    wallhd.body.immovable = true;
-
-    game.physics.enable(wallvr, Phaser.Physics.ARCADE);
-    wallvr.body.immovable = true;
+    // Initializing Controls
+    cursors = game.input.keyboard.createCursorKeys();
 }
 
 function update() {
 
-    game.physics.arcade.collide(ball, wallv);
-    game.physics.arcade.collide(ball, wallh);
-    game.physics.arcade.collide(ball, wallvr);
-    game.physics.arcade.collide(ball, wallhd);
+    // Collisions
+    game.physics.arcade.collide(player, platforms);
+
+    // Refresh changed values
+    player.body.velocity.x = 0;
+    player.body.acceleration.y = 0;
+
+
+    // controls
+    if (cursors.left.isDown)
+    {
+        player.body.velocity.x = -150;
+    }
+    else if (cursors.right.isDown)
+    {
+        player.body.velocity.x = 150;
+    }
+
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.body.velocity.y = -250;
+    }
+
+    if (!player.body.touching.down && cursors.down.isDown){
+        player.body.acceleration.y = 2000;
+    }
+    else if (player.body.touching.down && cursors.down.isDown){
+
+        // crouching
+    }
+
+    if (player.body.touching.down && cursors.shiftKey && cursors.down.isDown){
+
+        // getting down from platforms
+    }
+
+    
+
 }
 
 function render () {
 
     //debug helper
-    //game.debug.bodyInfo(ball, 16, 24);
+    game.debug.bodyInfo(player, 16, 24);
 
 }

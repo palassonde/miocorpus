@@ -4,13 +4,13 @@ INF5071 Projet de jeu vidéo
 
 ## Partir le serveur
 
-$ cd ~/game
-$ java Server
+`$ cd ~/game`\
+`$ java Server`
 
 Naviguer à http://localhost:8080 affichera la page d'index donc le jeu,
 les ressources sont accessibles par la même adresse exemple : http://localhost:8080/assets/ball.png
 
-## Definitions des genres
+## Définitions des genres
 
 * Tower Defense
 
