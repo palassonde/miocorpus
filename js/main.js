@@ -1,11 +1,15 @@
 // Julien Perron
 
-var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
+var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});
 
 var server = 'http://localhost:8080/';
 var player;
 var cursors;
 var platforms;
+
+var lol = 0;
+var time = 0;
+var ihih = 0;
 
 function preload() {
 
@@ -21,56 +25,62 @@ function create() {
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //game.physics.arcade.gravity.y = 600;
-    game.world.setBounds(0, 0, 2000, 2000);
+    game.world.setBounds(0, 0, 2000, 1200);
 
     // Platforms
     platforms = game.add.group();
     platforms.enableBody = true;
 
     //// Ground
-    var ground = platforms.create(0,1910,'platform');
-    ground.scale.setTo(10,3);
+    var ground = platforms.create(0,1170,'platform');
+    ground.scale.setTo(10,2);
+	var jungleGround = platforms.create(0,600,'platform');
+	jungleGround.scale.setTo(10,1);
 
     //// Ledges
-    platforms.create(200,1850,'platform');
-    platforms.create(580,1790,'platform');
+	for(var i = 0; i<100;i++){
+		var x = i*400;
+		x= x%1800;
+		var y = 1800 - i*60;
+		platforms.create(x,y,'platform');
+		//console.log(x + "ss" + y)
+	}
+    //platforms.create(200,1850,'platform');
+   // platforms.create(580,1790,'platform');
     platforms.setAll('body.immovable', true);
     platforms.setAll('body.checkCollision.down', false);
     platforms.setAll('body.checkCollision.left', false);
     platforms.setAll('body.checkCollision.right', false);
     
     // Player
-    player = game.add.sprite(5,1800, 'player');
+    player = game.add.sprite(20,1000, 'player');
     game.camera.follow(player);
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.gravity.y = 500;
     player.body.collideWorldBounds = true;
     
+	// Ennemies
+	 ennemies = game.add.group();
+	 ennemies.enableBody = true;
+	 ennemies.physicsBodyType = Phaser.Physics.ARCADE;
+	 ennemies.setAll("body.gravity.y", 500);
+	 ennemies.setAll("body.collideWorldBounds", true);
+	
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function update() {
-
-    // Collisions
-    game.physics.arcade.collide(player, platforms);
-
-    // Refresh changed values
-    player.body.velocity.x = 0;
-    player.body.acceleration.y = 0;
-
-
-    // controls
-    if (cursors.left.isDown)
+function movePlayer(){
+	if (cursors.left.isDown)
     {
-        player.body.velocity.x = -150;
+        player.body.velocity.x = -300;
     }
     else if (cursors.right.isDown)
     {
-        player.body.velocity.x = 150;
+        player.body.velocity.x = 300;
     }
 
-    if (cursors.up.isDown && player.body.touching.down)
+    if (cursors.up.isDown)// && player.body.touching.down)
     {
         player.body.velocity.y = -250;
     }
@@ -87,14 +97,76 @@ function update() {
 
         // getting down from platforms
     }
+}
 
+function update() {
+
+    // Collisions
+    game.physics.arcade.collide(player, platforms);
+	game.physics.arcade.collide(ennemies, platforms);
+	game.physics.arcade.collide(ennemies, player);
+	game.physics.arcade.collide(ennemies);
     
+	// Refresh changed values
+	player.body.velocity.x = 0;
+    player.body.acceleration.y = 0;
+	
+
+
+    // controls
+    if (cursors.left.isDown)
+    {
+        player.body.velocity.x = -300;
+    }
+    else if (cursors.right.isDown)
+    {
+        player.body.velocity.x = 300;
+    }
+
+    if (cursors.up.isDown)// && player.body.touching.down)
+    {
+        player.body.velocity.y = -250;
+    }
+
+    if (!player.body.touching.down && cursors.down.isDown){
+        player.body.acceleration.y = 2000;
+    }
+    else if (player.body.touching.down && cursors.down.isDown){
+
+        // crouching
+    }
+
+    if (player.body.touching.down && cursors.shiftKey && cursors.down.isDown){
+
+        // getting down from platforms
+    }
+	time += (game.time.now % 1000);
+//console.log (time);
+	//time += (game.time.now % 1000);
+    //// Ledges
+	if(time > 30000 && ihih < 3000){
+		lol = -50;
+		var x = 1000;
+	
+		var y = 1800;
+		var ennemie = ennemies.create(1900,1000,'player');
+		//console.log(x + "ss" + y)
+		ennemie.body.velocity.x = lol;
+		time = 0;
+		ihih += 1;
+		
+		game.physics.enable(ennemie, Phaser.Physics.ARCADE);
+    ennemie.body.gravity.y = 500;
+    ennemie.body.collideWorldBounds = true;
+	}
+	
+
 
 }
 
-function render () {
+// function render () {
 
-    //debug helper
-    game.debug.bodyInfo(player, 16, 24);
+    // //debug helper
+   // // game.debug.bodyInfo(player, 16, 24);
 
-}
+// }
