@@ -1,3 +1,5 @@
+// Julien Perron
+
 var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
 var server = 'http://localhost:8080/';
