@@ -1,28 +1,32 @@
 // Pierre-Alexandre Lassonde
 // Julien Perron
 
-var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});
+var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
 var server = 'http://localhost:8080/';
 var player;
 var cursors;
 var platforms;
+var playerFacing = 'right';
 
 function preload() {
 
     // Sprites
 	game.load.image('platform', server+'assets/platform.png');
-	game.load.image('player', server+'assets/player.png');
+	//game.load.image('player', server+'assets/char.png');
+    game.load.spritesheet('player', server+'assets/player.png', 50, 100);
+    game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
+
 }
 
 function create() {
 
     // Game stage
-    game.stage.backgroundColor = '#AAAAAA';
+    game.stage.backgroundColor = '#6666FF';
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //game.physics.arcade.gravity.y = 600;
-    game.world.setBounds(0, 0, 2000, 1200);
+    game.world.setBounds(0, 0, 2200, 1200);
 
     // Platforms
     platforms = game.add.group();
@@ -48,8 +52,12 @@ function create() {
     player = game.add.sprite(20,1000, 'player');
     
     game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.gravity.y = 500;
+    player.body.gravity.y = 600;
     player.body.collideWorldBounds = true;
+    player.animations.add('right', [3,4,5], 5, true);
+    player.animations.add('left', [6,7,8], 5, true);
+    //player.animations.play('idle', 10, true);
+    player.anchor.set(0.5);
     
 	// Camera
 	game.camera.y = 1200;
@@ -86,7 +94,7 @@ function moveCamera(){
 
     game.camera.x = player.x -512 ;
 
-    if (player.y < 600){
+    if (player.y < 570){
         if (game.camera.y > 30){
             game.camera.y -= 15;
         }
@@ -107,15 +115,15 @@ function ennemyWave(){
         var x = 1000;
     
         var y = 1800;
-        var ennemie = ennemies.create(1900,1000,'player');
+        var ennemy = ennemies.create(1900,1000,'player');
         //console.log(x + "ss" + y)
-        ennemie.body.velocity.x = lol;
+        ennemy.body.velocity.x = lol;
         time = 0;
         ihih += 1;
         
-        game.physics.enable(ennemie, Phaser.Physics.ARCADE);
-        ennemie.body.gravity.y = 500;
-        ennemie.body.collideWorldBounds = true;
+        game.physics.enable(ennemy, Phaser.Physics.ARCADE);
+        ennemy.body.gravity.y = 500;
+        ennemy.body.collideWorldBounds = true;
     }   
 }
 
@@ -123,7 +131,7 @@ function createPlatforms(){
 
     var x = 200;
 
-    for (var j = 0; j < 4; j++){
+    for (var j = 0; j < 5; j++){
         if(j % 2 === 0){
             for(var i = 0; i < 4 ; i++){
                     var y = 1050 - (i * 110) ;
@@ -142,14 +150,27 @@ function createPlatforms(){
 }
 
 function movePlayer(){
-    
+
+   
     if (cursors.left.isDown)
     {
         player.body.velocity.x = -300;
+
+        if (playerFacing != 'left')
+        {
+            player.animations.play('left');
+            playerFacing = 'left';
+        }
     }
     else if (cursors.right.isDown)
     {
         player.body.velocity.x = 300;
+
+        if (playerFacing != 'right')
+        {
+            player.animations.play('right');
+            playerFacing = 'right';
+        }
     }
 
     if (cursors.up.isDown && player.body.touching.down)
@@ -169,6 +190,9 @@ function movePlayer(){
 
         // getting down from platforms
     }
+
+    player.animations.play('idle');
+    playerFacing = 'idle';
 }
 
 function render () {
