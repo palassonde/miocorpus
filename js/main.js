@@ -1,6 +1,7 @@
+// Pierre-Alexandre Lassonde
 // Julien Perron
 
-var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});
+var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});//,render : remder});
 
 var server = 'http://localhost:8080/';
 var player;
@@ -38,13 +39,8 @@ function create() {
 	jungleGround.scale.setTo(10,1);
 
     //// Ledges
-	for(var i = 0; i<100;i++){
-		var x = i*400;
-		x= x%1800;
-		var y = 1800 - i*60;
-		platforms.create(x,y,'platform');
-		//console.log(x + "ss" + y)
-	}
+    createPlatforms();
+
     //platforms.create(200,1850,'platform');
    // platforms.create(580,1790,'platform');
     platforms.setAll('body.immovable', true);
@@ -71,6 +67,34 @@ function create() {
 	
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
+}
+
+function createPlatforms(){
+
+    var x = 200;
+
+    for (var j = 0; j < 4; j++){
+
+        if(j % 2 === 0){
+
+            for(var i = 0; i < 4 ; i++){
+    
+                var y = 1050 - (i * 110) ;
+                platforms.create(x,y,'platform');
+            }
+
+        } else {
+
+            for(var i = 0; i < 3 ; i++){
+    
+                var y = 1000 - (i * 110) ;
+                platforms.create(x,y,'platform');
+            }
+        }
+
+        x += 400;
+    }
+
 }
 
 function movePlayer(){
@@ -155,6 +179,7 @@ function update() {
 	//time += (game.time.now % 1000);
     //// Ledges
 	if(time > 30000 && ihih < 3000){
+
 		lol = -50;
 		var x = 1000;
 	
@@ -166,17 +191,16 @@ function update() {
 		ihih += 1;
 		
 		game.physics.enable(ennemie, Phaser.Physics.ARCADE);
-    ennemie.body.gravity.y = 500;
-    ennemie.body.collideWorldBounds = true;
-	}
-	
+        ennemie.body.gravity.y = 500;
+        ennemie.body.collideWorldBounds = true;
+	}	
 
 
 }
 
-// function render () {
+//  function render () {
 
-    // //debug helper
-   // game.debug.bodyInfo(player, 16, 24);
+//     // //debug helper
+//     game.debug.bodyInfo(player, 16, 24);
 
 // }
