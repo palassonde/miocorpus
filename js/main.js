@@ -1,16 +1,12 @@
 // Pierre-Alexandre Lassonde
 // Julien Perron
 
-var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});//,render : remder});
+var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update});
 
 var server = 'http://localhost:8080/';
 var player;
 var cursors;
 var platforms;
-
-var lol = 0;
-var time = 0;
-var ihih = 0;
 
 function preload() {
 
@@ -69,63 +65,6 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function createPlatforms(){
-
-    var x = 200;
-
-    for (var j = 0; j < 4; j++){
-
-        if(j % 2 === 0){
-
-            for(var i = 0; i < 4 ; i++){
-    
-                var y = 1050 - (i * 110) ;
-                platforms.create(x,y,'platform');
-            }
-
-        } else {
-
-            for(var i = 0; i < 3 ; i++){
-    
-                var y = 1000 - (i * 110) ;
-                platforms.create(x,y,'platform');
-            }
-        }
-
-        x += 400;
-    }
-
-}
-
-function movePlayer(){
-	if (cursors.left.isDown)
-    {
-        player.body.velocity.x = -300;
-    }
-    else if (cursors.right.isDown)
-    {
-        player.body.velocity.x = 300;
-    }
-
-    if (cursors.up.isDown)// && player.body.touching.down)
-    {
-        player.body.velocity.y = -250;
-    }
-
-    if (!player.body.touching.down && cursors.down.isDown){
-        player.body.acceleration.y = 2000;
-    }
-    else if (player.body.touching.down && cursors.down.isDown){
-
-        // crouching
-    }
-
-    if (player.body.touching.down && cursors.shiftKey && cursors.down.isDown){
-
-        // getting down from platforms
-    }
-}
-
 function update() {
 
     // Collisions
@@ -137,17 +76,73 @@ function update() {
 	// Refresh changed values
 	player.body.velocity.x = 0;
     player.body.acceleration.y = 0;
-	game.camera.x = player.x -512 ;
 
-	if (player.y >= 600){
+    movePlayer();
+    moveCamera();
+    ennemyWave();
+}
 
-	game.camera.y = 600;
+function moveCamera(){
 
-	}
+    game.camera.x = player.x -512 ;
 
+    if (player.y < 600){
+        if (game.camera.y > 30){
+            game.camera.y -= 15;
+        }
+    }
+}
 
+function ennemyWave(){
 
-    // controls
+    var lol = 0;
+    var time = 0;
+    var ihih = 0;
+
+    time += (game.time.now % 1000);
+
+    if(time > 30000 && ihih < 3000){
+
+        lol = -50;
+        var x = 1000;
+    
+        var y = 1800;
+        var ennemie = ennemies.create(1900,1000,'player');
+        //console.log(x + "ss" + y)
+        ennemie.body.velocity.x = lol;
+        time = 0;
+        ihih += 1;
+        
+        game.physics.enable(ennemie, Phaser.Physics.ARCADE);
+        ennemie.body.gravity.y = 500;
+        ennemie.body.collideWorldBounds = true;
+    }   
+}
+
+function createPlatforms(){
+
+    var x = 200;
+
+    for (var j = 0; j < 4; j++){
+        if(j % 2 === 0){
+            for(var i = 0; i < 4 ; i++){
+                    var y = 1050 - (i * 110) ;
+                var p = platforms.create(x,y,'platform');
+                p.scale.setTo(0.7,0.5);
+            }
+        } else {
+            for(var i = 0; i < 3 ; i++){
+                    var y = 1000 - (i * 110) ;
+                var p = platforms.create(x,y,'platform');
+                p.scale.setTo(0.7,0.5);
+            }
+        }
+        x += 400;
+    }
+}
+
+function movePlayer(){
+    
     if (cursors.left.isDown)
     {
         player.body.velocity.x = -300;
@@ -157,9 +152,9 @@ function update() {
         player.body.velocity.x = 300;
     }
 
-    if (cursors.up.isDown)// && player.body.touching.down)
+    if (cursors.up.isDown && player.body.touching.down)
     {
-        player.body.velocity.y = -250;
+        player.body.velocity.y = -400;
     }
 
     if (!player.body.touching.down && cursors.down.isDown){
@@ -174,33 +169,11 @@ function update() {
 
         // getting down from platforms
     }
-	time += (game.time.now % 1000);
-//console.log (time);
-	//time += (game.time.now % 1000);
-    //// Ledges
-	if(time > 30000 && ihih < 3000){
-
-		lol = -50;
-		var x = 1000;
-	
-		var y = 1800;
-		var ennemie = ennemies.create(1900,1000,'player');
-		//console.log(x + "ss" + y)
-		ennemie.body.velocity.x = lol;
-		time = 0;
-		ihih += 1;
-		
-		game.physics.enable(ennemie, Phaser.Physics.ARCADE);
-        ennemie.body.gravity.y = 500;
-        ennemie.body.collideWorldBounds = true;
-	}	
-
-
 }
 
-//  function render () {
+function render () {
 
-//     // //debug helper
-//     game.debug.bodyInfo(player, 16, 24);
+    //game.debug.bodyInfo(player, 16, 50);
+    //game.debug.cameraInfo(game.camera, 32, 32);
 
-// }
+}
