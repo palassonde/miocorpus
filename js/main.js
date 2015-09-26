@@ -8,12 +8,15 @@ var player;
 var cursors;
 var platforms;
 var playerFacing = 'right';
+var core;
+var skin;
 
 function preload() {
 
     // Sprites
-	game.load.image('platform', server+'assets/platform.png');
-	//game.load.image('player', server+'assets/char.png');
+    game.load.image('core', server+'assets/core.png');
+    game.load.image('skin', server+'assets/skin.png');
+    game.load.image('platform', server+'assets/platform.png');
     game.load.spritesheet('player', server+'assets/player.png', 50, 100);
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
 
@@ -23,7 +26,11 @@ function create() {
 
     // Game stage
     game.stage.backgroundColor = '#6666FF';
-	game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    // Core n Skin
+    core = game.add.sprite(0,600, 'core');
+    skin = game.add.sprite(60,600, 'skin');
 
     //game.physics.arcade.gravity.y = 600;
     game.world.setBounds(0, 0, 2200, 1200);
@@ -35,21 +42,21 @@ function create() {
     //// Ground
     var ground = platforms.create(0,1170,'platform');
     ground.scale.setTo(10,2);
-	var jungleGround = platforms.create(0,600,'platform');
-	jungleGround.scale.setTo(10,1);
+    var jungleGround = platforms.create(0,600,'platform');
+    jungleGround.scale.setTo(10,1);
 
     //// Ledges
     createPlatforms();
 
     //platforms.create(200,1850,'platform');
    // platforms.create(580,1790,'platform');
-    platforms.setAll('body.immovable', true);
-    platforms.setAll('body.checkCollision.down', false);
-    platforms.setAll('body.checkCollision.left', false);
-    platforms.setAll('body.checkCollision.right', false);
-    
+   platforms.setAll('body.immovable', true);
+   platforms.setAll('body.checkCollision.down', false);
+   platforms.setAll('body.checkCollision.left', false);
+   platforms.setAll('body.checkCollision.right', false);
+
     // Player
-    player = game.add.sprite(20,1000, 'player');
+    player = game.add.sprite(200,1000, 'player');
     
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.gravity.y = 600;
@@ -62,13 +69,17 @@ function create() {
 	// Camera
 	game.camera.y = 1200;
 
+    // Full screen
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+    game.input.onDown.add(fullscreen, this);
+
 	// Ennemies
-	 ennemies = game.add.group();
-	 ennemies.enableBody = true;
-	 ennemies.physicsBodyType = Phaser.Physics.ARCADE;
-	 ennemies.setAll("body.gravity.y", 500);
-	 ennemies.setAll("body.collideWorldBounds", true);
-	
+    ennemies = game.add.group();
+    ennemies.enableBody = true;
+    ennemies.physicsBodyType = Phaser.Physics.ARCADE;
+    ennemies.setAll("body.gravity.y", 500);
+    ennemies.setAll("body.collideWorldBounds", true);
+
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
 }
@@ -77,10 +88,10 @@ function update() {
 
     // Collisions
     game.physics.arcade.collide(player, platforms);
-	game.physics.arcade.collide(ennemies, platforms);
+    game.physics.arcade.collide(ennemies, platforms);
 	//game.physics.arcade.collide(ennemies, player);
 	//game.physics.arcade.collide(ennemies);
-    
+
 	// Refresh changed values
 	player.body.velocity.x = 0;
     player.body.acceleration.y = 0;
@@ -113,7 +124,7 @@ function ennemyWave(){
 
         lol = -50;
         var x = 1000;
-    
+
         var y = 1800;
         var ennemy = ennemies.create(1900,1000,'player');
         //console.log(x + "ss" + y)
@@ -129,18 +140,18 @@ function ennemyWave(){
 
 function createPlatforms(){
 
-    var x = 200;
+    var x = 300;
 
     for (var j = 0; j < 5; j++){
         if(j % 2 === 0){
             for(var i = 0; i < 4 ; i++){
-                    var y = 1050 - (i * 110) ;
+                var y = 1050 - (i * 110) ;
                 var p = platforms.create(x,y,'platform');
                 p.scale.setTo(0.7,0.5);
             }
         } else {
             for(var i = 0; i < 3 ; i++){
-                    var y = 1000 - (i * 110) ;
+                var y = 1000 - (i * 110) ;
                 var p = platforms.create(x,y,'platform');
                 p.scale.setTo(0.7,0.5);
             }
@@ -151,7 +162,7 @@ function createPlatforms(){
 
 function movePlayer(){
 
-   
+
     if (cursors.left.isDown)
     {
         player.body.velocity.x = -300;
@@ -191,8 +202,19 @@ function movePlayer(){
         // getting down from platforms
     }
 
-    player.animations.play('idle');
-    playerFacing = 'idle';
+}
+
+function fullscreen() {
+
+    if (game.scale.isFullScreen)
+    {
+        game.scale.stopFullScreen();
+    }
+    else
+    {
+        game.scale.startFullScreen(false);
+    }
+
 }
 
 function render () {
