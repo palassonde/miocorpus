@@ -13,7 +13,7 @@ var core;
 var skin;
 var nbrTurrets = 0;
 var turret;
-var ennemy;
+var enemy;
 var bullet;
 var time;
 
@@ -27,6 +27,7 @@ function preload() {
     game.load.spritesheet('player', server+'assets/player.png', 50, 100);
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
     game.load.image('bullet', server+'assets/bullet.png');
+    game.load.audio('maintheme', 'assets/audio/maintheme.mp3')
 
 }
 
@@ -36,9 +37,15 @@ function create() {
     game.stage.backgroundColor = '#6666FF';
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    music = game.add.audio('maintheme');
+
+    music.play();
+
     // Core n Skin
     core = game.add.sprite(0,600, 'core');
     skin = game.add.sprite(60,600, 'skin');
+    game.physics.enable(core, Phaser.Physics.ARCADE);
+    game.physics.enable(skin, Phaser.Physics.ARCADE);
 
     //game.physics.arcade.gravity.y = 600;
     game.world.setBounds(0, 0, 2200, 1200);
@@ -98,17 +105,23 @@ function create() {
     // Bullets
     bullets = game.add.group();
     bullets.enableBody = true;
-    turrets.physicsBodyType = Phaser.Physics.ARCADE;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-    ennemyWave();
+    enemyWave();
 
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
     actionKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
     actionKey.onDown.add(function(actionKey){
 
-        turret = turrets.create(player.x + 30, player.y + 14, 'turret');
-        nbrTurrets++;
+        if (player.body.touching.down){
+
+            turret = turrets.create(player.x + 30, player.y + 14, 'turret');
+            nbrTurrets++;
+
+        }
+
+        
     })
 
     time = game.time.now;
@@ -130,13 +143,32 @@ function update() {
     movePlayer();
     moveCamera();
 
-    if (nbrTurrets > 0 && Math.abs(turret.x - ennemy.x) <= 200){
+    if (nbrTurrets > 0 && Math.abs(turret.x - enemy.x) <= 400){
 
         turretShoot();
-
     }
 
+    game.physics.arcade.overlap(bullets, ennemies, bulletVSenemy, null, this);
+    game.physics.arcade.overlap(core, ennemies, coreVSenemy, null, this);
+    game.physics.arcade.overlap(ennemies, skin, enemyVSskin, null, this);
 }
+
+function bulletVSenemy(bullet, enemy) {
+            bullet.kill();
+            enemy.kill();
+            enemyWave();
+}
+
+function coreVSenemy(core, enemy) {
+            var gui = game.add.text(0,0,'YOU LOSE', { fontSize: '32px', fill: '#000' });
+            gui.fixedToCamera = true;
+}
+
+function enemyVSskin(skin, enemy) {
+
+            enemy.body.velocity.x = -10;
+}
+
 
 function turretShoot(){
 
@@ -148,12 +180,14 @@ function turretShoot(){
 
         bullet = bullets.create(turret.x, turret.y, 'bullet');
         
-        if (turret.x < ennemy.x)
+        if (turret.x < enemy.x)
             bullet.body.velocity.x = speed;
         else
             bullet.body.velocity.x = -speed;
 
-        bullet.body.velocity.y = turret.y + ennemy.y;
+        //bullet.body.velocity.y = -(Math.abs(turret.y - enemy.y));
+
+        game.physics.arcade.moveToObject(bullet, enemy,300);
 
         time = 0;
     }
@@ -170,16 +204,16 @@ function moveCamera(){
     }
 }
 
-function ennemyWave(){
+function enemyWave(){
 
-    ennemy = ennemies.create(1900,1000,'player');
-    ennemy.body.velocity.x = -50;        
-    game.physics.enable(ennemy, Phaser.Physics.ARCADE);
-    ennemy.body.gravity.y = 500;
-    ennemy.body.collideWorldBounds = true;
-    ennemy.animations.add('left', [6,7,8], 5, true);
-    ennemy.animations.play('left');
-    ennemy.anchor.set(0.5);
+    enemy = ennemies.create(1900,1000,'player');
+    enemy.body.velocity.x = -100;        
+    game.physics.enable(enemy, Phaser.Physics.ARCADE);
+    enemy.body.gravity.y = 500;
+    enemy.body.collideWorldBounds = true;
+    enemy.animations.add('left', [6,7,8], 5, true);
+    enemy.animations.play('left');
+    enemy.anchor.set(0.5);
 }
 
 function createPlatforms(){
@@ -295,7 +329,7 @@ function fullscreen() {
 
 function render () {
 
-    //game.debug.bodyInfo(player, 16, 50);
+    //game.debug.bodyInfo(enemy, 16, 50);
     //game.debug.cameraInfo(game.camera, 32, 32);
 
 }
