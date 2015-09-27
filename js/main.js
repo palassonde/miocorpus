@@ -3,7 +3,7 @@
 
 var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
-var server = 'http://localhost:8080/';
+var server = '';//http://localhost:8080/';
 var player;
 var cursors;
 var platforms;
@@ -61,6 +61,8 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE);
     player.body.gravity.y = 600;
     player.body.collideWorldBounds = true;
+    player.animations.add('idleRight', [0,1,2], 5, true);
+    player.animations.add('idleLeft', [9,10,11], 5, true);
     player.animations.add('right', [3,4,5], 5, true);
     player.animations.add('left', [6,7,8], 5, true);
     //player.animations.play('idle', 10, true);
@@ -182,16 +184,50 @@ function movePlayer(){
             player.animations.play('right');
             playerFacing = 'right';
         }
+    } else {
+
+        if (playerFacing != 'idle')
+        {
+
+
+            player.animations.stop();
+
+            if (playerFacing == 'left')
+            {
+                 player.animations.play('idleLeft');
+            }
+            else
+            {
+                 player.animations.play('idleRight');
+            }
+
+            playerFacing = 'idle';
+        }
     }
 
     if (cursors.up.isDown && player.body.touching.down)
     {
         player.body.velocity.y = -400;
+
+    }
+
+    if (!player.body.touching.down){
+
+        if (playerFacing === 'left')
+            player.frame = 12;
+
+        if (playerFacing === 'idle')
+            player.frame = 13;
+
+        if (playerFacing === 'right')
+            player.frame = 14;
     }
 
     if (!player.body.touching.down && cursors.down.isDown){
+
         player.body.acceleration.y = 2000;
     }
+
     else if (player.body.touching.down && cursors.down.isDown){
 
         // crouching
