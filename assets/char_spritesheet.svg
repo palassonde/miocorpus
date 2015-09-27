@@ -189,11 +189,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="75.041019"
-     inkscape:cy="61.341466"
+     inkscape:zoom="2"
+     inkscape:cx="188.79111"
+     inkscape:cy="116.82117"
      inkscape:document-units="px"
-     inkscape:current-layer="g6603"
+     inkscape:current-layer="g8866"
      showgrid="true"
      units="px"
      showguides="false"
@@ -329,6 +329,9 @@
          id="image8152"
          x="-322.45178"
          y="-372.80914" />
+      <g
+         id="g8866"
+         transform="translate(704,-115)" />
       <g
          id="g8369"
          transform="matrix(0.98510765,0,0,1,1.4892027,0)">

@@ -6,19 +6,27 @@ var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, cr
 var server = '';//http://localhost:8080/';
 var player;
 var cursors;
+var actionKey;
 var platforms;
 var playerFacing = 'right';
 var core;
 var skin;
+var nbrTurrets = 0;
+var turret;
+var ennemy;
+var bullet;
+var time;
 
 function preload() {
 
     // Sprites
     game.load.image('core', server+'assets/core.png');
+    game.load.image('turret', server+'assets/turret.png');
     game.load.image('skin', server+'assets/skin.png');
     game.load.image('platform', server+'assets/platform.png');
     game.load.spritesheet('player', server+'assets/player.png', 50, 100);
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
+    game.load.image('bullet', server+'assets/bullet.png');
 
 }
 
@@ -82,8 +90,28 @@ function create() {
     ennemies.setAll("body.gravity.y", 500);
     ennemies.setAll("body.collideWorldBounds", true);
 
+    // Turrets
+    turrets = game.add.group();
+    turrets.enableBody = true;
+    turrets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    // Bullets
+    bullets = game.add.group();
+    bullets.enableBody = true;
+    turrets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    ennemyWave();
+
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
+    actionKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
+    actionKey.onDown.add(function(actionKey){
+
+        turret = turrets.create(player.x + 30, player.y + 14, 'turret');
+        nbrTurrets++;
+    })
+
+    time = game.time.now;
 }
 
 function update() {
@@ -91,6 +119,7 @@ function update() {
     // Collisions
     game.physics.arcade.collide(player, platforms);
     game.physics.arcade.collide(ennemies, platforms);
+    game.physics.arcade.collide(turrets, platforms);
 	//game.physics.arcade.collide(ennemies, player);
 	//game.physics.arcade.collide(ennemies);
 
@@ -100,7 +129,34 @@ function update() {
 
     movePlayer();
     moveCamera();
-    ennemyWave();
+
+    if (nbrTurrets > 0 && Math.abs(turret.x - ennemy.x) <= 200){
+
+        turretShoot();
+
+    }
+
+}
+
+function turretShoot(){
+
+    var speed = 50;
+
+    time += game.time.now % 1000;
+
+    if (time > 30000) {
+
+        bullet = bullets.create(turret.x, turret.y, 'bullet');
+        
+        if (turret.x < ennemy.x)
+            bullet.body.velocity.x = speed;
+        else
+            bullet.body.velocity.x = -speed;
+
+        bullet.body.velocity.y = turret.y + ennemy.y;
+
+        time = 0;
+    }
 }
 
 function moveCamera(){
@@ -116,28 +172,14 @@ function moveCamera(){
 
 function ennemyWave(){
 
-    var lol = 0;
-    var time = 0;
-    var ihih = 0;
-
-    time += (game.time.now % 1000);
-
-    if(time > 30000 && ihih < 3000){
-
-        lol = -50;
-        var x = 1000;
-
-        var y = 1800;
-        var ennemy = ennemies.create(1900,1000,'player');
-        //console.log(x + "ss" + y)
-        ennemy.body.velocity.x = lol;
-        time = 0;
-        ihih += 1;
-        
-        game.physics.enable(ennemy, Phaser.Physics.ARCADE);
-        ennemy.body.gravity.y = 500;
-        ennemy.body.collideWorldBounds = true;
-    }   
+    ennemy = ennemies.create(1900,1000,'player');
+    ennemy.body.velocity.x = -50;        
+    game.physics.enable(ennemy, Phaser.Physics.ARCADE);
+    ennemy.body.gravity.y = 500;
+    ennemy.body.collideWorldBounds = true;
+    ennemy.animations.add('left', [6,7,8], 5, true);
+    ennemy.animations.play('left');
+    ennemy.anchor.set(0.5);
 }
 
 function createPlatforms(){
@@ -194,41 +236,39 @@ function movePlayer(){
 
             if (playerFacing == 'left')
             {
-                 player.animations.play('idleLeft');
-            }
-            else
-            {
-                 player.animations.play('idleRight');
-            }
+               player.animations.play('idleLeft');
+           }
+           else
+           {
+               player.animations.play('idleRight');
+           }
 
-            playerFacing = 'idle';
-        }
-    }
+           playerFacing = 'idle';
+       }
+   }
 
-    if (cursors.up.isDown && player.body.touching.down)
-    {
-        player.body.velocity.y = -400;
+   if (cursors.up.isDown && player.body.touching.down)
+   {
+    player.body.velocity.y = -400;
 
-    }
+}
 
-    if (!player.body.touching.down){
+if (!player.body.touching.down){
 
-        if (playerFacing === 'left')
-            player.frame = 12;
+    if (playerFacing === 'left')
+        player.frame = 12;
+    else if (playerFacing === 'idle')
+        player.frame = 13;
+    else if (playerFacing === 'right')
+        player.frame = 14;
+}
 
-        if (playerFacing === 'idle')
-            player.frame = 13;
+if (!player.body.touching.down && cursors.down.isDown){
 
-        if (playerFacing === 'right')
-            player.frame = 14;
-    }
+    player.body.acceleration.y = 2000;
+}
 
-    if (!player.body.touching.down && cursors.down.isDown){
-
-        player.body.acceleration.y = 2000;
-    }
-
-    else if (player.body.touching.down && cursors.down.isDown){
+else if (player.body.touching.down && cursors.down.isDown){
 
         // crouching
     }
