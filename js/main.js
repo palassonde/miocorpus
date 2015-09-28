@@ -1,3 +1,5 @@
+/* global Phaser */
+
 // Pierre-Alexandre Lassonde
 // Julien Perron
 
@@ -27,7 +29,7 @@ function preload() {
     game.load.spritesheet('player', server+'assets/player.png', 50, 100);
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
     game.load.image('bullet', server+'assets/bullet.png');
-    game.load.audio('maintheme', 'assets/audio/maintheme.mp3')
+    game.load.audio('maintheme', 'assets/audio/maintheme.mp3');
 
 }
 
@@ -122,7 +124,7 @@ function create() {
         }
 
         
-    })
+    });
 
     time = game.time.now;
 }
@@ -245,7 +247,7 @@ function movePlayer(){
     {
         player.body.velocity.x = -300;
 
-        if (playerFacing != 'left')
+        if (playerFacing !== 'left')
         {
             player.animations.play('left');
             playerFacing = 'left';
@@ -255,20 +257,20 @@ function movePlayer(){
     {
         player.body.velocity.x = 300;
 
-        if (playerFacing != 'right')
+        if (playerFacing !== 'right')
         {
             player.animations.play('right');
             playerFacing = 'right';
         }
     } else {
 
-        if (playerFacing != 'idle')
+        if (playerFacing !== 'idle')
         {
 
 
             player.animations.stop();
 
-            if (playerFacing == 'left')
+            if (playerFacing === 'left')
             {
                player.animations.play('idleLeft');
            }
