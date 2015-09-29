@@ -2,6 +2,20 @@
 
 INF5071 Projet de jeu vidéo
 
+## Description du jeu
+
+Le joueur doit empecher l'ennemi d'atteindre le coeur qui est situe a l'extremite gauche du tableau. Il y a une couche protectrice qui ralentit l'ennemi. Le joueur peut placer des turrets si il a les ressources necessaires, les turretes sont creer a partir de combinaise de 3 types d'ennemi. Le jeu continu tant qu'aucun ennemi n'a toucher le coeur et les vagues d'ennemi sont de plus en plus feroce et un score saccumule entre temps. Il y a un tableau au dessus du tableau principal qui est consacrer a lobtention de nouvelles ressources. Il y a des power ups qui donne au joueur de meilleur facultes tel que saute plus haut aller plus vite reprendre de la vie attaquer plus fort. Des que le joueur est toucher par un ennemi il perd toute ses faculte. Si le joueur meurt il doit attendre un certains nombre de temps avant de reaparaitre. Ce temps est incrementer plus il meurt souvent. Le joueur peut placer des turrets en haut comme en bas. Le theme du jeu n'est pas encore choisi.
+
+## Processus de developpement 
+
+10 1/2 semaines, remise le 9 decembre
+
+1. Scenario, gameplay, idees, theme, deroulement du jeu, configuration des environnements + CVS - 2 semaines (Fin le 7 octobre) 
+2. Coder les fonctionnalites, reorganiser le code, corriger les bugs - 6 semaines (Fin le 18 novembre) 
+3. faire les graphismes - 1 semaine (Fin le 25 novembre) 
+4. Faire le son - 1/2 semaines (Fin le 30 Novembre) 
+5. S'occuper des bugs - 1 semaine (Fin le 5 Decembre) 
+
 ## Partir le serveur
 
 ```
