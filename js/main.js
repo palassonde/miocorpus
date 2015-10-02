@@ -2,6 +2,7 @@
 
 // Pierre-Alexandre Lassonde
 // Julien Perron
+// Firas Cherif
 
 var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
