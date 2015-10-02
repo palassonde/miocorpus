@@ -23,6 +23,7 @@ function preload() {
 
     // Sprites
     game.load.image('core', server+'assets/core.png');
+	game.load.image('fond', server+'assets/fond.png');
     game.load.image('turret', server+'assets/turret.png');
     game.load.image('skin', server+'assets/skin.png');
     game.load.image('platform', server+'assets/platform.png');
@@ -30,13 +31,18 @@ function preload() {
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
     game.load.image('bullet', server+'assets/bullet.png');
     game.load.audio('maintheme', 'assets/audio/maintheme.mp3');
-
+	
 }
 
 function create() {
 
     // Game stage
-    game.stage.backgroundColor = '#6666FF';
+	//var fond = game.add.sprite(0,0, 'fond');
+	//fond.scale.setTo(0.6, 0.6);
+	//fond.fixedToCamera = true;
+	
+	
+    game.stage.backgroundColor = '#78fdff';
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     music = game.add.audio('maintheme');
@@ -114,6 +120,7 @@ function create() {
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
     actionKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
+	actionKey2 = game.input.keyboard.addKey(Phaser.Keyboard.A);
     actionKey.onDown.add(function(actionKey){
 
         if (player.body.touching.down){
@@ -132,7 +139,7 @@ function create() {
 function update() {
 
     // Collisions
-    game.physics.arcade.collide(player, platforms);
+    game.physics.arcade.collide(player, platforms,null,passerAtravers);
     game.physics.arcade.collide(ennemies, platforms);
     game.physics.arcade.collide(turrets, platforms);
 	//game.physics.arcade.collide(ennemies, player);
@@ -145,6 +152,10 @@ function update() {
     movePlayer();
     moveCamera();
 
+	changeBackgroundColor(game.time.now % 100000);
+
+	
+	
     if (nbrTurrets > 0 && Math.abs(turret.x - enemy.x) <= 400){
 
         turretShoot();
@@ -153,6 +164,24 @@ function update() {
     game.physics.arcade.overlap(bullets, ennemies, bulletVSenemy, null, this);
     game.physics.arcade.overlap(core, ennemies, coreVSenemy, null, this);
     game.physics.arcade.overlap(ennemies, skin, enemyVSskin, null, this);
+}
+
+function passerAtravers(player, platforms){
+	console.log(actionKey2.onDown)
+	if(actionKey2.isDown){
+		return false;
+	}
+	return true;
+}
+
+function changeBackgroundColor (time){
+	if(time <= 25000){
+		game.stage.backgroundColor = '#78fdff';
+	}else if(time <= 50000 || (time <= 100000 && time > 75000)){
+		game.stage.backgroundColor = "#67d2ff"
+	}else{
+		game.stage.backgroundColor = '#079eff';
+	}
 }
 
 function bulletVSenemy(bullet, enemy) {
