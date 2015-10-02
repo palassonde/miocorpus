@@ -4,6 +4,7 @@ MyGame.Menu = function (game) {
 };
 
 MyGame.Menu.prototype = {
+    
     create: function () {
         // On démarre la musique
         this.music = this.add.audio('main-theme');

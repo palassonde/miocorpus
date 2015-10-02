@@ -7,6 +7,7 @@ MyGame.Boot = function (game) {
 
 
 MyGame.Boot.prototype = {
+    
     init: function () {
 
     },
