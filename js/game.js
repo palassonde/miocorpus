@@ -4,6 +4,25 @@
 // Julien Perron
 // Firas Cherif
 
+MyGame.Game = function (game) {
+    this.game;      //  a reference to the currently running game (Phaser.Game)
+    this.add;       //  used to add sprites, text, groups, etc (Phaser.GameObjectFactory)
+    this.camera;    //  a reference to the game camera (Phaser.Camera)
+    this.cache;     //  the game cache (Phaser.Cache)
+    this.input;     //  the global input manager. You can access this.input.keyboard, this.input.mouse, as well from it. (Phaser.Input)
+    this.load;      //  for preloading assets (Phaser.Loader)
+    this.math;      //  lots of useful common math operations (Phaser.Math)
+    this.sound;     //  the sound manager - add a sound, play one, set-up markers, etc (Phaser.SoundManager)
+    this.stage;     //  the game stage (Phaser.Stage)
+    this.time;      //  the clock (Phaser.Time)
+    this.tweens;    //  the tween manager (Phaser.TweenManager)
+    this.state;     //  the state manager (Phaser.StateManager)
+    this.world;     //  the game world (Phaser.World)
+    this.particles; //  the particle manager (Phaser.Particles)
+    this.physics;   //  the physics manager (Phaser.Physics)
+    this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
+};
+
 var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game', {preload: preload, create: create, update: update, render: render});
 
 var server = '';//http://localhost:8080/';
@@ -24,7 +43,7 @@ function preload() {
 
     // Sprites
     game.load.image('core', server+'assets/core.png');
-	game.load.image('fond', server+'assets/fond.png');
+    game.load.image('fond', server+'assets/fond.png');
     game.load.image('turret', server+'assets/turret.png');
     game.load.image('skin', server+'assets/skin.png');
     game.load.image('platform', server+'assets/platform.png');
@@ -32,17 +51,17 @@ function preload() {
     game.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
     game.load.image('bullet', server+'assets/bullet.png');
     game.load.audio('maintheme', 'assets/audio/maintheme.mp3');
-	
+    
 }
 
 function create() {
 
     // Game stage
-	//var fond = game.add.sprite(0,0, 'fond');
-	//fond.scale.setTo(0.6, 0.6);
-	//fond.fixedToCamera = true;
-	
-	
+    //var fond = game.add.sprite(0,0, 'fond');
+    //fond.scale.setTo(0.6, 0.6);
+    //fond.fixedToCamera = true;
+    
+    
     game.stage.backgroundColor = '#78fdff';
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -92,14 +111,14 @@ function create() {
     //player.animations.play('idle', 10, true);
     player.anchor.set(0.5);
     
-	// Camera
-	game.camera.y = 1200;
+    // Camera
+    game.camera.y = 1200;
 
     // Full screen
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.input.onDown.add(fullscreen, this);
 
-	// Ennemies
+    // Ennemies
     ennemies = game.add.group();
     ennemies.enableBody = true;
     ennemies.physicsBodyType = Phaser.Physics.ARCADE;
@@ -121,7 +140,7 @@ function create() {
     // Initializing Controls
     cursors = game.input.keyboard.createCursorKeys();
     actionKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
-	actionKey2 = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    actionKey2 = game.input.keyboard.addKey(Phaser.Keyboard.A);
     actionKey.onDown.add(function(actionKey){
 
         if (player.body.touching.down){
@@ -143,20 +162,20 @@ function update() {
     game.physics.arcade.collide(player, platforms,null,passerAtravers);
     game.physics.arcade.collide(ennemies, platforms);
     game.physics.arcade.collide(turrets, platforms);
-	//game.physics.arcade.collide(ennemies, player);
-	//game.physics.arcade.collide(ennemies);
+    //game.physics.arcade.collide(ennemies, player);
+    //game.physics.arcade.collide(ennemies);
 
-	// Refresh changed values
-	player.body.velocity.x = 0;
+    // Refresh changed values
+    player.body.velocity.x = 0;
     player.body.acceleration.y = 0;
 
     movePlayer();
     moveCamera();
 
-	changeBackgroundColor(game.time.now % 100000);
+    changeBackgroundColor(game.time.now % 100000);
 
-	
-	
+    
+    
     if (nbrTurrets > 0 && Math.abs(turret.x - enemy.x) <= 400){
 
         turretShoot();
@@ -168,21 +187,21 @@ function update() {
 }
 
 function passerAtravers(player, platforms){
-	console.log(actionKey2.onDown)
-	if(actionKey2.isDown){
-		return false;
-	}
-	return true;
+    console.log(actionKey2.onDown)
+    if(actionKey2.isDown){
+        return false;
+    }
+    return true;
 }
 
 function changeBackgroundColor (time){
-	if(time <= 25000){
-		game.stage.backgroundColor = '#78fdff';
-	}else if(time <= 50000 || (time <= 100000 && time > 75000)){
-		game.stage.backgroundColor = "#67d2ff"
-	}else{
-		game.stage.backgroundColor = '#079eff';
-	}
+    if(time <= 25000){
+        game.stage.backgroundColor = '#78fdff';
+    }else if(time <= 50000 || (time <= 100000 && time > 75000)){
+        game.stage.backgroundColor = "#67d2ff"
+    }else{
+        game.stage.backgroundColor = '#079eff';
+    }
 }
 
 function bulletVSenemy(bullet, enemy) {
