@@ -3,7 +3,7 @@
 // Pierre-Alexandre Lassonde
 // Julien Perron
 // Firas Cherif
-
+var game = game
 MyGame.Game = function (game) {
 
     this.game;      //  a reference to the currently running game (Phaser.Game)
@@ -42,7 +42,7 @@ MyGame.Game = function (game) {
 
 MyGame.Game.prototype = {
 
-    create : function () {
+    create : function (game) {
 
         // Game stage
         //var fond = game.add.sprite(0,0, 'fond');
@@ -51,208 +51,208 @@ MyGame.Game.prototype = {
         
         
         
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 
         // Core n Skin
-        core = game.add.sprite(0,600, 'core');
-        skin = game.add.sprite(60,600, 'skin');
-        game.physics.enable(core, Phaser.Physics.ARCADE);
-        game.physics.enable(skin, Phaser.Physics.ARCADE);
+        this.core = this.game.add.sprite(0,600, 'core');
+        this.skin = this.game.add.sprite(60,600, 'skin');
+        this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
+        this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
 
-        //game.physics.arcade.gravity.y = 600;
-        game.world.setBounds(0, 0, 2200, 1200);
+        //this.game.physics.arcade.gravity.y = 600;
+        this.game.world.setBounds(0, 0, 2200, 1200);
 
         // Platforms
-        platforms = game.add.group();
-        platforms.enableBody = true;
+        this.platforms = this.game.add.group();
+        this.platforms.enableBody = true;
 
         //// Ground
-        var ground = platforms.create(0,1170,'platform');
-        ground.scale.setTo(10,2);
-        var jungleGround = platforms.create(0,600,'platform');
-        jungleGround.scale.setTo(10,1);
+        this.ground = this.platforms.create(0,1170,'platform');
+        this.ground.scale.setTo(10,2);
+        this.jungleGround = this.platforms.create(0,600,'platform');
+        this.jungleGround.scale.setTo(10,1);
 
         //// Ledges
-        createPlatforms();
+        this.createPlatforms();
 
         //platforms.create(200,1850,'platform');
        // platforms.create(580,1790,'platform');
-       platforms.setAll('body.immovable', true);
-       platforms.setAll('body.checkCollision.down', false);
-       platforms.setAll('body.checkCollision.left', false);
-       platforms.setAll('body.checkCollision.right', false);
+       this.platforms.setAll('body.immovable', true);
+       this.platforms.setAll('body.checkCollision.down', false);
+       this.platforms.setAll('body.checkCollision.left', false);
+       this.platforms.setAll('body.checkCollision.right', false);
 
         // Player
-        player = game.add.sprite(200,1000, 'player');
+        this.player = this.game.add.sprite(200,1000, 'player');
         
-        game.physics.enable(player, Phaser.Physics.ARCADE);
-        player.body.gravity.y = 600;
-        player.body.collideWorldBounds = true;
-        player.animations.add('idleRight', [0,1,2], 5, true);
-        player.animations.add('idleLeft', [9,10,11], 5, true);
-        player.animations.add('right', [3,4,5], 5, true);
-        player.animations.add('left', [6,7,8], 5, true);
+        this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
+        this.player.body.gravity.y = 600;
+        this.player.body.collideWorldBounds = true;
+        this.player.animations.add('idleRight', [0,1,2], 5, true);
+        this.player.animations.add('idleLeft', [9,10,11], 5, true);
+        this.player.animations.add('right', [3,4,5], 5, true);
+        this.player.animations.add('left', [6,7,8], 5, true);
         //player.animations.play('idle', 10, true);
-        player.anchor.set(0.5);
+        this.player.anchor.set(0.5);
         
         // Camera
-        game.camera.y = 1200;
+        this.game.camera.y = 1200;
 
         // Full screen
-        game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        game.input.onDown.add(fullscreen, this);
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+        this.game.input.onDown.add(this.fullscreen, this);
 
         // Ennemies
-        ennemies = game.add.group();
-        ennemies.enableBody = true;
-        ennemies.physicsBodyType = Phaser.Physics.ARCADE;
-        ennemies.setAll("body.gravity.y", 500);
-        ennemies.setAll("body.collideWorldBounds", true);
+        this.ennemies = this.game.add.group();
+        this.ennemies.enableBody = true;
+        this.ennemies.physicsBodyType = Phaser.Physics.ARCADE;
+        this.ennemies.setAll("body.gravity.y", 500);
+        this.ennemies.setAll("body.collideWorldBounds", true);
 
         // Turrets
-        turrets = game.add.group();
-        turrets.enableBody = true;
-        turrets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.turrets = this.game.add.group();
+        this.turrets.enableBody = true;
+        this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
 
         // Bullets
-        bullets = game.add.group();
-        bullets.enableBody = true;
-        bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets = this.game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-        enemyWave();
+        this.enemyWave();
 
         // Initializing Controls
-        cursors = game.input.keyboard.createCursorKeys();
-        actionKey = game.input.keyboard.addKey(Phaser.Keyboard.T);
-        actionKey2 = game.input.keyboard.addKey(Phaser.Keyboard.A);
-        actionKey.onDown.add(function(actionKey){
+        this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+        this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        this.actionKey.onDown.add(creationTurret, this);
+		function creationTurret (){
+			if (this.player.body.touching.down){
 
-            if (player.body.touching.down){
-
-                turret = turrets.create(player.x + 30, player.y + 14, 'turret');
-                nbrTurrets++;
+                this.turret = this.turrets.create(this.player.x + 30, this.player.y + 14, 'turret');
+                this.nbrTurrets++;
 
             }
+		}
 
-            
-        });
-
-        time = game.time.now;
-    }
+        this.time = this.game.time.now;
+    },
     
     update : function () {
-
+		
+		var variable = this;
         // Collisions
-        game.physics.arcade.collide(player, platforms,null,passerAtravers);
-        game.physics.arcade.collide(ennemies, platforms);
-        game.physics.arcade.collide(turrets, platforms);
-        //game.physics.arcade.collide(ennemies, player);
-        //game.physics.arcade.collide(ennemies);
+        this.game.physics.arcade.collide(this.player, this.platforms,null,this.passerAtravers, this);
+        this.game.physics.arcade.collide(this.ennemies, this.platforms);
+        this.game.physics.arcade.collide(this.turrets, this.platforms);
+        //this.game.physics.arcade.collide(ennemies, player);
+        //this.game.physics.arcade.collide(ennemies);
 
         // Refresh changed values
-        player.body.velocity.x = 0;
-        player.body.acceleration.y = 0;
+        this.player.body.velocity.x = 0;
+        this.player.body.acceleration.y = 0;
 
-        movePlayer();
-        moveCamera();
+        this.movePlayer();
+        this.moveCamera();
 
-        changeBackgroundColor(game.time.now % 100000);
+        this.changeBackgroundColor(this.game.time.now % 100000);
 
         
         
-        if (nbrTurrets > 0 && Math.abs(turret.x - enemy.x) <= 400){
+        if (this.nbrTurrets > 0 && Math.abs(this.turret.x - this.enemy.x) <= 400){
 
-            turretShoot();
+            this.turretShoot();
         }
 
-        game.physics.arcade.overlap(bullets, ennemies, bulletVSenemy, null, this);
-        game.physics.arcade.overlap(core, ennemies, coreVSenemy, null, this);
-        game.physics.arcade.overlap(ennemies, skin, enemyVSskin, null, this);
-    }
+        this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
+        this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
+    },
 
-    function passerAtravers(player, platforms){
-        console.log(actionKey2.onDown)
-        if(actionKey2.isDown){
-            return false;
-        }
-        return true;
-    }
+    passerAtravers : function(player, platform, game){
 
-    function changeBackgroundColor (time){
+		return !this.actionKey2.isDown;
+        // if(this.actionKey2.isDown){
+            // return false;
+        // }
+        // return true;
+    },
+
+    changeBackgroundColor : function (time){
         if(time <= 25000){
-            game.stage.backgroundColor = '#78fdff';
+            this.game.stage.backgroundColor = '#78fdff';
         }else if(time <= 50000 || (time <= 100000 && time > 75000)){
-            game.stage.backgroundColor = "#67d2ff"
+            this.game.stage.backgroundColor = "#67d2ff"
         }else{
-            game.stage.backgroundColor = '#079eff';
+            this.game.stage.backgroundColor = '#079eff';
         }
-    }
+    },
 
-    function bulletVSenemy(bullet, enemy) {
+    bulletVSenemy : function(bullet, enemy) {
                 bullet.kill();
                 enemy.kill();
-                enemyWave();
-    }
+                this.enemyWave();
+    },
 
-    function coreVSenemy(core, enemy) {
-                var gui = game.add.text(0,0,'YOU LOSE', { fontSize: '32px', fill: '#000' });
-                gui.fixedToCamera = true;
-    }
+    coreVSenemy : function(core, enemy) {
+                this.gui = this.game.add.text(0,0,'YOU LOSE', { fontSize: '32px', fill: '#000' });
+                this.gui.fixedToCamera = true;
+    },
 
-    function enemyVSskin(skin, enemy) {
+    enemyVSskin : function(skin, enemy) {
 
                 enemy.body.velocity.x = -10;
-    }
+    },
 
 
-    function turretShoot(){
+    turretShoot : function(){
 
         var speed = 50;
 
-        time += game.time.now % 1000;
+        this.time += this.game.time.now % 1000;
 
-        if (time > 30000) {
+        if (this.time > 30000) {
 
-            bullet = bullets.create(turret.x, turret.y, 'bullet');
+            this.bullet = this.bullets.create(this.turret.x, this.turret.y, 'bullet');
             
-            if (turret.x < enemy.x)
-                bullet.body.velocity.x = speed;
+            if (this.turret.x < this.enemy.x)
+                this.bullet.body.velocity.x = speed;
             else
-                bullet.body.velocity.x = -speed;
+                this.bullet.body.velocity.x = -speed;
 
             //bullet.body.velocity.y = -(Math.abs(turret.y - enemy.y));
 
-            game.physics.arcade.moveToObject(bullet, enemy,300);
+            this.game.physics.arcade.moveToObject(this.bullet, this.enemy,300);
 
-            time = 0;
+            this.time = 0;
         }
-    }
+    },
 
-    function moveCamera(){
+    moveCamera : function(){
 
-        game.camera.x = player.x -512 ;
+        this.game.camera.x = this.player.x -512 ;
 
-        if (player.y < 570){
-            if (game.camera.y > 30){
-                game.camera.y -= 15;
+        if (this.player.y < 570){
+            if (this.game.camera.y > 30){
+                this.game.camera.y -= 15;
             }
         }
-    }
+    },
 
-    function enemyWave(){
+    enemyWave : function(){
 
-        enemy = ennemies.create(1900,1000,'player');
-        enemy.body.velocity.x = -100;        
-        game.physics.enable(enemy, Phaser.Physics.ARCADE);
-        enemy.body.gravity.y = 500;
-        enemy.body.collideWorldBounds = true;
-        enemy.animations.add('left', [6,7,8], 5, true);
-        enemy.animations.play('left');
-        enemy.anchor.set(0.5);
-    }
+        this.enemy = this.ennemies.create(1900,1000,'player');
+        this.enemy.body.velocity.x = -100;        
+        this.game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
+        this.enemy.body.gravity.y = 500;
+        this.enemy.body.collideWorldBounds = true;
+        this.enemy.animations.add('left', [6,7,8], 5, true);
+        this.enemy.animations.play('left');
+        this.enemy.anchor.set(0.5);
+    },
 
-    function createPlatforms(){
+    createPlatforms : function(){
 
         var x = 300;
 
@@ -260,108 +260,108 @@ MyGame.Game.prototype = {
             if(j % 2 === 0){
                 for(var i = 0; i < 4 ; i++){
                     var y = 1050 - (i * 110) ;
-                    var p = platforms.create(x,y,'platform');
-                    p.scale.setTo(0.7,0.5);
+                    this.p = this.platforms.create(x,y,'platform');
+                    this.p.scale.setTo(0.7,0.5);
                 }
             } else {
                 for(var i = 0; i < 3 ; i++){
                     var y = 1000 - (i * 110) ;
-                    var p = platforms.create(x,y,'platform');
-                    p.scale.setTo(0.7,0.5);
+                    this.p = this.platforms.create(x,y,'platform');
+                    this.p.scale.setTo(0.7,0.5);
                 }
             }
             x += 400;
         }
-    }
+    },
 
-    function movePlayer(){
+    movePlayer : function(){
 
 
-        if (cursors.left.isDown)
+        if (this.cursors.left.isDown)
         {
-            player.body.velocity.x = -300;
+            this.player.body.velocity.x = -300;
 
-            if (playerFacing !== 'left')
+            if (this.playerFacing !== 'left')
             {
-                player.animations.play('left');
-                playerFacing = 'left';
+                this.player.animations.play('left');
+                this.playerFacing = 'left';
             }
         }
-        else if (cursors.right.isDown)
+        else if (this.cursors.right.isDown)
         {
-            player.body.velocity.x = 300;
+            this.player.body.velocity.x = 300;
 
-            if (playerFacing !== 'right')
+            if (this.playerFacing !== 'right')
             {
-                player.animations.play('right');
-                playerFacing = 'right';
+                this.player.animations.play('right');
+                this.playerFacing = 'right';
             }
         } else {
 
-            if (playerFacing !== 'idle')
+            if (this.playerFacing !== 'idle')
             {
 
 
-                player.animations.stop();
+                this.player.animations.stop();
 
-                if (playerFacing === 'left')
+                if (this.playerFacing === 'left')
                 {
-                   player.animations.play('idleLeft');
+                   this.player.animations.play('idleLeft');
                }
                else
                {
-                   player.animations.play('idleRight');
+                   this.player.animations.play('idleRight');
                }
 
-               playerFacing = 'idle';
+               this.playerFacing = 'idle';
            }
        }
 
-       if (cursors.up.isDown && player.body.touching.down)
+       if (this.cursors.up.isDown && this.player.body.touching.down)
        {
-        player.body.velocity.y = -400;
+        this.player.body.velocity.y = -400;
 
     }
 
-    if (!player.body.touching.down){
+    if (!this.player.body.touching.down){
 
-        if (playerFacing === 'left')
-            player.frame = 12;
-        else if (playerFacing === 'idle')
-            player.frame = 13;
-        else if (playerFacing === 'right')
-            player.frame = 14;
+        if (this.playerFacing === 'left')
+            this.player.frame = 12;
+        else if (this.playerFacing === 'idle')
+            this.player.frame = 13;
+        else if (this.playerFacing === 'right')
+            this.player.frame = 14;
     }
 
-    if (!player.body.touching.down && cursors.down.isDown){
+    if (!this.player.body.touching.down && this.cursors.down.isDown){
 
-        player.body.acceleration.y = 2000;
+        this.player.body.acceleration.y = 2000;
     }
 
-    else if (player.body.touching.down && cursors.down.isDown){
+    else if (this.player.body.touching.down && this.cursors.down.isDown){
 
             // crouching
         }
 
-        if (player.body.touching.down && cursors.shiftKey && cursors.down.isDown){
+        if (this.player.body.touching.down && this.cursors.shiftKey && this.cursors.down.isDown){
 
             // getting down from platforms
         }
 
-    }
+    },
 
     fullscreen : function() {
 
-        if (game.scale.isFullScreen)
+        if (this.game.scale.isFullScreen)
         {
-            game.scale.stopFullScreen();
+            this.game.scale.stopFullScreen();
         }
         else
         {
-            game.scale.startFullScreen(false);
+            this.game.scale.startFullScreen(false);
         }
 
-    }
+    },
 
     render : function () {
 
@@ -373,5 +373,4 @@ MyGame.Game.prototype = {
 
 
 }
-
 

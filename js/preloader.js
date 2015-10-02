@@ -11,14 +11,14 @@ MyGame.Preloader.prototype = {
 
         this.add.audio('maintheme');
 
-        this.load.image('core', server+'assets/core.png');
-        this.load.image('fond', server+'assets/fond.png');
-        this.load.image('turret', server+'assets/turret.png');
-        this.load.image('skin', server+'assets/skin.png');
-        this.load.image('platform', server+'assets/platform.png');
-        this.load.spritesheet('player', server+'assets/player.png', 50, 100);
-        this.load.spritesheet('ennemies', server+'assets/ennemies.png', 50, 100);
-        this.load.image('bullet', server+'assets/bullet.png');
+        this.load.image('core', 'assets/core.png');
+        //this.load.image('fond', 'assets/fond.png');
+        this.load.image('turret', 'assets/turret.png');
+        this.load.image('skin', 'assets/skin.png');
+        this.load.image('platform', 'assets/platform.png');
+        this.load.spritesheet('player', 'assets/player.png', 50, 100);
+        this.load.spritesheet('ennemies', 'assets/ennemies.png', 50, 100);
+        this.load.image('bullet', 'assets/bullet.png');
         this.load.audio('maintheme', 'assets/audio/maintheme.mp3');
     },
 

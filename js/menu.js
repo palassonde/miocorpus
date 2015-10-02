@@ -6,13 +6,15 @@ MyGame.Menu = function (game) {
 MyGame.Menu.prototype = {
     
     create: function () {
+		this.state.start('game');
+		
         // On démarre la musique
-        this.music = this.add.audio('main-theme');
+        this.music = this.add.audio('maintheme');
         this.music.play();
-        this.playButton = this.add.button(this.world.centerX, this.world.centerY,
-                                          'play-button', this.startGame, this,
-                                          2, 1, 0, 2);
-        this.playButton.anchor.setTo(0.5, 0.5);
+        // //this.playButton = this.add.button(this.world.centerX, this.world.centerY,
+          // //                                'play-button', this.startGame, this,
+            // //                              2, 1, 0, 2);
+        // this.playButton.anchor.setTo(0.5, 0.5);
     },
 
     update: function () {
