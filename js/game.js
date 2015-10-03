@@ -169,13 +169,10 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
     },
 
-    passerAtravers : function(player, platform, game){
+    passerAtravers : function(player, platform){
 
 		return !this.actionKey2.isDown;
-        // if(this.actionKey2.isDown){
-            // return false;
-        // }
-        // return true;
+
     },
 
     changeBackgroundColor : function (time){
@@ -241,7 +238,11 @@ MyGame.Game.prototype = {
             if (this.game.camera.y > 30){
                 this.game.camera.y -= 15;
             }
-        }
+        }else {
+			if (this.game.camera.y < 600){
+                this.game.camera.y += 15;
+            }
+		}
     },
 
     enemyWave : function(){
