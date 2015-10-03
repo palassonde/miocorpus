@@ -83,18 +83,7 @@ MyGame.Game.prototype = {
         // Player
 		this.cursors = this.game.input.keyboard.createCursorKeys();
 		this.player = new Personnage(this.game, this.cursors);
-		
-        // this.player = this.game.add.sprite(200,1000, 'player');
-        
-        // this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
-        // this.player.body.gravity.y = 600;
-        // this.player.body.collideWorldBounds = true;
-        // this.player.animations.add('idleRight', [0,1,2], 5, true);
-        // this.player.animations.add('idleLeft', [9,10,11], 5, true);
-        // this.player.animations.add('right', [3,4,5], 5, true);
-        // this.player.animations.add('left', [6,7,8], 5, true);
-        // //player.animations.play('idle', 10, true);
-        // this.player.anchor.set(0.5);
+
         
         // Camera
         this.game.camera.y = 1200;
@@ -317,8 +306,6 @@ Personnage = function(game, cursors){
 	//player.animations.play('idle', 10, true);
 	this.player.anchor.set(0.5);
 
-	//Créer le bouton qui permet de passer a travers le plateau
-	this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
 };
 
 Personnage.prototype.passerAtravers = function(player, platform){
