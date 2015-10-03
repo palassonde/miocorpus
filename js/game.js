@@ -3,7 +3,6 @@
 // Pierre-Alexandre Lassonde
 // Julien Perron
 // Firas Cherif
-var game = game
 MyGame.Game = function (game) {
 
     this.game;      //  a reference to the currently running game (Phaser.Game)
@@ -30,7 +29,6 @@ MyGame.Game = function (game) {
     this.cursors;
     this.actionKey;
     this.platforms;
-    this.playerFacing = 'right';
     this.core;
     this.skin;
     this.nbrTurrets = 0;
@@ -83,17 +81,20 @@ MyGame.Game.prototype = {
        this.platforms.setAll('body.checkCollision.right', false);
 
         // Player
-        this.player = this.game.add.sprite(200,1000, 'player');
+		this.cursors = this.game.input.keyboard.createCursorKeys();
+		this.player = new Personnage(this.game, this.cursors);
+		
+        // this.player = this.game.add.sprite(200,1000, 'player');
         
-        this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
-        this.player.body.gravity.y = 600;
-        this.player.body.collideWorldBounds = true;
-        this.player.animations.add('idleRight', [0,1,2], 5, true);
-        this.player.animations.add('idleLeft', [9,10,11], 5, true);
-        this.player.animations.add('right', [3,4,5], 5, true);
-        this.player.animations.add('left', [6,7,8], 5, true);
-        //player.animations.play('idle', 10, true);
-        this.player.anchor.set(0.5);
+        // this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
+        // this.player.body.gravity.y = 600;
+        // this.player.body.collideWorldBounds = true;
+        // this.player.animations.add('idleRight', [0,1,2], 5, true);
+        // this.player.animations.add('idleLeft', [9,10,11], 5, true);
+        // this.player.animations.add('right', [3,4,5], 5, true);
+        // this.player.animations.add('left', [6,7,8], 5, true);
+        // //player.animations.play('idle', 10, true);
+        // this.player.anchor.set(0.5);
         
         // Camera
         this.game.camera.y = 1200;
@@ -122,14 +123,14 @@ MyGame.Game.prototype = {
         this.enemyWave();
 
         // Initializing Controls
-        this.cursors = this.game.input.keyboard.createCursorKeys();
+        //this.cursors = this.game.input.keyboard.createCursorKeys();
         this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.actionKey.onDown.add(creationTurret, this);
 		function creationTurret (){
-			if (this.player.body.touching.down){
+			if (this.player.player.body.touching.down){
 
-                this.turret = this.turrets.create(this.player.x + 30, this.player.y + 14, 'turret');
+                this.turret = this.turrets.create(this.player.player.x + 30, this.player.player.y + 14, 'turret');
                 this.nbrTurrets++;
 
             }
@@ -142,17 +143,17 @@ MyGame.Game.prototype = {
 		
 		var variable = this;
         // Collisions
-        this.game.physics.arcade.collide(this.player, this.platforms,null,this.passerAtravers, this);
+        this.game.physics.arcade.collide(this.player.player, this.platforms,null,this.player.passerAtravers, this);
         this.game.physics.arcade.collide(this.ennemies, this.platforms);
         this.game.physics.arcade.collide(this.turrets, this.platforms);
         //this.game.physics.arcade.collide(ennemies, player);
         //this.game.physics.arcade.collide(ennemies);
 
         // Refresh changed values
-        this.player.body.velocity.x = 0;
-        this.player.body.acceleration.y = 0;
+        this.player.player.body.velocity.x = 0;
+        this.player.player.body.acceleration.y = 0;
 
-        this.movePlayer();
+        this.player.movePlayer();
         this.moveCamera();
 
         this.changeBackgroundColor(this.game.time.now % 100000);
@@ -167,12 +168,6 @@ MyGame.Game.prototype = {
         this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
-    },
-
-    passerAtravers : function(player, platform){
-
-		return !this.actionKey2.isDown;
-
     },
 
     changeBackgroundColor : function (time){
@@ -232,9 +227,9 @@ MyGame.Game.prototype = {
 
     moveCamera : function(){
 
-        this.game.camera.x = this.player.x -512 ;
+        this.game.camera.x = this.player.player.x -512 ;
 
-        if (this.player.y < 570){
+        if (this.player.player.y < 570){
             if (this.game.camera.y > 30){
                 this.game.camera.y -= 15;
             }
@@ -279,81 +274,6 @@ MyGame.Game.prototype = {
         }
     },
 
-    movePlayer : function(){
-
-
-        if (this.cursors.left.isDown)
-        {
-            this.player.body.velocity.x = -300;
-
-            if (this.playerFacing !== 'left')
-            {
-                this.player.animations.play('left');
-                this.playerFacing = 'left';
-            }
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.player.body.velocity.x = 300;
-
-            if (this.playerFacing !== 'right')
-            {
-                this.player.animations.play('right');
-                this.playerFacing = 'right';
-            }
-        } else {
-
-            if (this.playerFacing !== 'idle')
-            {
-
-
-                this.player.animations.stop();
-
-                if (this.playerFacing === 'left')
-                {
-                   this.player.animations.play('idleLeft');
-               }
-               else
-               {
-                   this.player.animations.play('idleRight');
-               }
-
-               this.playerFacing = 'idle';
-           }
-       }
-
-       if (this.cursors.up.isDown && this.player.body.touching.down)
-       {
-        this.player.body.velocity.y = -400;
-
-    }
-
-    if (!this.player.body.touching.down){
-
-        if (this.playerFacing === 'left')
-            this.player.frame = 12;
-        else if (this.playerFacing === 'idle')
-            this.player.frame = 13;
-        else if (this.playerFacing === 'right')
-            this.player.frame = 14;
-    }
-
-    if (!this.player.body.touching.down && this.cursors.down.isDown){
-
-        this.player.body.acceleration.y = 2000;
-    }
-
-    else if (this.player.body.touching.down && this.cursors.down.isDown){
-
-            // crouching
-        }
-
-        if (this.player.body.touching.down && this.cursors.shiftKey && this.cursors.down.isDown){
-
-            // getting down from platforms
-        }
-
-    },
 
     fullscreen : function() {
 
@@ -379,3 +299,99 @@ MyGame.Game.prototype = {
 
 }
 
+Personnage = function(game, cursors){
+	//Variable
+	this.game = game;
+	this.cursors = cursors;
+	this.playerFacing = 'right';
+	
+	//Créer le player
+	this.player = this.game.add.sprite(200,1000, 'player');    
+	this.game.physics.enable(this.player, Phaser.Physics.ARCADE);
+	this.player.body.gravity.y = 600;
+	this.player.body.collideWorldBounds = true;
+	this.player.animations.add('idleRight', [0,1,2], 5, true);
+	this.player.animations.add('idleLeft', [9,10,11], 5, true);
+	this.player.animations.add('right', [3,4,5], 5, true);
+	this.player.animations.add('left', [6,7,8], 5, true);
+	//player.animations.play('idle', 10, true);
+	this.player.anchor.set(0.5);
+
+	//Créer le bouton qui permet de passer a travers le plateau
+	this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+};
+
+Personnage.prototype.passerAtravers = function(player, platform){
+		return !this.actionKey2.isDown;
+}
+
+Personnage.prototype.movePlayer = function(){
+	if (this.cursors.left.isDown)
+	{
+		this.player.body.velocity.x = -300;
+
+		if (this.playerFacing !== 'left')
+		{
+			this.player.animations.play('left');
+			this.playerFacing = 'left';
+		}
+	}else if (this.cursors.right.isDown)
+	{
+		this.player.body.velocity.x = 300;
+
+		if (this.playerFacing !== 'right')
+		{
+			this.player.animations.play('right');
+			this.playerFacing = 'right';
+		}
+	}else 
+	{
+
+		if (this.playerFacing !== 'idle')
+		{
+			this.player.animations.stop();
+
+			if (this.playerFacing === 'left')
+			{
+			   this.player.animations.play('idleLeft');
+			}
+			else
+			{
+			   this.player.animations.play('idleRight');
+			}
+
+			this.playerFacing = 'idle';
+	   }
+	}
+
+    if (this.cursors.up.isDown && this.player.body.touching.down)
+    {
+		this.player.body.velocity.y = -400;
+
+    }
+
+    if (!this.player.body.touching.down)
+	{
+
+        if (this.playerFacing === 'left')
+            this.player.frame = 12;
+        else if (this.playerFacing === 'idle')
+            this.player.frame = 13;
+        else if (this.playerFacing === 'right')
+            this.player.frame = 14;
+    }
+
+    if (!this.player.body.touching.down && this.cursors.down.isDown)
+	{
+        this.player.body.acceleration.y = 2000;
+    }else if (this.player.body.touching.down && this.cursors.down.isDown)
+	{
+
+            // crouching
+    }
+
+    if (this.player.body.touching.down && this.cursors.shiftKey && this.cursors.down.isDown){
+
+            // getting down from platforms
+    }
+}
