@@ -45,10 +45,9 @@ MyGame.Game.prototype = {
     create : function (game) {
 
         // Game stage
-        //var fond = game.add.sprite(0,0, 'fond');
+        var fond = game.add.sprite(0,0, 'fond_degrader');
         //fond.scale.setTo(0.6, 0.6);
-        //fond.fixedToCamera = true;
-        
+        fond.fixedToCamera = true;
         
         
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -180,13 +179,18 @@ MyGame.Game.prototype = {
     },
 
     changeBackgroundColor : function (time){
-        if(time <= 25000){
-            this.game.stage.backgroundColor = '#78fdff';
-        }else if(time <= 50000 || (time <= 100000 && time > 75000)){
-            this.game.stage.backgroundColor = "#67d2ff"
-        }else{
-            this.game.stage.backgroundColor = '#079eff';
-        }
+		
+		if(time <= 50000){
+			var red = (120 - 0.0022*time);
+			var green = (253 - 0.002*time);
+		}else{
+			var timeMod = time % 50000;
+			var red = (0.0022*timeMod + 10);
+			var green = (153 + 0.002*timeMod);
+		}
+		
+		this.game.stage.backgroundColor = "#" + ((1 << 24) + (red << 16) + (green << 8) + 255).toString(16).slice(1);
+		
     },
 
     bulletVSenemy : function(bullet, enemy) {

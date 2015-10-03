@@ -10,8 +10,8 @@ MyGame.Preloader.prototype = {
         this.stage.backgroundColor = '#78fdff';
 
         this.add.audio('maintheme');
-
-        this.load.image('core', 'assets/core.png');
+		this.load.image('core', 'assets/core.png');
+        this.load.image('fond_degrader', 'assets/fond_degrader.png');
         //this.load.image('fond', 'assets/fond.png');
         this.load.image('turret', 'assets/turret.png');
         this.load.image('skin', 'assets/skin.png');
