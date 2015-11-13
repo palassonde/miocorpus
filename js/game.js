@@ -122,8 +122,8 @@ MyGame.Game.prototype = {
         function creationTurret (){
          if (this.player.player.body.touching.down){
 
-            this.turret = this.turrets.create(this.player.player.x + 30, this.player.player.y + 14, 'turret');
-            this.nbrTurrets++;
+                this.nbrTurrets++;
+				this.turrets.add(new Turret(this.player.player.x + 30, this.player.player.y + 14,this.game));
 
         }
     }
@@ -154,11 +154,20 @@ update : function () {
 
         
         
-        if (this.nbrTurrets > 0 && Math.abs(this.turret.x - this.enemy.x) <= 400){
-
-            this.turretShoot();
-        }
-
+        for (var x in this.turrets.children){
+			this.turrets.children[x].time += this.game.time.elapsed;
+			
+			
+			
+			var dis = Phaser.Point.distance(this.turrets.children[x].position, this.enemy.position);
+			
+			if(this.turrets.children[x].time > 1000 && dis < 400){
+				console.log("bang bang");
+				this.turrets.children[x].time = 0;
+			}
+		}
+		
+		
         this.game.physics.arcade.overlap(this.bullets, this.ennemies, this.bulletVSenemy, null, this);
         this.game.physics.arcade.overlap(this.core, this.ennemies, this.coreVSenemy, null, this);
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);

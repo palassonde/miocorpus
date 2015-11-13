@@ -15,5 +15,3 @@ Enemy.prototype.action = function(mofo){
 
 	
 }
-
-Enemy.prototype.

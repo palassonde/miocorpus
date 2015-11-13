@@ -15,12 +15,11 @@ player = function(game, cursors){
 	//player.animations.play('idle', 10, true);
 	this.player.anchor.set(0.5);
 
-	console.log(MyGame.Game.game);
-
+	
 };
 
 player.prototype.passerAtravers = function(player, platform){
-		console.log(platform)
+		
 		return !this.actionKey2.isDown;
 }
 
