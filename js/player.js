@@ -1,8 +1,10 @@
-player = function(game, cursors){
+Player = function(game, cursors){
+
+	this.game = game;
 
 	this.cursors = cursors;
 	this.playerFacing = 'right';
-	
+	this.cursors = game.input.keyboard.createCursorKeys();
 	//Créer le player
 	this.player = game.add.sprite(200,1000, 'player');    
 	game.physics.enable(this.player, Phaser.Physics.ARCADE);
@@ -15,8 +17,7 @@ player = function(game, cursors){
 	//player.animations.play('idle', 10, true);
 	this.player.anchor.set(0.5);
 
-	
-};
+}
 
 player.prototype.passerAtravers = function(player, platform){
 		

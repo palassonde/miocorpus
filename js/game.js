@@ -21,78 +21,34 @@ MyGame.Game = function (game) {
     this.particles; //  the particle manager (Phaser.Particles)
     this.physics;   //  the physics manager (Phaser.Physics)
     this.rnd;       //  the repeatable random number generator (Phaser.RandomDataGenerator)
-
-
-    // Variables du jeu
-    this.server = '';//http://localhost:8080/';
-    this.player;
-    this.cursors;
-    this.actionKey;
-    this.platforms;
-    this.core;
-    this.skin;
-    this.nbrTurrets = 0;
-    this.turret;
-    this.enemy;
-    this.bullet;
-    this.timer;
 };
 
 MyGame.Game.prototype = {
 
     create : function (game) {
 
-
-        this.en = new Enemy(game);
-
-        // Game stagetimer
-        var background_image = game.add.sprite(0,0, 'fond_degrader');
-        //fond.scale.setTo(0.6, 0.6);
-        background_image.fixedToCamera = true;
-        
         // La physique du jeu ARCADE
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        // Configuration des objets sur la scene
+        this.stage = new Stage(game);
+        stage.createObjects();
 
-        // Core n Skin
-        this.core = this.game.add.sprite(0,600, 'core');
-        this.skin = this.game.add.sprite(60,600, 'skin');
-        this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
-        this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
-
-        //this.game.physics.arcade.gravity.y = 600;
+        // Configuration des limites du monde
         this.game.world.setBounds(0, 0, 2200, 1200);
 
-        // Platforms
-        this.platforms = this.game.add.group();
-        this.platforms.enableBody = true;
-
-        //// Ground
-        this.ground = this.platforms.create(0,1170,'platform');
-        this.ground.scale.setTo(10,2);
-        this.jungleGround = this.platforms.create(0,600,'platform');
-        this.jungleGround.scale.setTo(10,1);
-
-        //// Ledges
-        this.createPlatforms();
-
-        //platforms.create(200,1850,'platform');
-       // platforms.create(580,1790,'platform');
-        this.platforms.setAll('body.immovable', true);
-        this.platforms.setAll('body.checkCollision.down', false);
-        this.platforms.setAll('body.checkCollision.left', false);
-        this.platforms.setAll('body.checkCollision.right', false);
+        // Platforms && ground && ledges
+        this.stage.createPlatforms();
 
         // Player
-        this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.player = new player(this.game, this.cursors);
+        this.player = new player(game);
 
         // Camera
         this.game.camera.y = 1200;
 
         // Full screen
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        this.game.input.onDown.add(this.fullscreen, this);
+        this.game.input.onDown.add(stage.fullscreen, this);
 
         // Ennemies
         this.ennemies = this.game.add.group();
@@ -173,20 +129,7 @@ update : function () {
         this.game.physics.arcade.overlap(this.ennemies, this.skin, this.enemyVSskin, null, this);
     },
 
-    changeBackgroundColor : function (time){
 
-      if(time <= 50000){
-         var red = (120 - 0.0022*time);
-         var green = (253 - 0.002*time);
-     }else{
-         var timeMod = time % 50000;
-         var red = (0.0022*timeMod + 10);
-         var green = (153 + 0.002*timeMod);
-     }
-
-     this.game.stage.backgroundColor = "#" + ((1 << 24) + (red << 16) + (green << 8) + 255).toString(16).slice(1);
-
- },
 
  bulletVSenemy : function(bullet, enemy) {
     bullet.kill();
@@ -228,20 +171,6 @@ turretShoot : function(){
         }
     },
 
-    moveCamera : function(){
-
-        this.game.camera.x = this.player.player.x -512 ;
-
-        if (this.player.player.y < 570){
-            if (this.game.camera.y > 30){
-                this.game.camera.y -= 15;
-            }
-        }else {
-         if (this.game.camera.y < 600){
-            this.game.camera.y += 15;
-        }
-    }
-},
 
 enemyWave : function(){
 
@@ -253,42 +182,6 @@ enemyWave : function(){
     this.enemy.animations.add('left', [6,7,8], 5, true);
     this.enemy.animations.play('left');
     this.enemy.anchor.set(0.5);
-},
-
-createPlatforms : function(){
-
-    var x = 300;
-
-    for (var j = 0; j < 5; j++){
-        if(j % 2 === 0){
-            for(var i = 0; i < 4 ; i++){
-                var y = 1050 - (i * 110) ;
-                this.p = this.platforms.create(x,y,'platform');
-                this.p.scale.setTo(0.7,0.5);
-            }
-        } else {
-            for(var i = 0; i < 3 ; i++){
-                var y = 1000 - (i * 110) ;
-                this.p = this.platforms.create(x,y,'platform');
-                this.p.scale.setTo(0.7,0.5);
-            }
-        }
-        x += 400;
-    }
-},
-
-
-fullscreen : function() {
-
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
-    }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
-
 },
 
 render : function () {
