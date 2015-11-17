@@ -1,7 +1,4 @@
 Player = function (x, y, game, turrets) {
-
-	this.game = game;
-
 	// Create the sprite
 	Phaser.Sprite.call(this, game, x, y, "player")
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -18,28 +15,48 @@ Player = function (x, y, game, turrets) {
 	this.animations.play('idleRight')
 
 	// Controls
-	this.actionKey_T = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-	this.actionKey_T.onDown.add(createTurret, this);
+	this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.T); 
+    this.actionKey.onDown.add(this.creationTurret, this);
+	
+	this.actionKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+	
 	this.cursors = this.game.input.keyboard.createCursorKeys();
-
-	function createTurret (){
-
-        turrets.add(new Turret(this.x + 30, this.y + 14, this.game));
-
-    }
+	
+	
+	//Turrets
+	this.maxTurrret = 10;
+	this.nbrTurrets = 0;
+	this.turrets = this.game.add.group();
+    this.turrets.enableBody = true;
+    this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
-Player.prototype.action = function(platforms){
+Player.prototype.creationTurret = function(){
+	if (this.body.touching.down && this.maxTurrret >= this.nbrTurrets){
+        this.nbrTurrets++;
+		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game));
+	}
+}
 
-	this.game.physics.arcade.collide(this, platforms);
+Player.prototype.action = function(platforms, enemy){
+
+	this.game.physics.arcade.collide(this, platforms, null, this.passerAtravers, this);
 
 	// Refresh changed values
     this.body.velocity.x = 0;
     this.body.acceleration.y = 0;
 
 	this.move();
+	
+	for (var x in this.turrets.children){
+		this.turrets.children[x].actionTurret(enemy);
+	}
+}
+
+Player.prototype.passerAtravers = function(player, platform){		
+	return !this.actionKey2.isDown;
 }
 
 Player.prototype.move = function(){

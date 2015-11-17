@@ -36,7 +36,7 @@ MyGame.Game.prototype = {
         this.stage.createPlatforms();
         
         // Create group Turrets
-        this.turrets = this.game.add.group();
+        //this.turrets = this.game.add.group();
 
         // Create group Enemies
         this.enemies = this.game.add.group();
@@ -45,20 +45,25 @@ MyGame.Game.prototype = {
         // Instantiate Player
         this.player = new Player(200,1000,this.game, this.turrets);
         this.game.add.existing(this.player);
-
+		
+		this.timeEnemie = 0 - this.game.time.now;
 },
 
     update : function () {
-
+		this.timeEnemie += this.game.time.elapsed;
+		if(this.timeEnemie >= 1000){
+			this.stage.createEnemy(this.enemies); // peut etre creer dans le stage ou le level ?
+			this.timeEnemie = 0;
+		}
         // Collisions peut etre a changer de place
         
         // Actions
-        this.player.action(this.stage.platforms);
+        this.player.action(this.stage.platforms, this.enemies);
         this.stage.action(this.time, this.player, this.enemies, this.turrets);
 
-        for (var x in this.turrets.children){
-            this.turrets.children[x].action(this.enemies);          
-        }
+        // for (var x in this.turrets.children){
+            // this.turrets.children[x].action(this.enemies);          
+        // }
         for (var x in this.enemies.children)
             this.enemies.children[x].action();   
 
