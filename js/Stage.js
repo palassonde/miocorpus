@@ -1,10 +1,16 @@
 Stage = function(game){
 
 	this.game = game;
+
 	this.background_image = game.add.sprite(0,0, 'fond_degrader');
     this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
+
+    // Stage variables
+    this.core;
+    this.skin;
+    this.groud;
 
     // Full screen
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -12,10 +18,15 @@ Stage = function(game){
 
 }
 
-Stage.prototype.action = function(time, player){
+Stage.prototype.action = function(time, player, enemies, turrets){
+
+    this.game.physics.arcade.collide(enemies, this.platforms);
+    this.game.physics.arcade.collide(turrets, this.platforms);
+
+    this.game.physics.arcade.overlap(enemies, this.skin, this.enemyVSskin, null, this);
 
 	this.moveCamera(player);
-	this.changeBackgroundColor(time.now % 100000);
+	this.changeBackgroundColor(time.now % 1000);
 }
 
 Stage.prototype.changeBackgroundColor = function (time){
@@ -31,8 +42,7 @@ Stage.prototype.changeBackgroundColor = function (time){
 
     this.game.stage.backgroundColor = "#" + ((1 << 24) + (red << 16) + (green << 8) + 255).toString(16).slice(1);
 
- }
-
+}
 
 Stage.prototype.moveCamera = function(player){
 
@@ -43,7 +53,7 @@ Stage.prototype.moveCamera = function(player){
                 this.game.camera.y -= 15;
             }
         }else {
-         if (this.game.camera.y < 600){
+        if (this.game.camera.y < 600){
             this.game.camera.y += 15;
         }
     }
@@ -108,4 +118,9 @@ Stage.prototype.fullscreen = function() {
 Stage.prototype.createEnemy = function(enemies){
 
 	enemies.add(new Enemy(1900, 1000, this.game));
+}
+
+Stage.prototype.enemyVSskin = function(skin, enemy) {
+
+    enemy.body.velocity.x = -10;
 }

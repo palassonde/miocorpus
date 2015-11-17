@@ -38,8 +38,6 @@ MyGame.Game.prototype = {
         // Create group Turrets
         this.turrets = this.game.add.group();
 
-        this.players = this.game.add.group();
-
         // Create group Enemies
         this.enemies = this.game.add.group();
         this.stage.createEnemy(this.enemies); // peut etre creer dans le stage ou le level ?
@@ -52,15 +50,11 @@ MyGame.Game.prototype = {
 
     update : function () {
 
-        // Collisions
-        this.game.physics.arcade.collide(this.enemies, this.stage.platforms);
-        this.game.physics.arcade.collide(this.turrets, this.stage.platforms);        
-        this.game.physics.arcade.overlap(this.turrets.bullets, this.enemies, this.bulletVSenemy, null, this);
-        this.game.physics.arcade.overlap(this.enemies, this.stage.skin, this.enemyVSskin, null, this);
-
+        // Collisions peut etre a changer de place
+        
         // Actions
         this.player.action(this.stage.platforms);
-        this.stage.action(this.time, this.player);
+        this.stage.action(this.time, this.player, this.enemies, this.turrets);
 
         for (var x in this.turrets.children){
             this.turrets.children[x].action(this.enemies);          
@@ -68,16 +62,6 @@ MyGame.Game.prototype = {
         for (var x in this.enemies.children)
             this.enemies.children[x].action();   
 
-    },
-
-    bulletVSenemy : function(bullet, enemy) {
-        bullet.destroy();
-        enemy.destroy();
-    },
-
-    enemyVSskin : function(skin, enemy) {
-
-        enemy.body.velocity.x = -10;
     }
 
 }

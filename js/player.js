@@ -24,7 +24,7 @@ Player = function (x, y, game, turrets) {
 
 	function createTurret (){
 
-            turrets.add(new Turret(this.x + 30, this.y + 14, this.game));
+        turrets.add(new Turret(this.x + 30, this.y + 14, this.game));
 
     }
 }
@@ -104,8 +104,11 @@ Player.prototype.move = function(){
         this.body.acceleration.y = 2000;
     }else if (this.body.touching.down && this.cursors.down.isDown)
 	{
+
         // crouching
-        if (this.cursors.shiftKey){
+        if (this.cursors.shiftKey.isDown){
+
+        	console.log("yes im here")
 
         	this.body.checkCollision.down = false;
     	}

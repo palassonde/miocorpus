@@ -22,6 +22,8 @@ Turret.prototype = Object.create(Phaser.Sprite.prototype);
 
 Turret.prototype.action = function(enemies){
 
+	this.game.physics.arcade.overlap(this.bullets, enemies, this.touchEnemy, null, this);
+
 	for (var x in enemies.children){
 		this.shoot(enemies.children[x]);
 	}
@@ -45,4 +47,9 @@ Turret.prototype.shoot = function(enemy){
 
 		this.game.physics.arcade.moveToObject(this.bullet, enemy,300);
 	}
+}
+
+Turret.prototype.touchEnemy = function(bullet, enemy) {
+    bullet.destroy();
+    enemy.hurt();
 }
