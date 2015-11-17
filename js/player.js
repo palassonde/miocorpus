@@ -106,9 +106,9 @@ Player.prototype.move = function(){
 	{
 
         // crouching
-        if (this.cursors.shiftKey.isDown){
+        if (this.cursors.down.shiftKey){
 
-        	console.log("yes im here")
+        	console.log("yes im here");
 
         	this.body.checkCollision.down = false;
     	}
