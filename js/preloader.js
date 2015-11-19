@@ -18,6 +18,7 @@ MyGame.Preloader.prototype = {
         // Turrets stuff
         this.load.image('turret', 'assets/turret.png');
         this.load.image('bullet', 'assets/bullet.png');
+		this.load.image('boomerang', 'assets/boomerang.png');
 
         // Player
         this.load.spritesheet('player', 'assets/player.png', 50, 100);
@@ -28,10 +29,18 @@ MyGame.Preloader.prototype = {
         // Audio
         this.add.audio('maintheme');
         this.load.audio('maintheme', 'assets/audio/maintheme.mp3');
+
+        // Fonts
+        this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
+        // GUI
+        this.load.image('heart', 'assets/heart.png');
+        this.load.image('redstone', 'assets/redstone.png');
+        this.load.image('bluestone', 'assets/bluestone.png');
+        this.load.image('greenstone', 'assets/greenstone.png');
     },
 
     create: function () {
-
 
         this.state.start('menu');
 

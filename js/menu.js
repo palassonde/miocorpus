@@ -10,7 +10,7 @@ MyGame.Menu.prototype = {
 		
         // On démarre la musique
         this.music = this.add.audio('maintheme');
-        this.music.play();
+        //this.music.play();
         // //this.playButton = this.add.button(this.world.centerX, this.world.centerY,
           // //                                'play-button', this.startGame, this,
             // //                              2, 1, 0, 2);

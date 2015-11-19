@@ -1,6 +1,9 @@
-Stage = function(game){
+Stage = function(game, player){
 
 	this.game = game;
+    this.player = player;
+
+    // Constantes
 
 	this.background_image = game.add.sprite(0,0, 'fond_degrader');
     this.background_image.fixedToCamera = true;
@@ -10,23 +13,33 @@ Stage = function(game){
     // Stage variables
     this.core;
     this.skin;
-    this.groud;
+    this.ground;
+    this.jungleGround;
+    this.gameOver = false;
+
+    enemiesByWave = 1;
+    expansion = 2;
+    this.waveCount = 0;
 
     // Full screen
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
     this.game.input.onDown.add(this.fullscreen, this);
-
 }
 
-Stage.prototype.action = function(time, player, enemies, turrets){
+Stage.prototype.action = function(time, player, enemies, turrets, GUI){
 
     this.game.physics.arcade.collide(enemies, this.platforms);
     this.game.physics.arcade.collide(turrets, this.platforms);
 
-    this.game.physics.arcade.overlap(enemies, this.skin, this.enemyVSskin, null, this);
+    this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
+    this.game.physics.arcade.overlap(enemies, this.core, this.endGame, null, this);
 
 	this.moveCamera(player);
-	this.changeBackgroundColor(time.now % 1000);
+	this.changeBackgroundColor(time.now % 10);
+
+    if (enemies.length === 0){
+        this.createWave(time, enemies, GUI);
+    }
 }
 
 Stage.prototype.changeBackgroundColor = function (time){
@@ -91,11 +104,13 @@ Stage.prototype.createPlatforms = function(){
     this.platforms.setAll('body.checkCollision.down', false);
     this.platforms.setAll('body.checkCollision.left', false);
     this.platforms.setAll('body.checkCollision.right', false);
+
+    this.jungleGround.body.checkCollision.down = true;
 }
 
 Stage.prototype.createObjects = function(){
 
-	this.core = this.game.add.sprite(0,600, 'core');
+	this.core = this.game.add.sprite(-10,600, 'core');
     this.skin = this.game.add.sprite(60,600, 'skin');
     this.game.physics.enable(this.core, Phaser.Physics.ARCADE);
     this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);
@@ -114,13 +129,32 @@ Stage.prototype.fullscreen = function() {
 
 }
 
+Stage.prototype.createEnemy = function(enemies, x, y, speed){
 
-Stage.prototype.createEnemy = function(enemies){
-
-	enemies.add(new Enemy(1900, 1000, this.game));
+	enemies.add(new Enemy(x, y, this.game, speed));
 }
 
-Stage.prototype.enemyVSskin = function(skin, enemy) {
+Stage.prototype.slowEnemy = function(skin, enemy) {
 
-    enemy.body.velocity.x = -10;
+    enemy.slowDown();
+}
+
+Stage.prototype.endGame = function() {
+
+    this.gameOver = true;
+    this.player.kill();
+
+}
+
+Stage.prototype.createWave = function(time, enemies, GUI){
+
+    for (var i = 0; i < enemiesByWave; i++) {
+        speed = 40 * (Math.random() + 1);
+        this.createEnemy(enemies, 2000, 960, speed);
+    }
+    
+    enemiesByWave = enemiesByWave * expansion;
+    this.waveCount++;
+    GUI.displayWave(this.waveCount);
+
 }

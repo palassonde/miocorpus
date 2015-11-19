@@ -1,13 +1,18 @@
-Enemy = function (x, y, game) {
+Enemy = function (x, y, game, speed) {
 
 	this.game = game;
+
+    this.jumpTimer = 0;
+    this.jumpTime = 500;
+    this.jumpHeight = 300;
+    this.speed = speed;
 
     this.hp = 100;
 
 	Phaser.Sprite.call(this, game, x, y, "player")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
-    this.body.velocity.x = -100;        
+    this.body.velocity.x = -speed;        
     this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
 
@@ -15,20 +20,22 @@ Enemy = function (x, y, game) {
     this.animations.play('left');
     this.anchor.set(0.5);
 
-    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-    this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
-
+	//var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
+    //this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 
-Enemy.prototype.action = function(){
+Enemy.prototype.action = function(time){
 
-    this.displayHP();
+    //this.displayHP();
+
+    if ((time.now - this.jumpTimer) >= this.jumpTime){
+        this.jump(time);
+    }
 
     if (this.hp <= 0){
         this.destroy();
-        this.text.destroy();
     }
 }
 
@@ -42,4 +49,22 @@ Enemy.prototype.displayHP = function(){
     this.text.setText(this.hp);
     this.text.x = this.body.x
     this.text.y = this.body.y - 30
+}
+
+Enemy.prototype.jump = function(time){
+
+    if(Math.random() > 0.2){
+        if (this.body.touching.down)
+            this.body.velocity.y = -this.jumpHeight * (Math.random() + 1);
+    }
+
+    this.jumpTimer = time.now;
+    
+}
+
+Enemy.prototype.slowDown = function(){
+
+    this.body.velocity.x = -10;
+    this.body.gravity.y = 0;
+    this.body.velocity.y = 0;
 }

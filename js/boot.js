@@ -1,5 +1,3 @@
-
-
 var MyGame = {};
 
 MyGame.Boot = function (game) {

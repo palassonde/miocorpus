@@ -29,44 +29,30 @@ MyGame.Game.prototype = {
 
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        // Create group Enemies
+        enemies = this.game.add.group();
+        // Instantiate Player
+        player = new Player(200, 1000, this.game);
+        this.game.add.existing(player);
 
         // Instantiate Stage
-        this.stage = new Stage(this.game);
-        this.stage.createObjects();
-        this.stage.createPlatforms();
-        
-        // Create group Turrets
-        //this.turrets = this.game.add.group();
-
-        // Create group Enemies
-        this.enemies = this.game.add.group();
-        this.stage.createEnemy(this.enemies); // peut etre creer dans le stage ou le level ?
-
-        // Instantiate Player
-        this.player = new Player(200,1000,this.game, this.turrets);
-        this.game.add.existing(this.player);
+        stage = new Stage(this.game, player);
+        stage.createObjects();
+        stage.createPlatforms();
 		
-		this.timeEnemie = 0 - this.game.time.now;
-},
+        // Instantiate GUI
+        GUI = new GUI(this.game, stage, player);
+
+    },
 
     update : function () {
-		this.timeEnemie += this.game.time.elapsed;
-		if(this.timeEnemie >= 1000){
-			this.stage.createEnemy(this.enemies); // peut etre creer dans le stage ou le level ?
-			this.timeEnemie = 0;
-		}
-        // Collisions peut etre a changer de place
-        
         // Actions
-        this.player.action(this.stage.platforms, this.enemies);
-        this.stage.action(this.time, this.player, this.enemies, this.turrets);
+        player.action(stage.platforms,enemies);
+        stage.action(this.time, player, enemies, player.turrets,GUI);
+        GUI.action();
 
-        // for (var x in this.turrets.children){
-            // this.turrets.children[x].action(this.enemies);          
-        // }
-        for (var x in this.enemies.children)
-            this.enemies.children[x].action();   
+        for (var x in enemies.children)
+            enemies.children[x].action(this.time);   
 
     }
-
 }
