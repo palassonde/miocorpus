@@ -8,7 +8,6 @@ GUI = function (game, stage, player) {
 	// CSS styles
 	style = { font: "40px Arial", fill: "#f26c4f", align: "left" };
 	resourcesStyle = { font: "20px Arial", fill: "#f26c4f", align: "left" };
-	gameOverStyle = { font: "60px Arial", fill: "#f26c4f", align: "left" };
 
 	// Adding the GUI components
 	this.redstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
@@ -52,7 +51,7 @@ GUI.prototype.setDisplayStone = function (){
 }
 
 GUI.prototype.setDisplayHealth = function (){
-	console.log(this.numberHeart);
+
 	var difHeart = this.numberHeart - this.player.health;
 	if(difHeart === 0 || this.player.health > 10) return;	
 	//Ajouter de coeur
@@ -84,7 +83,6 @@ GUI.prototype.setDisplayHealth = function (){
 GUI.prototype.action = function(){
 
 	this.updatePlayerInfos();
-	this.updateResourcesInfos();
 	if (this.stage.gameOver === true){
 		this.endGame();
 	}
@@ -107,13 +105,10 @@ GUI.prototype.updatePlayerInfos = function(){
 
 }
 
-GUI.prototype.updateResourcesInfos = function(){
-
-}
-
 GUI.prototype.endGame = function(){
 
-    end = this.game.add.text(this.game.camera.x, this.game.camera.y, "GAME-O", gameOverStyle);
-    end.fixedToCamera = true;
-    end.cameraOffset.setTo(400, 300);
+    end = this.game.add.sprite(350, 175, 'gameover');
+   	end.fixedToCamera = true;
+   	end.alpha = 0;
+   	var tween = this.game.add.tween(end).to( { alpha: 1 }, 10000, "Linear", true, 0, -1).repeat(0);
 }

@@ -25,18 +25,18 @@ Turret = function(x, y, game){
 	this.cooldownTemp = 0;
 	this.kind = 3;
 	this.enemyList = [];
-	this.changeEnemieList = [];
+	this.changeEnemyList = [];
 }
 
 Turret.prototype = Object.create(Phaser.Sprite.prototype);
 
-Turret.prototype.actionTurret = function(enemy){	
+Turret.prototype.actionTurret = function(enemies){	
 	this.time += this.game.time.elapsed; //Garde le temps lors de son dernier tir
 
 	var cooldown = this.cooldownTemp;
 	
 	this.enemyList = [];
-	this.changeEnemieList = [];
+	this.changeEnemyList = [];
 	
 	//Liste des enemie attaquer par un laser et liste de missile a changer de target
 	for(var x in this.bullets.children){
@@ -44,22 +44,22 @@ Turret.prototype.actionTurret = function(enemy){
 			this.enemyList.push(this.bullets.children[x].target);
 		}
 		if(this.bullets.children[x].needChangeTarget){
-			this.changeEnemieList.push(this.bullets.children[x]);
+			this.changeEnemyList.push(this.bullets.children[x]);
 		}
 	}
 	
 	//Change le target du missile
-	for(var x in this.changeEnemieList){
-		for (var y in enemy.children){
-			if(this.enemyList.indexOf(enemy.children[y]) !== -1){
+	for(var x in this.changeEnemyList){
+		for (var y in enemies.children){
+			if(this.enemyList.indexOf(enemies.children[y]) !== -1){
 				continue; //Si l'ennemie est deja target
 			}
 			
-			var dis = Phaser.Point.distance(this.position, enemy.children[y].position);
+			var dis = Phaser.Point.distance(this.position, enemies.children[y].position);
 			if(dis < this.rayon){
-				this.changeEnemieList[x].target = enemy.children[y];
-				this.changeEnemieList[x].needChangeTarget = false;
-				this.enemyList.push(enemy.children[y]); //Garde concience de l'ennemie attaquer
+				this.changeEnemyList[x].target = enemies.children[y];
+				this.changeEnemyList[x].needChangeTarget = false;
+				this.enemyList.push(enemies.children[y]); //Garde concience de l'ennemie attaquer
 			}
 		}
 	}
@@ -67,7 +67,7 @@ Turret.prototype.actionTurret = function(enemy){
 	//tirer un nouveau bullet;	
 	if (cooldown <= this.time){
 		
-		this.shootMissile(enemy,cooldown); 
+		this.shootMissile(enemies,cooldown); 
 	}
 	
 	//Action des missile
@@ -76,7 +76,7 @@ Turret.prototype.actionTurret = function(enemy){
 	}
 	
 	//Verifier une collision
-	this.game.physics.arcade.overlap(this.bullets, enemy, this.collisionMissile, null, this);
+	this.game.physics.arcade.overlap(this.bullets, enemies, this.collisionMissile, null, this);
 }
 
 Turret.prototype.collisionMissile = function(bullet,enemy){

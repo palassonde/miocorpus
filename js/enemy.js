@@ -26,18 +26,22 @@ Enemy = function (x, y, game, speed) {
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 
-Enemy.prototype.action = function(time, powerups){
-
-    //this.displayHP();
+Enemy.prototype.action = function(time, powerups, stage){
 
     if ((time.now - this.jumpTimer) >= this.jumpTime){
         this.jump(time);
+    }
+
+    if (this.body.x < 30){
+        stage.endGame();
     }
 
     if (this.hp <= 0){
 		this.createResource(powerups);
         this.destroy();
     }
+
+    
 }
 
 Enemy.prototype.createResource = function(){
@@ -73,3 +77,4 @@ Enemy.prototype.slowDown = function(){
     this.body.gravity.y = 0;
     this.body.velocity.y = 0;
 }
+

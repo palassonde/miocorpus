@@ -46,16 +46,19 @@ MyGame.Game.prototype = {
 		//Powerups
 		powerups = this.game.add.group();
 
+        player.bringToTop();
+
     },
 
     update : function () {
+
         // Actions
         player.action(stage.platforms,enemies, powerups);
-        stage.action(this.time, player, enemies, player.turrets,GUI, powerups);
+        stage.action(this.time, player, enemies, player.turrets, GUI, powerups);
         GUI.action();
 
         for (var x in enemies.children){
-			 enemies.children[x].action(this.time, powerups);   
+			 enemies.children[x].action(this.time, powerups, stage);   
 		}
 		
 		for (var x in powerups.children){

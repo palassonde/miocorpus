@@ -14,6 +14,9 @@ MyGame.Preloader.prototype = {
         this.load.image('fond_degrader', 'assets/fond_degrader.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
+        this.load.image('grass', 'assets/grass.png');
+        this.load.image('ground', 'assets/ground.png');
+        this.load.image('jungleground', 'assets/jungleground.png');
 
         // Turrets stuff
         this.load.image('turret', 'assets/turret.png');
@@ -38,6 +41,7 @@ MyGame.Preloader.prototype = {
         this.load.image('redstone', 'assets/redstone.png');
         this.load.image('bluestone', 'assets/bluestone.png');
         this.load.image('greenstone', 'assets/greenstone.png');
+        this.load.image('gameover', 'assets/gameover.png');
     },
 
     create: function () {

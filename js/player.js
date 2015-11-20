@@ -52,13 +52,22 @@ Player = function (x, y, game) {
 	this.turrets = this.game.add.group();
     this.turrets.enableBody = true;
     this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
+
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
 Player.prototype.action = function(platforms, enemy, powerups){
+
 	this.body.acceleration.y = 0;
+
+	// Collisions du player
 	this.game.physics.arcade.collide(this, platforms);
+	//powerups
+	this.game.physics.arcade.overlap(player, powerups, this.collisionPlayerPowerUp, null, this);
+	this.game.physics.arcade.overlap(this.turrets, powerups, this.upGradeTurret, null, this);
+	//ennemie
+	this.game.physics.arcade.overlap(player, enemies, this.hurtPlayer, null, this);
 
 	this.move();
 	this.manageSpeed();
@@ -210,4 +219,49 @@ Player.prototype.manageSpeed = function(){
 			this.body.velocity.x = 0;
 		}
 	}	
+}
+
+Player.prototype.collisionPlayerPowerUp = function(player, powerups){
+	
+	if(player.health < 10) player.health++;
+	if(!powerups.collidePlayer)return;
+	
+	switch(powerups.key){
+		case 'redstone':
+			player.numberStoneRed++;
+			break;
+		case 'greenstone':
+			player.numberStoneGreen++;
+			break;
+		case 'bluestone':
+			player.numberStoneBlue++;
+			break;
+	}
+	powerups.alive = false;
+}
+
+Player.prototype.upGradeTurret = function(turret, powerups){
+	
+	switch(powerups.key){
+		case 'redstone':
+			turret.kind = 3;
+			break;
+		case 'greenstone':
+			turret.kind = 2;
+			break;
+		case 'bluestone':
+			turret.kind = 1;
+			break;
+	}
+	powerups.alive = false;
+	
+}
+
+Player.prototype.hurtPlayer = function(player, enemies){
+    
+    if(this.game.time.now > player.timerDomage){
+        player.health--;
+        player.timerDomage = this.game.time.now + 3000;
+    }
+    
 }
