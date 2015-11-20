@@ -11,7 +11,7 @@ var Bullet = function(x,y,game, target, rayon, kind){
     this.angleMax = 0.5;
 	this.behavior = kind; // comportement (1 = chercheuse, 2 = boomerang, 3 = ...)
 	this.domage = 1; //Dommage
-	this.timeLive = 5000; //Temps de vie du missile
+	this.timeLive = 4000; //Temps de vie du missile
 	this.rayon = rayon; //Distance de tir
 	
 	this.tween;
@@ -31,7 +31,6 @@ Bullet.prototype.actionMissile = function(){
 	
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
-	
 	if(this.time >= this.timeLive || this.needDestroy && this.behavior !==2){
 		this.destroy();
 		return;
@@ -111,12 +110,13 @@ Bullet.prototype.laser = function(){
 
 	var dis = Phaser.Point.distance(this.position, this.target.position);
 	
-	if(dis >= this.rayon){
+	if(dis >= this.rayon || !this.target.alive){
 		this.needChangeTarget = true;
 		return;
 	}
 	
 	this.graphic.moveTo(this.x, this.y);
 	this.graphic.lineTo(this.target.x,this.target.y);
+	this.target.hurt();
 }
 

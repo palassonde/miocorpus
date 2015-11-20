@@ -42,17 +42,38 @@ MyGame.Game.prototype = {
 		
         // Instantiate GUI
         GUI = new GUI(this.game, stage, player);
+		
+		//Powerups
+		powerups = this.game.add.group();
 
     },
 
     update : function () {
         // Actions
-        player.action(stage.platforms,enemies);
-        stage.action(this.time, player, enemies, player.turrets,GUI);
+        player.action(stage.platforms,enemies, powerups);
+        stage.action(this.time, player, enemies, player.turrets,GUI, powerups);
         GUI.action();
 
-        for (var x in enemies.children)
-            enemies.children[x].action(this.time);   
-
+        for (var x in enemies.children){
+			 enemies.children[x].action(this.time, powerups);   
+		}
+		
+		for (var x in powerups.children){
+			powerups.children[x].action();   
+		} 
     }
+}
+
+//Retourne une random name stone
+function getRandomStone(){
+	var random = Math.random();
+	
+	if(random <= 0.33){
+		return 'redstone';
+	}else if(random <= 0.66){
+		return 'greenstone';
+	}else{
+		return 'bluestone';
+	}
+	
 }

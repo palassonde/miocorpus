@@ -2,12 +2,14 @@ Turret = function(x, y, game){
 
 	this.time = 0;
 
+	//Attribut
 	Phaser.Sprite.call(this, game, x, y, 'turret');
 	this.anchor.x = 0.5;
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
-
+	
+	//Missile
     this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
     //this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
@@ -21,7 +23,7 @@ Turret = function(x, y, game){
 	
 	
 	this.cooldownTemp = 0;
-	this.kind = 2;
+	this.kind = 3;
 	this.enemyList = [];
 	this.changeEnemieList = [];
 }
@@ -64,6 +66,7 @@ Turret.prototype.actionTurret = function(enemy){
 	
 	//tirer un nouveau bullet;	
 	if (cooldown <= this.time){
+		
 		this.shootMissile(enemy,cooldown); 
 	}
 	

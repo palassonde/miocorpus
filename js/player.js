@@ -8,6 +8,12 @@ Player = function (x, y, game) {
 	// Player attributes
 	this.maxspeed = MAX_SPEED;
 	this.friction = 20;
+	this.numberStoneBlue = 0;
+	this.numberStoneRed = 0;
+	this.numberStoneGreen = 0;
+	this.health = 4;
+	this.shotTime = 0;
+	this.isRight = true;
 
 	// Create the sprite
 	Phaser.Sprite.call(this, game, x, y, "player")
@@ -29,6 +35,12 @@ Player = function (x, y, game) {
 	this.actionKey_shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 	this.actionKey_T = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
 	this.actionKey_T.onDown.add(this.creationTurret, this);
+	
+	this.actionKey_Q = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
+	
+	this.actionKey_W = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+	
+	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	this.cursors = this.game.input.keyboard.createCursorKeys();	
 	
 	
@@ -43,15 +55,55 @@ Player = function (x, y, game) {
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
-Player.prototype.action = function(platforms, enemy){
+Player.prototype.action = function(platforms, enemy, powerups){
 	this.body.acceleration.y = 0;
 	this.game.physics.arcade.collide(this, platforms);
 
 	this.move();
 	this.manageSpeed();
 	
+	this.launchResource(powerups);
+	
 	for (var x in this.turrets.children){
 		this.turrets.children[x].actionTurret(enemy);
+	}
+}
+
+Player.prototype.launchResource = function(powerups){
+	
+	if(this.game.time.now > this.shotTime){
+		
+		if(this.x > (this.game.world.width - 100) || this.x < 150)return;
+		
+		var nature = null;
+		if(this.actionKey_Q.isDown && this.numberStoneRed > 0){
+			nature = 'redstone';
+			this.numberStoneRed--;
+		}else if (this.actionKey_W.isDown && this.numberStoneBlue > 0){
+			nature = 'bluestone';
+			this.numberStoneBlue--;
+		}else if (this.actionKey_E.isDown && this.numberStoneGreen > 0){
+			nature = 'greenstone';
+			this.numberStoneGreen--;
+		}
+		
+		if(nature == null) return;
+		
+		var velocite = 0;
+			
+		if(this.isRight){
+			velocite = 200;
+		}else{
+			velocite = -200;
+		}
+		
+		var stone = new Powerups(this.x,this.y, this.game, nature,false);
+		//this.game.add.existing(stone);
+		powerups.add(stone);
+		
+		stone.body.velocity.x = velocite;
+		stone.body.gravity.y = 10;
+		this.shotTime = this.game.time.now + 400;
 	}
 }
 
@@ -59,6 +111,7 @@ Player.prototype.move = function(){
 
 	if (this.cursors.left.isDown)
 	{
+		this.isRight = false;
 		this.body.velocity.x -= 50;
 		if (this.playerFacing !== 'left')
 		{
@@ -67,6 +120,7 @@ Player.prototype.move = function(){
 		}
 	}else if (this.cursors.right.isDown)
 	{
+		this.isRight = true;
 		this.body.velocity.x += 50;
 		if (this.playerFacing !== 'right')
 		{

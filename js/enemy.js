@@ -26,7 +26,7 @@ Enemy = function (x, y, game, speed) {
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 
-Enemy.prototype.action = function(time){
+Enemy.prototype.action = function(time, powerups){
 
     //this.displayHP();
 
@@ -35,8 +35,13 @@ Enemy.prototype.action = function(time){
     }
 
     if (this.hp <= 0){
+		this.createResource(powerups);
         this.destroy();
     }
+}
+
+Enemy.prototype.createResource = function(){
+	powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true));
 }
 
 Enemy.prototype.hurt = function(){

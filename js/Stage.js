@@ -26,10 +26,11 @@ Stage = function(game, player){
     this.game.input.onDown.add(this.fullscreen, this);
 }
 
-Stage.prototype.action = function(time, player, enemies, turrets, GUI){
+Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups){
 
     this.game.physics.arcade.collide(enemies, this.platforms);
     this.game.physics.arcade.collide(turrets, this.platforms);
+	this.game.physics.arcade.collide(powerups, this.platforms);
 
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
     this.game.physics.arcade.overlap(enemies, this.core, this.endGame, null, this);
@@ -40,6 +41,45 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI){
     if (enemies.length === 0){
         this.createWave(time, enemies, GUI);
     }
+	
+	//Verifie collision au powerups
+	this.game.physics.arcade.overlap(player, powerups, this.collisionPlayerPowerUp, null, this);
+	this.game.physics.arcade.overlap(turrets, powerups, this.upGradeTurret, null, this);
+}
+
+Stage.prototype.collisionPlayerPowerUp = function(player, powerups){
+	
+	if(!powerups.collidePlayer)return;
+	
+	switch(powerups.key){
+		case 'redstone':
+			player.numberStoneRed++;
+			break;
+		case 'greenstone':
+			player.numberStoneGreen++;
+			break;
+		case 'bluestone':
+			player.numberStoneBlue++;
+			break;
+	}
+	powerups.alive = false;
+}
+
+Stage.prototype.upGradeTurret = function(turret, powerups){
+	
+	switch(powerups.key){
+		case 'redstone':
+			turret.kind = 3;
+			break;
+		case 'greenstone':
+			turret.kind = 2;
+			break;
+		case 'bluestone':
+			turret.kind = 1;
+			break;
+	}
+	powerups.alive = false;
+	
 }
 
 Stage.prototype.changeBackgroundColor = function (time){

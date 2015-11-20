@@ -3,43 +3,83 @@ GUI = function (game, stage, player) {
 	this.game = game;
 	this.player = player;
 	this.stage = stage;
-
+	this.numberHeart = 10;
+	
 	// CSS styles
 	style = { font: "40px Arial", fill: "#f26c4f", align: "left" };
 	resourcesStyle = { font: "20px Arial", fill: "#f26c4f", align: "left" };
 	gameOverStyle = { font: "60px Arial", fill: "#f26c4f", align: "left" };
 
 	// Adding the GUI components
-	redstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
-	bluestone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
-	greenstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
+	this.redstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
+	this.bluestone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
+	this.greenstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
 
+	//number = this.game.add.text(this.game.camera.x, this.game.camera.y, "1", resourcesStyle);
+	
 	// TOP LEFT
-	hearts = this.game.add.group();
-    for (var i = 0; i < 10; i++) {
-    	h = hearts.create((i*35) + 15, 10, 'heart');
+	this.hearts = this.game.add.group();
+    for (var i = this.numberHeart - 1; i >= 0; i--) {
+    	h = this.hearts.create((i*35) + 15, 10, 'heart');
     	h.scale.setTo(0.3, 0.3);
     }
-    hearts.setAll('fixedToCamera', true);
+    this.hearts.setAll('fixedToCamera', true);
 
     // TOP RIGHT
-    redstone.fixedToCamera = true;
-    redstone.cameraOffset.setTo(960, 45);
-    bluestone.fixedToCamera = true;
-    bluestone.cameraOffset.setTo(960, 85);
-    greenstone.fixedToCamera = true;
-    greenstone.cameraOffset.setTo(960, 130);
+    this.redstone.fixedToCamera = true;
+    this.redstone.cameraOffset.setTo(960, 45);
+    this.bluestone.fixedToCamera = true;
+    this.bluestone.cameraOffset.setTo(960, 85);
+    this.greenstone.fixedToCamera = true;
+    this.greenstone.cameraOffset.setTo(960, 130);
 
-    stones = this.game.add.group();
-    r = stones.create(900, 30, 'redstone');
+    this.stones = this.game.add.group();
+    r = this.stones.create(900, 30, 'redstone');
     r.scale.setTo(0.5, 0.5);
-    b = stones.create(900, 70, 'bluestone');
+    b = this.stones.create(900, 70, 'bluestone');
     b.scale.setTo(0.5, 0.5);
-    g = stones.create(900, 120, 'greenstone');
+    g = this.stones.create(900, 120, 'greenstone');
     g.scale.setTo(0.5, 0.5);
-    stones.setAll('fixedToCamera', true);
+    this.stones.setAll('fixedToCamera', true);
 
 }
+
+//Player
+GUI.prototype.setDisplayStone = function (){
+	this.redstone.text = "X " + this.player.numberStoneRed;
+	this.bluestone.text = "X " + this.player.numberStoneBlue;
+	this.greenstone.text = "X " + this.player.numberStoneGreen;
+}
+
+GUI.prototype.setDisplayHealth = function (){
+	
+	var difHeart = this.numberHeart - this.player.health;
+	if(difHeart === 0 || this.player.health > 10) return;	
+	//Ajouter de coeur
+	if(difHeart < 0){
+		while(difHeart !== 0){
+			var health = this.hearts.getFirstDead();
+			if(health == null) break;
+			health.alive = true;
+			health.visible = true;
+			difHeart++;
+			this.numberHeart++;
+		}
+	}
+	//Enlever des coeur
+	else{
+		while(difHeart !== 0){
+			var health = this.hearts.getFirstAlive();
+			if(health == null) break;
+			
+			health.alive = false;
+			health.visible = false;
+			difHeart--;
+			this.numberHeart--;
+		}
+	}
+}
+
 
 GUI.prototype.action = function(){
 
@@ -62,8 +102,8 @@ GUI.prototype.displayWave = function(waveCount){
 }
 
 GUI.prototype.updatePlayerInfos = function(){
-
-
+	this.setDisplayStone();
+	this.setDisplayHealth();
 
 }
 
