@@ -52,13 +52,13 @@ GUI.prototype.setDisplayStone = function (){
 }
 
 GUI.prototype.setDisplayHealth = function (){
-	
+	console.log(this.numberHeart);
 	var difHeart = this.numberHeart - this.player.health;
 	if(difHeart === 0 || this.player.health > 10) return;	
 	//Ajouter de coeur
 	if(difHeart < 0){
 		while(difHeart !== 0){
-			var health = this.hearts.getFirstDead();
+			var health = this.hearts.getAt(9 - this.numberHeart);
 			if(health == null) break;
 			health.alive = true;
 			health.visible = true;

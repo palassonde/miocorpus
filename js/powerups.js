@@ -21,8 +21,9 @@ Powerups.prototype.action = function(player){
 	
 	var velocityX = this.body.velocity.x;
 	
-	if(velocityX > 0){
-		
+	
+	//Ralentissement droite
+	if(velocityX > 0){	
 		if(this.body.touching.down){
 			var ralentissement = 10;
 			if(velocityX <= 10){
@@ -34,8 +35,8 @@ Powerups.prototype.action = function(player){
 		
 	}
 	
-	if(velocityX < 0){
-		
+	//Ralentissement gauche
+	if(velocityX < 0){	
 		if(this.body.touching.down){
 			var ralentissement = -10;
 			if(velocityX >= -10){
@@ -45,5 +46,11 @@ Powerups.prototype.action = function(player){
 			this.body.velocity.x -= ralentissement;
 		}
 		
+	}
+	
+	//S'il va hors de l'écran, on l'empèche
+	if(this.x > (this.game.world.width-50) || this.x < 50){
+		this.body.velocity.x = 0;
+		this.collidePlayer = true;
 	}
 }

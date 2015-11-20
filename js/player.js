@@ -14,6 +14,7 @@ Player = function (x, y, game) {
 	this.health = 4;
 	this.shotTime = 0;
 	this.isRight = true;
+	this.timerDomage = 0;//Evite de recevoir trop de coup
 
 	// Create the sprite
 	Phaser.Sprite.call(this, game, x, y, "player")

@@ -34,7 +34,11 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
     this.game.physics.arcade.overlap(enemies, this.core, this.endGame, null, this);
-
+	
+	if(player.health === 0){
+		this.endGame();
+	}
+	
 	this.moveCamera(player);
 	this.changeBackgroundColor(time.now % 10);
 
@@ -45,10 +49,14 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 	//Verifie collision au powerups
 	this.game.physics.arcade.overlap(player, powerups, this.collisionPlayerPowerUp, null, this);
 	this.game.physics.arcade.overlap(turrets, powerups, this.upGradeTurret, null, this);
+	
+	//Verifie collision du joueur sur l'ennemie
+	this.game.physics.arcade.overlap(player, enemies, this.hurtPlayer, null, this);
 }
 
 Stage.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
+	if(player.health < 10) player.health++;
 	if(!powerups.collidePlayer)return;
 	
 	switch(powerups.key){
@@ -82,6 +90,14 @@ Stage.prototype.upGradeTurret = function(turret, powerups){
 	
 }
 
+Stage.prototype.hurtPlayer = function(player, enemies){
+	
+	if(this.game.time.now > player.timerDomage){
+		player.health--;
+		player.timerDomage = this.game.time.now + 3000;
+	}
+	
+}
 Stage.prototype.changeBackgroundColor = function (time){
 
     if(time <= 50000){
