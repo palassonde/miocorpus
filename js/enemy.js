@@ -20,8 +20,8 @@ Enemy = function (x, y, game, speed) {
     this.animations.play('left');
     this.anchor.set(0.5);
 
-	//var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-    //this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
+	// var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
+    // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -36,6 +36,9 @@ Enemy.prototype.action = function(time, powerups, stage){
         stage.endGame();
     }
 
+	// this.text.text = this.hp;
+	// this.text.x = this.x;
+	// this.text.y = this.y;
     if (this.hp <= 0){
 		this.createResource(powerups);
         this.destroy();
@@ -48,9 +51,9 @@ Enemy.prototype.createResource = function(){
 	powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true));
 }
 
-Enemy.prototype.hurt = function(){
+Enemy.prototype.hurt = function(dmg){
 
-    this.hp -= 10;    
+    this.hp -= dmg;    
 }
 
 Enemy.prototype.displayHP = function(){

@@ -1,4 +1,4 @@
-var Bullet = function(x,y,game, target, rayon, kind){
+var Bullet = function(x,y,game, target, rayon, kind, domage){
 	
 	if(kind === 2){
 		Phaser.Sprite.call(this, game, x, y, 'boomerang');
@@ -10,9 +10,10 @@ var Bullet = function(x,y,game, target, rayon, kind){
 	this.speed = 300;
     this.angleMax = 0.5;
 	this.behavior = kind; // comportement (1 = chercheuse, 2 = boomerang, 3 = ...)
-	this.domage = 1; //Dommage
+	this.domage = domage; //Dommage
 	this.timeLive = 4000; //Temps de vie du missile
 	this.rayon = rayon; //Distance de tir
+	this.timeDomageEffet = this.game.time.now;
 	
 	this.tween;
 	this.time = 0;
@@ -21,6 +22,10 @@ var Bullet = function(x,y,game, target, rayon, kind){
 	this.target = target; 
 	this.stop = false; //Sert a changer le comportement (boomerang (lance un tween seulement)
 	this.graphic = this.game.add.graphics(0, 0);
+	
+	if(kind === 3){
+		this.kill();
+	}
 }
 
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);
@@ -117,6 +122,6 @@ Bullet.prototype.laser = function(){
 	
 	this.graphic.moveTo(this.x, this.y);
 	this.graphic.lineTo(this.target.x,this.target.y);
-	this.target.hurt();
+	this.target.hurt(this.domage);
 }
 

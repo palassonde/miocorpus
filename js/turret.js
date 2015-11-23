@@ -21,9 +21,8 @@ Turret = function(x, y, game){
 	this.domage = 1;
 	this.rayon = 300;
 	
-	
 	this.cooldownTemp = 0;
-	this.kind = 3;
+	this.kind = 1;
 	this.enemyList = [];
 	this.changeEnemyList = [];
 }
@@ -80,8 +79,16 @@ Turret.prototype.actionTurret = function(enemies){
 }
 
 Turret.prototype.collisionMissile = function(bullet,enemy){
-	enemy.hurt();
-	bullet.needDestroy = true;
+	if(bullet.behavior ===  2){
+		if(bullet.timeDomageEffet < this.game.time.now){
+			enemy.hurt(this.domage*10);
+			bullet.timeDomageEffet = this.game.time.now + 1000;
+		}
+	}else{
+		enemy.hurt(this.domage*100);
+		bullet.needDestroy = true;
+	}
+	
 }
 
 //Créer un missile s'il est a une bonne distance et remet un cooldown qui depend du nombre de missile lancé
@@ -101,7 +108,7 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 		var dis = Phaser.Point.distance(this.position, enemy.children[x].position);
 		//Tir a chaque seconde
 		if(dis < this.rayon){
-			this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind));
+			this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind, this.domage));
 			maxEnemy -= 1;
 			isShoot = true;
 		}

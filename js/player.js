@@ -244,15 +244,28 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 	
 	switch(powerups.key){
 		case 'redstone':
-			turret.kind = 3;
+			if(turret.kind === 3){
+				turret.rayon = turret.rayon + 50;
+			}else{
+				turret.kind = 3;
+			}
 			break;
 		case 'greenstone':
-			turret.kind = 2;
+			if(turret.kind === 2){
+				turret.cooldown = turret.cooldown-500;
+			}else{
+				turret.kind = 2;
+			}
 			break;
 		case 'bluestone':
-			turret.kind = 1;
+			if(turret.kind === 1){
+				turret.numberEnemyShoot++;
+			}else{
+				turret.kind = 1;
+			}
 			break;
 	}
+	turret.domage = turret.domage + 1;
 	powerups.alive = false;
 	
 }
