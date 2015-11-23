@@ -4,7 +4,6 @@ Stage = function(game, player){
     this.player = player;
 
     // Constantes
-
 	this.background_image = game.add.sprite(0,0, 'fond_degrader');
     this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
@@ -22,7 +21,8 @@ Stage = function(game, player){
 
     // Full screen
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    this.game.input.onDown.add(this.fullscreen, this);
+    //this.game.input.onDown.add(this.fullscreen, this);
+	
 }
 
 Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups){
@@ -44,7 +44,9 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
         this.createWave(time, enemies, GUI);
     }
 	
+	
 }
+
 
 
 Stage.prototype.changeBackgroundColor = function (time){
