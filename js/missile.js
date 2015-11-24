@@ -1,28 +1,32 @@
-var Bullet = function(x,y,game, target, rayon, kind, domage){
-	
-	if(kind === 2){
-		Phaser.Sprite.call(this, game, x, y, 'boomerang');
-	}else{
-		Phaser.Sprite.call(this, game, x, y, 'bullet');
-	}
-	this.anchor.setTo(0.5, 0.5);
+Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestination, cursor){
 	
 	this.speed = 300;
     this.angleMax = 0.5;
 	this.behavior = kind; // comportement (1 = chercheuse, 2 = boomerang, 3 = ...)
 	this.domage = domage; //Dommage
-	this.timeLive = 4000; //Temps de vie du missile
+	this.timeLive = timeLive; //Temps de vie du missile
 	this.rayon = rayon; //Distance de tir
-	this.timeDomageEffet = this.game.time.now;
+	this.timeDomageEffet = game.time.now;
+	this.nbScale = 0.1;
+	this.cursor = cursor;
 	
 	this.tween;
 	this.time = 0;
 	this.needDestroy = false;
 	this.needChangeTarget = false; //Chage de target (pour laser)
 	this.target = target; 
+	this.pointDestination = pointDestination;
 	this.stop = false; //Sert a changer le comportement (boomerang (lance un tween seulement)
-	this.graphic = this.game.add.graphics(0, 0);
+	this.graphic = game.add.graphics(0, 0);
 	
+	if(kind === 2){
+		Phaser.Sprite.call(this, game, x, y, 'boomerang');
+	}else if(kind === 4){
+		this.circle(game,x,y);
+	}else{
+		Phaser.Sprite.call(this, game, x, y, 'bullet');
+	}
+	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
 		this.kill();
 	}
@@ -36,14 +40,18 @@ Bullet.prototype.actionMissile = function(){
 	
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
-	if(this.time >= this.timeLive || this.needDestroy && this.behavior !==2){
+	if(this.time >= this.timeLive || this.needDestroy){
 		this.destroy();
 		return;
 	}
 	
 	//Mouvement
 	switch(this.behavior){
+		case 0: 
+			this.simpleFire();
+			break;
 		case 1:
+		case 5:
 			this.homing();
 			break;
 		case 2:
@@ -52,17 +60,49 @@ Bullet.prototype.actionMissile = function(){
 		case 3:
 			this.laser();
 			break;
+		case 4:
+			this.ajuster();
+			break;
 	}
 
 }
 
+//Fire personnage
+Bullet.prototype.simpleFire = function(){
+	
+	if(this.stop){
+		return;
+	}
+	var vistesse = 600;
+	
+	if(this.cursor.left.isDown){
+		this.body.velocity.x = -vistesse;
+	}else if (this.cursor.up.isDown){
+		this.body.velocity.y = -vistesse;
+	}else if(this.cursor.down.isDown){
+		this.body.velocity.y = vistesse;
+	}else{
+		this.body.velocity.x = vistesse;
+	}
+	this.scale.setTo(2,2);
+	this.stop = true;
+}
+
+
 //Missile a tête chercheuse
 Bullet.prototype.homing = function(){
+	var angleTarget;
 	
-	var angleTarget = this.game.math.angleBetween(
+	if(this.behavior === 1){
+		angleTarget = this.game.math.angleBetween(
 		this.x, this.y, this.target.x, this.target.y
-	);
-	
+		);
+	}else{
+		angleTarget = this.game.math.angleBetween(
+		this.x, this.y, this.pointDestination.x, this.pointDestination.y
+		);
+	}
+
 	if(this.rotation !== angleTarget){
 		var differenceAngle = angleTarget - this.rotation;
 		
@@ -124,4 +164,31 @@ Bullet.prototype.laser = function(){
 	this.graphic.lineTo(this.target.x,this.target.y);
 	this.target.hurt(this.domage);
 }
+
+//Bonus
+Bullet.prototype.circle = function(game,x,y){
+	
+	//Permet de creer un cercle
+	//this.graphic.lineStyle(10, 0x881111,1);
+    this.graphic.beginFill(0x881111, 0.15);
+    this.graphic.drawCircle(x, y, this.rayon);
+    this.graphic.endFill();
+	
+	Phaser.Sprite.call(this, game, x, y, this.graphic.generateTexture());
+	this.scale.setTo(0.1,0.1);
+}
+
+Bullet.prototype.ajuster = function(){
+	if(this.stop){
+		return;
+	}
+	
+	this.tween = this.game.add.tween(this.scale).to( { x: 1, y: 1}, this.timeLive/2);
+	this.tween.yoyo(true);
+	this.tween.start();
+	this.tween.onComplete.removeAll();
+	this.stop = true;
+	
+}
+
 

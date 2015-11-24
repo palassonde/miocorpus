@@ -31,6 +31,19 @@ MyGame.Game.prototype = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
         enemies = this.game.add.group();
+		
+		var essaie1 = new MasterTurret(1730, 50, this.game,1,1,8000,1000,300);
+		enemies.add(essaie1);
+		
+		var essaie1 = new MasterTurret(1480, 50, this.game,1,1,8000,1000,300);
+		enemies.add(essaie1);
+		
+		var essaie1 = new MasterTurret(1230, 50, this.game,1,1,8000,1000,300);
+		enemies.add(essaie1);
+		
+		var essaie1 = new MasterTurret(1480, 350, this.game,1,1,8000,1000,300);
+		enemies.add(essaie1);
+		
         // Instantiate Player
         player = new Player(200, 1000, this.game);
         this.game.add.existing(player);
@@ -58,7 +71,7 @@ MyGame.Game.prototype = {
         GUI.action();
 
         for (var x in enemies.children){
-			 enemies.children[x].action(this.time, powerups, stage);   
+			 enemies.children[x].action(this.time, powerups, stage, player);   
 		}
 		
 		for (var x in powerups.children){

@@ -8,6 +8,10 @@ Turret = function(x, y, game){
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
+	this.bonus1 = false; //Creer un rond d'attaque
+	this.bonus2 = false; //Met des missile dans le chemin
+	this.bonus3 = false; //Invisible
+	this.hp = 100;
 	
 	//Missile
     this.bullets = this.game.add.group();
@@ -19,7 +23,7 @@ Turret = function(x, y, game){
 	this.numberEnemyShoot = 2;
 	this.cooldown = 8000; //ICI 
 	this.domage = 1;
-	this.rayon = 300;
+	this.rayon = 200;
 	
 	this.cooldownTemp = 0;
 	this.kind = 1;
@@ -30,6 +34,16 @@ Turret = function(x, y, game){
 Turret.prototype = Object.create(Phaser.Sprite.prototype);
 
 Turret.prototype.actionTurret = function(enemies){	
+
+	if (this.hp <= 0){
+		for(var x in this.bullets.children){
+			this.bullets.children[x].graphic.destroy();
+		}
+		this.bullets.destroy();
+        this.destroy();
+		return;
+    }
+
 	this.time += this.game.time.elapsed; //Garde le temps lors de son dernier tir
 
 	var cooldown = this.cooldownTemp;
@@ -79,9 +93,9 @@ Turret.prototype.actionTurret = function(enemies){
 }
 
 Turret.prototype.collisionMissile = function(bullet,enemy){
-	if(bullet.behavior ===  2){
+	if(bullet.behavior ===  2 || bullet.behavior ===  4){
 		if(bullet.timeDomageEffet < this.game.time.now){
-			enemy.hurt(this.domage*10);
+			enemy.hurt(this.domage*25);
 			bullet.timeDomageEffet = this.game.time.now + 1000;
 		}
 	}else{
@@ -91,9 +105,13 @@ Turret.prototype.collisionMissile = function(bullet,enemy){
 	
 }
 
+Turret.prototype.hurt = function(dmg){
+
+    this.hp -= dmg;    
+}
+
 //Créer un missile s'il est a une bonne distance et remet un cooldown qui depend du nombre de missile lancé
 Turret.prototype.shootMissile = function (enemy,cooldown){
-
 	var maxEnemy = this.numberEnemyShoot; // Combien d'enemi qu'il peu tirer a la fois
 	
 	var isShoot = false; 
@@ -106,10 +124,32 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 		}
 		
 		var dis = Phaser.Point.distance(this.position, enemy.children[x].position);
-		//Tir a chaque seconde
+		//Tir
 		if(dis < this.rayon){
-			this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind, this.domage));
+			this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind, this.domage, 4000));
 			maxEnemy -= 1;
+			
+			//Premiere fois qui tire active les bonus
+			if(!isShoot){
+				if(this.bonus1){
+					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 4, this.domage, 4000));
+				}
+				if(this.bonus2){
+					//var point1 = new Phaser.Point(this.x + 70,this.y - 150);
+					var point2 = new Phaser.Point(this.x + 70,this.y - 75);
+					var point3 = new Phaser.Point(this.x + 70,this.y);
+					var point4 = new Phaser.Point(this.x + 70,this.y + 75);
+					//var point5 = new Phaser.Point(this.x + 70,this.y + 150);
+					
+					
+					//this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point1));
+					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point2));
+					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point3));
+					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point4));
+					//this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point5));
+				}
+			}
+				
 			isShoot = true;
 		}
 	}
@@ -119,3 +159,4 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 		this.cooldownTemp = this.cooldown * ((this.numberEnemyShoot - maxEnemy)/this.numberEnemyShoot);
 	}
 }
+

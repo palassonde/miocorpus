@@ -15,9 +15,13 @@ Stage = function(game, player){
     this.jungleGround;
     this.gameOver = false;
 
-    enemiesByWave = 1;
+    enemiesByWave = 5;
     expansion = 2;
     this.waveCount = 0;
+	this.timeWave = 0;
+	this.timeEscorte = 0;
+	this.newWave = true;
+	this.enemieToSpwan = 5;
 
     // Full screen
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -33,15 +37,37 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
 	
-	if(player.health === 0){
+	if(player.health <= 0){
 		this.endGame();
 	}
 	
 	this.moveCamera(player);
 	this.changeBackgroundColor(time.now);
 
-    if (enemies.length === 0){
-        this.createWave(time, enemies, GUI);
+	
+    if ((this.newWave && (this.timeWave < this.game.time.now)) 
+		|| ((this.timeEscorte < this.game.time.now) && this.enemieToSpwan>0 && !this.newWave)){
+		
+		if(this.newWave){
+			this.waveCount++;
+			GUI.displayWave(this.waveCount);
+			this.newWave = false;
+		}
+		
+		this.timeEscorte = this.game.time.now + 2000;
+        this.createWave(enemies, GUI);
+		
+		//Si tout les ennemie son créer
+		if(this.enemieToSpwan === 0){
+			if(this.waveCount%10 === 0){
+				enemiesByWave = enemiesByWave * 2;
+			}else{
+				enemiesByWave = enemiesByWave +5;
+			}
+			this.enemieToSpwan = enemiesByWave;
+			this.newWave = true;
+			this.timeWave = this.game.time.now + 30000; //A chaque 30 seconde
+		}
     }
 	
 	
@@ -110,6 +136,26 @@ Stage.prototype.createPlatforms = function(){
         x += 400;
     }
 
+	//Creat jungle plateform
+	this.p = this.platforms.create(2000-50,500,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+		
+	this.p = this.platforms.create(2000-300,400,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+		
+	this.p = this.platforms.create(2000-550,300,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+	
+	this.p = this.platforms.create(2000-550,450,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+		
+	this.p = this.platforms.create(2000-800,400,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+		
+	this.p = this.platforms.create(2000-1050,500,'platform');
+    this.p.scale.setTo(0.2, 0.5);
+
+	
     this.platforms.setAll('body.immovable', true);
     this.platforms.setAll('body.checkCollision.down', false);
     this.platforms.setAll('body.checkCollision.left', false);
@@ -140,9 +186,9 @@ Stage.prototype.fullscreen = function() {
 
 }
 
-Stage.prototype.createEnemy = function(enemies, x, y, speed){
+Stage.prototype.createEnemy = function(enemies, x, y, speed,hp){
 
-	enemies.add(new Enemy(x, y, this.game, speed));
+	enemies.add(new Enemy(x, y, this.game, speed,hp));
 }
 
 Stage.prototype.slowEnemy = function(skin, enemy) {
@@ -157,15 +203,30 @@ Stage.prototype.endGame = function() {
 
 }
 
-Stage.prototype.createWave = function(time, enemies, GUI){
-
-    for (var i = 0; i < enemiesByWave; i++) {
-        speed = 40 * (Math.random() + 1);
-        this.createEnemy(enemies, 2000, 960, speed);
-    }
-    
-    enemiesByWave = enemiesByWave * expansion;
-    this.waveCount++;
-    GUI.displayWave(this.waveCount);
+Stage.prototype.createWave = function(enemies, GUI){
+	
+	//Wave boss
+	if(this.waveCount%10 ===0){
+		
+		this.enemieToSpwan = 0;
+	}else{
+		for (var i = 0; i < 5; i++) {
+			speed = 40 * (Math.random() + 1);
+			this.createEnemy(enemies, 2000, 700 + 100*i, speed,40+ 10*this.waveCount);
+			this.enemieToSpwan--;
+		}
+		//Ajout d'un nouveau monstre
+		if(this.waveCount>=5){
+				
+		}
+		//Ajout d'un nouveau monstre
+		if(this.waveCount>=15){
+				
+		}
+		//Ajout d'un nouveau monstre
+		if(this.waveCount>=25){
+			//Montre de wave boos 1?	
+		}
+	}
 
 }

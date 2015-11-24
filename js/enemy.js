@@ -1,4 +1,4 @@
-Enemy = function (x, y, game, speed) {
+Enemy = function (x, y, game, speed,hp) {
 
 	this.game = game;
 
@@ -6,8 +6,9 @@ Enemy = function (x, y, game, speed) {
     this.jumpTime = 500;
     this.jumpHeight = 300;
     this.speed = speed;
+	this.domage = 1;
 
-    this.hp = 100;
+    this.hp = hp;
 
 	Phaser.Sprite.call(this, game, x, y, "player")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -19,9 +20,11 @@ Enemy = function (x, y, game, speed) {
     this.animations.add('left', [6,7,8], 5, true);
     this.animations.play('left');
     this.anchor.set(0.5);
+	
+	this.timerDomage = 0;
 
-	// var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-    // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
+	 // var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
+     // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -36,9 +39,9 @@ Enemy.prototype.action = function(time, powerups, stage){
         stage.endGame();
     }
 
-	// this.text.text = this.hp;
-	// this.text.x = this.x;
-	// this.text.y = this.y;
+	  // this.text.text = this.hp;
+	  // this.text.x = this.x;
+	  // this.text.y = this.y;
     if (this.hp <= 0){
 		this.createResource(powerups);
         this.destroy();

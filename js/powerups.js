@@ -6,7 +6,6 @@ Powerups = function(x,y,game, name, isCollidePlayer){
     this.body.collideWorldBounds = true;
 	this.scale.setTo(0.35,0.35);
 	//Caracteristique
-	
 	this.collidePlayer = isCollidePlayer;
 }
 

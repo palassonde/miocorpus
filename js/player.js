@@ -3,7 +3,7 @@ Player = function (x, y, game) {
 	// Constantes
 	MAX_SPEED = 300;
 
-	this.hp = 100;
+	//this.hp = 100;
 
 	// Player attributes
 	this.maxspeed = MAX_SPEED;
@@ -15,6 +15,8 @@ Player = function (x, y, game) {
 	this.shotTime = 0;
 	this.isRight = true;
 	this.timerDomage = 0;//Evite de recevoir trop de coup
+	this.domage = 1;
+	this.def = 1;
 
 	// Create the sprite
 	Phaser.Sprite.call(this, game, x, y, "player")
@@ -41,41 +43,70 @@ Player = function (x, y, game) {
 	
 	this.actionKey_W = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
 	
+	
 	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	this.cursors = this.game.input.keyboard.createCursorKeys();	
 	
+	//Pistolet
+	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+	
 	
 	//Turrets
-	this.maxTurrret = 10;
+	this.maxTurrret = 4-1;
 	this.nbrTurrets = 0;
 
 	this.turrets = this.game.add.group();
     this.turrets.enableBody = true;
     this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
+	this.game.world.bringToTop(this.turrets);
+	
+	//misille
+	this.bullets = this.game.add.group();
+    this.bullets.enableBody = true;
 
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
 Player.prototype.action = function(platforms, enemy, powerups){
-
+	this.nbrTurrets = this.turrets.children.length;
 	this.body.acceleration.y = 0;
 
+	for (var x in this.bullets.children){
+		this.bullets.children[x].actionMissile();
+	}
+	
 	// Collisions du player
 	this.game.physics.arcade.collide(this, platforms);
 	//powerups
 	this.game.physics.arcade.overlap(player, powerups, this.collisionPlayerPowerUp, null, this);
 	this.game.physics.arcade.overlap(this.turrets, powerups, this.upGradeTurret, null, this);
 	//ennemie
-	this.game.physics.arcade.overlap(player, enemies, this.hurtPlayer, null, this);
+	this.game.physics.arcade.overlap(player, enemy, this.hurtPlayer, null, this);
+	this.game.physics.arcade.overlap(this.turrets, enemy, this.hurtTurret, null, this);
+	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtEnnemie, null, this);
 
-	this.move();
+	if(!this.actionKey_A.isDown){
+		this.move();
+	}
+
 	this.manageSpeed();
 	
 	this.launchResource(powerups);
+	this.fire();
 	
 	for (var x in this.turrets.children){
 		this.turrets.children[x].actionTurret(enemy);
+	}
+	
+}
+
+Player.prototype.fire = function(powerups){
+	
+	if(this.game.time.now > this.shotTime && this.actionKey_A.isDown){
+		this.shotTime = this.game.time.now + 400;
+		this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, this.cursors));
+		
 	}
 }
 
@@ -98,6 +129,7 @@ Player.prototype.launchResource = function(powerups){
 		}
 		
 		if(nature == null) return;
+		this.shotTime = this.game.time.now + 400;
 		
 		var velocite = 0;
 			
@@ -113,7 +145,6 @@ Player.prototype.launchResource = function(powerups){
 		
 		stone.body.velocity.x = velocite;
 		stone.body.gravity.y = 10;
-		this.shotTime = this.game.time.now + 400;
 	}
 }
 
@@ -186,7 +217,6 @@ Player.prototype.move = function(){
 
 Player.prototype.creationTurret = function(){
 	if (this.maxTurrret >= this.nbrTurrets){
-        this.nbrTurrets++;
 		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game));
 	}
 }
@@ -223,9 +253,8 @@ Player.prototype.manageSpeed = function(){
 
 Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
-	if(player.health < 10) player.health++;
 	if(!powerups.collidePlayer)return;
-	
+	if(player.health < 10) player.health++;
 	switch(powerups.key){
 		case 'redstone':
 			player.numberStoneRed++;
@@ -265,16 +294,36 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 			}
 			break;
 	}
-	turret.domage = turret.domage + 1;
+	turret.domage = turret.domage + 0.1;
 	powerups.alive = false;
 	
+}
+
+Player.prototype.hurt = function(dmg){
+    this.health -= (dmg/100)/this.def;  	
 }
 
 Player.prototype.hurtPlayer = function(player, enemies){
     
     if(this.game.time.now > player.timerDomage){
-        player.health--;
+        player.health -= enemies.domage / this.def;
         player.timerDomage = this.game.time.now + 3000;
+    }
+    
+}
+
+Player.prototype.hurtEnnemie = function(bullet,enemy){
+	enemy.hurt(this.domage*50);
+	bullet.needDestroy = true;
+}
+
+Player.prototype.hurtTurret = function(turret, enemies){
+    
+    if(this.game.time.now > enemies.timerDomage){
+		if(!turret.bonus3){
+			turret.hp = 0;
+		}
+        enemies.timerDomage = this.game.time.now + 3000;
     }
     
 }

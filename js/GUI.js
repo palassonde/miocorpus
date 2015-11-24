@@ -47,15 +47,14 @@ GUI = function (game, stage, player) {
 	this.game.add.text(90, 120, "R : RESET", resourcesStyle);
 	this.game.add.text(345, 120, "F : FUSION", resourcesStyle);
 	
-	this.graphics = this.game.add.graphics(90,150);
-	this.graphics.lineStyle(5, 0x00FFFF,1);
 	var nbItem = 4;
 	this.positionMileu = (nbItem*90/2) - (3*90)/2; //Sert a centrer
 	//var distance = 90; //Serte a faire une distance
 	
-	this.game.add.text(this.positionMileu + 90 + 42, 270, "MACHINE À FUSION", resourcesStyle);
+	this.game.add.text(this.positionMileu + 90 + 42, 300, "MACHINE À FUSION", resourcesStyle);
 	
 	//Group d'élémet de fusion
+	this.graphics = this.game.add.graphics(90,150);
 	this.elementFusion = this.game.add.group();
     this.elementFusion.enableBody = true;
 	
@@ -72,8 +71,75 @@ GUI = function (game, stage, player) {
 	var actionKey_F = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
 	actionKey_F.onDown.add(this.fusion, this);
 	
+	//Legende
+	var x = (nbItem*90) + 40;
+	
+	this.graphics.beginFill(0xbbbbbb, 0.7);
+	this.graphics.drawRect(x, -115, 360, 550);
+	this.graphics.endFill();
 	
 	
+	this.game.add.text(x+45+180, 40, "LEGENDE", resourcesStyle);
+	
+	var distance = 75;
+	var ressourceNbStyle = { font: "10px Arial", fill: "#f26c4f", align: "left" };
+	
+	var tabLeg = [["redstone","bluestone"],["redstone","greenstone"],["bluestone","greenstone"],["player","redstone"],["player","bluestone"],["player","greenstone"],["redstone","bluestone","greenstone"]]
+	for(var i = 0; i < 7; i++){
+		this.game.add.text(x + 90*1 + 85, 80 + distance * i, "+", resourcesStyle);
+		
+		if(i < 6){
+			this.game.add.text(x + 90*2 + 85, 88 + distance * i, "=", resourcesStyle);
+		}else{
+			this.game.add.text(x + 90*2 + 85, 80 + distance * i, "+", resourcesStyle);
+			this.game.add.text(x + 90*3 + 85, 88 + distance * i, "=", resourcesStyle);
+		}
+
+
+		if(tabLeg[i][0] == "player"){
+			this.game.add.text(x + 90 + 40, 60 + distance * i, "X1", ressourceNbStyle);
+		}else{
+			this.game.add.text(x + 90 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		}
+		this.game.add.text(x + 90*2 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		
+		this.graphics.lineStyle(2, 0xf26c4f, 1);
+		this.graphics.moveTo(x+90-10,-45 + distance * i);
+		this.graphics.lineTo(x+90+10,-45 + distance * i);
+		this.graphics.lineTo(x+90+5,-50 + distance * i);
+		
+		this.graphics.moveTo(x+90+10,-40 + distance * i);
+		this.graphics.lineTo(x+90-10,-40 + distance * i);
+		this.graphics.lineTo(x+90-5,-35 + distance * i);
+		
+		var imageF1 = this.game.add.sprite(x + 90 + 45,100 + distance * i, tabLeg[i][0]);
+		imageF1.anchor.set(0.5);
+		imageF1.scale.setTo(0.5,0.5);
+	
+		var imageF1 = this.game.add.sprite(x + 90*2 + 45,100 + distance * i, tabLeg[i][1]);
+		imageF1.anchor.set(0.5);
+		imageF1.scale.setTo(0.5,0.5);
+		
+		if(i===6){
+			var imageF1 = this.game.add.sprite(x + 90*3 + 45,100 + distance * i, tabLeg[i][2]);
+			imageF1.anchor.set(0.5);
+			imageF1.scale.setTo(0.5,0.5);
+			
+			this.graphics.moveTo(x+90*2-10,-45 + distance * i);
+			this.graphics.lineTo(x+90*2+10,-45 + distance * i);
+			this.graphics.lineTo(x+90*2+5,-50 + distance * i);
+		
+			this.graphics.moveTo(x+90*2+10,-40 + distance * i);
+			this.graphics.lineTo(x+90*2-10,-40 + distance * i);
+			this.graphics.lineTo(x+90*2-5,-35 + distance * i);
+			
+			this.game.add.text(x + 90*3 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		}
+	}
+	
+
+
+
 }
 
 //Player
@@ -85,7 +151,7 @@ GUI.prototype.setDisplayStone = function (){
 
 GUI.prototype.setDisplayHealth = function (){
 
-	var difHeart = this.numberHeart - this.player.health;
+	var difHeart = this.numberHeart - Math.ceil(this.player.health);
 	if(difHeart === 0 || this.player.health > 10) return;	
 	//Ajouter de coeur
 	if(difHeart < 0){
@@ -146,9 +212,10 @@ GUI.prototype.endGame = function(){
    	var tween = this.game.add.tween(end).to( { alpha: 1 }, 10000, "Linear", true, 0, -1).repeat(0);
 }
 
-
 //Pour la machine de fusion
 GUI.prototype.createMachine = function(nbItem, elementF){
+	this.graphics.lineStyle(5, 0x666666,1);
+	this.graphics.beginFill(0xbbbbbb, 0.7);
 	for(var a = 0; a < nbItem; a++){
 		this.graphics.drawRect(90*a, 0, 90, 90);
 		var imageF = this.game.add.sprite(90*a + 135,150 + 45, elementF[a]);	
@@ -160,10 +227,27 @@ GUI.prototype.createMachine = function(nbItem, elementF){
 		imageF.events.onDragStop.add(this.dragStop,this);
 		this.elementFusion.add(imageF);	
 	}
-	this.graphics.lineStyle(5, 0xFF0000,1);
+	this.graphics.endFill();
+	
+	this.graphics.lineStyle(5, 0x666666, 1);
+	this.graphics.beginFill(0x666666, 1);
+	
+	var topFleche = (nbItem*90)/2;
+	
+	this.graphics.moveTo(topFleche,100);
+	this.graphics.lineTo(topFleche,130);
+	this.graphics.lineTo(topFleche-5,130);
+	this.graphics.lineTo(topFleche,135);
+	this.graphics.lineTo(topFleche+5,130);
+	this.graphics.lineTo(topFleche,130);
+	this.graphics.endFill();
+	
+	this.graphics.lineStyle(5, 0x666666,1);
+	this.graphics.beginFill(0xbbbbbb, 0.7);
 	for(var a = 0; a < 3; a++){
-		this.graphics.drawRect(this.positionMileu + 90*a, 150, 90, 90);
+		this.graphics.drawRect(this.positionMileu + 90*a, 180, 90, 90);
 	}
+	this.graphics.endFill();
 }
 
 GUI.prototype.initItemFusion = function(){
@@ -187,7 +271,7 @@ GUI.prototype.dragStop = function(sprite){
 	}else{
 		var nb = this.tabFusion.length;
 		sprite.x = this.positionMileu + 90*nb + 135;
-		sprite.y = 300 + 45;
+		sprite.y = 330 + 45;
 		sprite.inputEnabled = false;
 		this.tabFusion.push(sprite);
 	}
@@ -212,6 +296,12 @@ GUI.prototype.fusion = function(sprite){
 	
 	if(this.tabFusion.length ===3){
 		if(tabObject[0] && tabObject[1] && tabObject[2]){
+			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10 && this.player.numberStoneGreen >= 10){
+				this.player.numberStoneBlue -= 10;
+				this.player.numberStoneRed -= 10;
+				this.player.numberStoneGreen -= 10;
+				this.player.maxTurrret++;
+			}
 			console.log("nombre de turret augmenter");
 			works = true;
 		}
@@ -229,15 +319,26 @@ GUI.prototype.fusion = function(sprite){
 			works = true;
 		}
 		if (tabObject[3] && tabObject[0]){
+			if(this.player.numberStoneRed >= 10){
+				this.player.numberStoneRed -= 10;
+				this.player.domage++;
+			}
 			console.log("augmente la force");
 			works = true;
 		}
 		if (tabObject[3] && tabObject[1]){
+			if(this.player.numberStoneBlue >= 10){
+				this.player.numberStoneBlue -= 10;
+				this.player.def +=0.5;
+			}
 			console.log("augmente la def");
 			works = true;
 		}
 		if (tabObject[3] && tabObject[2]){
-			console.log("augmente la vitesse");
+			if(this.player.numberStoneGreen >= 10){
+				this.player.numberStoneGreen -= 10;
+				this.player.MAX_SPEED +=50;
+			}
 			works = true;
 		}
 	}
