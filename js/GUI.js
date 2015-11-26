@@ -186,7 +186,7 @@ GUI.prototype.setDisplayHealth = function (){
 	}
 }
 
-GUI.prototype.setDisplayStone = function (){
+GUI.prototype.setDisplayTurrets = function (){
 	this.turretsCapacity.text = "X " + (this.player.maxTurrets - this.player.nbrTurrets);
 }
 
@@ -195,6 +195,7 @@ GUI.prototype.action = function(){
 
 	this.setDisplayStone();
 	this.setDisplayHealth();
+	this.setDisplayTurrets();
 }
 
 GUI.prototype.displayWave = function(waveCount){
