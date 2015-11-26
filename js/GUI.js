@@ -14,6 +14,8 @@ GUI = function (game, stage, player) {
 	this.bluestone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
 	this.greenstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
 
+	this.turretsCapacity = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
+
 	//number = this.game.add.text(this.game.camera.x, this.game.camera.y, "1", resourcesStyle);
 	
 	// TOP LEFT
@@ -31,6 +33,12 @@ GUI = function (game, stage, player) {
     this.bluestone.cameraOffset.setTo(960, 85);
     this.greenstone.fixedToCamera = true;
     this.greenstone.cameraOffset.setTo(960, 130);
+
+    this.turretsCapacity.fixedToCamera = true;
+    this.turretsCapacity.cameraOffset.setTo(800, 45);
+    this.turret = this.game.add.sprite(770, 45, 'turret')
+    this.turret.scale.setTo(0.5, 0.5);
+    this.turret.fixedToCamera = true;
 
     this.stones = this.game.add.group();
     r = this.stones.create(900, 30, 'redstone');
@@ -178,10 +186,15 @@ GUI.prototype.setDisplayHealth = function (){
 	}
 }
 
+GUI.prototype.setDisplayStone = function (){
+	this.turretsCapacity.text = "X " + (this.player.maxTurrets - this.player.nbrTurrets);
+}
+
 
 GUI.prototype.action = function(){
 
-	this.updatePlayerInfos();
+	this.setDisplayStone();
+	this.setDisplayHealth();
 }
 
 GUI.prototype.displayWave = function(waveCount){
@@ -193,12 +206,6 @@ GUI.prototype.displayWave = function(waveCount){
 	//tween = this.game.add.tween(waveInfos).to( { alpha: 1 }, 2000, "Linear", true)
 	var tween = this.game.add.tween(waveInfos).to( { alpha: 1 }, 2000, "Linear", true, 0, -1).repeat(0);
 	tween.yoyo(true, 3000);
-}
-
-GUI.prototype.updatePlayerInfos = function(){
-	this.setDisplayStone();
-	this.setDisplayHealth();
-
 }
 
 GUI.prototype.endGame = function(waveCount){

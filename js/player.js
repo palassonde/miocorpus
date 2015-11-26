@@ -3,15 +3,13 @@ Player = function (x, y, game) {
 	// Constantes
 	MAX_SPEED = 300;
 
-	//this.hp = 100;
-
 	// Player attributes
 	this.maxspeed = MAX_SPEED;
 	this.friction = 20;
 	this.numberStoneBlue = 0;
 	this.numberStoneRed = 0;
 	this.numberStoneGreen = 0;
-	this.health = 4;
+	this.health = 3;
 	this.shotTime = 0;
 	this.isRight = true;
 	this.timerDomage = 0;//Evite de recevoir trop de coup
@@ -52,7 +50,7 @@ Player = function (x, y, game) {
 	
 	
 	//Turrets
-	this.maxTurrret = 4-1;
+	this.maxTurrets = 4;
 	this.nbrTurrets = 0;
 
 	this.turrets = this.game.add.group();
@@ -97,6 +95,10 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	
 	for (var x in this.turrets.children){
 		this.turrets.children[x].actionTurret(enemy);
+	}
+
+	if(this.game.time.now > player.timerDomage){
+		this.tint = 0xFFFFFF;
 	}
 	
 }
@@ -216,7 +218,7 @@ Player.prototype.move = function(){
 }
 
 Player.prototype.creationTurret = function(){
-	if (this.maxTurrret >= this.nbrTurrets){
+	if (this.nbrTurrets < this.maxTurrets){
 		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game));
 	}
 }
@@ -307,7 +309,8 @@ Player.prototype.hurtPlayer = function(player, enemies){
     
     if(this.game.time.now > player.timerDomage){
         player.health -= enemies.domage / this.def;
-        player.timerDomage = this.game.time.now + 3000;
+        player.timerDomage = this.game.time.now + 1000;
+        this.tint = 0xff0000;
     }
     
 }
