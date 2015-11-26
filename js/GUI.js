@@ -182,9 +182,6 @@ GUI.prototype.setDisplayHealth = function (){
 GUI.prototype.action = function(){
 
 	this.updatePlayerInfos();
-	if (this.stage.gameOver === true){
-		this.endGame();
-	}
 }
 
 GUI.prototype.displayWave = function(waveCount){
@@ -204,16 +201,24 @@ GUI.prototype.updatePlayerInfos = function(){
 
 }
 
-GUI.prototype.endGame = function(){
+GUI.prototype.endGame = function(waveCount){
 
-    end = this.game.add.sprite(350, 175, 'gameover');
+    this.player.kill();
+
+    end = this.game.add.sprite(350, 170, 'gameover');
    	end.fixedToCamera = true;
    	end.alpha = 0;
-   	var tween = this.game.add.tween(end).to( { alpha: 1 }, 10000, "Linear", true, 0, -1).repeat(0);
+   	tween = this.game.add.tween(end).to( { alpha: 1 }, 1000, "Linear", true, 0, -1).repeat(0);
+
+   	endInfo = this.game.add.text(this.game.camera.x + 100, this.game.camera.y + 65, "Wave: "+waveCount, style);
+   	//endInfo.fixedToCamera = true;
+   	endInfo.anchor.set(0.5);
+
 }
 
 //Pour la machine de fusion
 GUI.prototype.createMachine = function(nbItem, elementF){
+
 	this.graphics.lineStyle(5, 0x666666,1);
 	this.graphics.beginFill(0xbbbbbb, 0.7);
 	for(var a = 0; a < nbItem; a++){
@@ -346,4 +351,11 @@ GUI.prototype.fusion = function(sprite){
 		console.log("Echec");
 	}
 	this.initItemFusion();
+}
+
+GUI.prototype.back = function(){
+
+	this.game.state.clearCurrentState()
+
+	this.game.state.start('boot', true, true);
 }

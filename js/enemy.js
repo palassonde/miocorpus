@@ -35,13 +35,6 @@ Enemy.prototype.action = function(time, powerups, stage){
         this.jump(time);
     }
 
-    if (this.body.x < 30){
-        stage.endGame();
-    }
-
-	  // this.text.text = this.hp;
-	  // this.text.x = this.x;
-	  // this.text.y = this.y;
     if (this.hp <= 0){
 		this.createResource(powerups);
         this.destroy();

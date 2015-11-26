@@ -37,8 +37,9 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
 	
-	if(player.health <= 0){
-		this.endGame();
+	if(player.health <= 0 && this.gameOver === false){
+        this.gameOver = true;
+		GUI.endGame(this.waveCount);
 	}
 	
 	this.moveCamera(player);
@@ -70,10 +71,7 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 		}
     }
 	
-	
 }
-
-
 
 Stage.prototype.changeBackgroundColor = function (time){
 
@@ -165,14 +163,6 @@ Stage.prototype.createPlatforms = function(){
 
 }
 
-Stage.prototype.createObjects = function(){
-
-    
-
-
-
-}
-
 Stage.prototype.fullscreen = function() {
 
     if (this.game.scale.isFullScreen)
@@ -196,12 +186,6 @@ Stage.prototype.slowEnemy = function(skin, enemy) {
     enemy.slowDown();
 }
 
-Stage.prototype.endGame = function() {
-
-    this.gameOver = true;
-    this.player.kill();
-
-}
 
 Stage.prototype.createWave = function(enemies, GUI){
 	

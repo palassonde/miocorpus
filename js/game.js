@@ -27,11 +27,15 @@ MyGame.Game.prototype = {
 
     create : function () {
 
+        // Couleur de fond
+        this.stage.backgroundColor = '#78fdff';
+
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
         enemies = this.game.add.group();
 		
+        // Fuckups
 		var essaie1 = new MasterTurret(1730, 50, this.game,1,1,8000,1000,300);
 		enemies.add(essaie1);
 		
@@ -50,7 +54,6 @@ MyGame.Game.prototype = {
 
         // Instantiate Stage
         stage = new Stage(this.game, player);
-        stage.createObjects();
         stage.createPlatforms();
 		
         // Instantiate GUI
@@ -71,12 +74,19 @@ MyGame.Game.prototype = {
         GUI.action();
 
         for (var x in enemies.children){
-			 enemies.children[x].action(this.time, powerups, stage, player);   
+
+            if (enemies.children[x].body.x < 30 && stage.gameOver === false){
+                stage.gameOver = true;
+                GUI.endGame(stage.waveCount);
+            }
+
+			 enemies.children[x].action(this.time, powerups, stage, player);             
 		}
 		
 		for (var x in powerups.children){
 			powerups.children[x].action();   
 		} 
+
     }
 }
 

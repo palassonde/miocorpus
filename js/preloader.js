@@ -1,5 +1,5 @@
 MyGame.Preloader = function(game) {
-    this.preloadBar = null;
+    this.loadingBar = null;
     this.ready = false;
 };
 
@@ -7,13 +7,28 @@ MyGame.Preloader.prototype = {
 
     preload: function () {
 
-        this.stage.backgroundColor = '#78fdff';
+        // loading
+        this.loadingBar = this.add.sprite(this.world.centerX, this.world.centerY,"loading");
+        this.loadingBar.anchor.setTo(0.5,0.5);
+        this.load.setPreloadSprite(this.loadingBar, 0);
+
+        // Menu
+        this.load.image('title', 'assets/title.png');
+        this.load.image('play-button', 'assets/play-button.png');
+        this.load.image('options-button', 'assets/options-button.png');
+        this.load.image('controls-button', 'assets/controls-button.png');
+        this.load.image('cell', 'assets/cell.png');
+        this.load.image('cursor', 'assets/cursor.png');
+        this.load.image('options', 'assets/options.png');
+        this.load.image('back-button', 'assets/back-button.png');
+        this.load.image('controls', 'assets/controls.png');
 
         // Stage
 		this.load.image('core', 'assets/core.png');
         this.load.image('fond_degrader', 'assets/fond_degrader.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
+        this.load.image('platform2', 'assets/platform2.png');
         this.load.image('grass', 'assets/grass.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('jungleground', 'assets/jungleground.png');
@@ -46,11 +61,16 @@ MyGame.Preloader.prototype = {
 
     create: function () {
 
-        this.state.start('menu');
+        this.loadingBar.cropEnabled = true;
 
     },
 
     update: function () {
+
+        if (this.cache.isSoundDecoded('maintheme') && !this.ready) {
+            this.ready = true;
+            this.state.start('menu');
+        }
 
     }
 };
