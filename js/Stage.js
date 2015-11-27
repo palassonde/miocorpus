@@ -179,6 +179,7 @@ Stage.prototype.fullscreen = function() {
 Stage.prototype.createEnemy = function(enemies, x, y, speed,hp){
 
 	enemies.add(new Enemy(x, y, this.game, speed,hp));
+    enemies.add(new Kamikaze(x, y, this.game, speed,hp, this.player));
 }
 
 Stage.prototype.slowEnemy = function(skin, enemy) {
