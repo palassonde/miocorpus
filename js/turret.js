@@ -33,13 +33,14 @@ Turret = function(x, y, game){
 
 Turret.prototype = Object.create(Phaser.Sprite.prototype);
 
-Turret.prototype.actionTurret = function(enemies){	
+Turret.prototype.actionTurret = function(enemies, powerup, player){	
 
 	if (this.hp <= 0){
 		for(var x in this.bullets.children){
 			this.bullets.children[x].graphic.destroy();
 		}
 		this.bullets.destroy();
+		this.createResource(powerups)
         this.destroy();
 		return;
     }
@@ -90,6 +91,10 @@ Turret.prototype.actionTurret = function(enemies){
 	
 	//Verifier une collision
 	this.game.physics.arcade.overlap(this.bullets, enemies, this.collisionMissile, null, this);
+}
+
+Turret.prototype.createResource = function(){
+	powerups.add(new Powerups(this.x,this.y,this.game,'turret', true));
 }
 
 Turret.prototype.collisionMissile = function(bullet,enemy){

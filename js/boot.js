@@ -2,6 +2,8 @@ var MyGame = {};
 
 MyGame.Boot = function (game) {
 
+
+
 };
 
 MyGame.Boot.prototype = {

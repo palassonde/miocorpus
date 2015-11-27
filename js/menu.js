@@ -5,6 +5,10 @@ MyGame.Menu = function (game) {
 
 MyGame.Menu.prototype = {
     create: function () {
+
+        this.world.setBounds(0, 0, 1024, 600);
+        this.stage.backgroundColor = '#000000';
+
         // On démarre la musique
         this.music = this.add.audio('maintheme');
         this.music.play();

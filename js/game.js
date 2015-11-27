@@ -57,7 +57,7 @@ MyGame.Game.prototype = {
         stage.createPlatforms();
 		
         // Instantiate GUI
-        GUI = new GUI(this.game, stage, player);
+        gui = new GUI(this.game, stage, player);
 		
 		//Powerups
 		powerups = this.game.add.group();
@@ -70,14 +70,14 @@ MyGame.Game.prototype = {
 
         // Actions
         player.action(stage.platforms,enemies, powerups);
-        stage.action(this.time, player, enemies, player.turrets, GUI, powerups);
-        GUI.action();
+        stage.action(this.time, player, enemies, player.turrets, gui, powerups);
+        gui.action();
 
         for (var x in enemies.children){
 
             if (enemies.children[x].body.x < 30 && stage.gameOver === false){
                 stage.gameOver = true;
-                GUI.endGame(stage.waveCount);
+                gui.endGame(stage.waveCount);
             }
 
 			 enemies.children[x].action(this.time, powerups, stage, player);             

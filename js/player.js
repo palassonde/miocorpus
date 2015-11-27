@@ -50,7 +50,7 @@ Player = function (x, y, game) {
 	
 	
 	//Turrets
-	this.maxTurrets = 4;
+	this.maxTurrets = 5;
 	this.nbrTurrets = 0;
 
 	this.turrets = this.game.add.group();
@@ -67,7 +67,7 @@ Player = function (x, y, game) {
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
 Player.prototype.action = function(platforms, enemy, powerups){
-	this.nbrTurrets = this.turrets.children.length;
+
 	this.body.acceleration.y = 0;
 
 	for (var x in this.bullets.children){
@@ -94,7 +94,7 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.fire();
 	
 	for (var x in this.turrets.children){
-		this.turrets.children[x].actionTurret(enemy);
+		this.turrets.children[x].actionTurret(enemy, powerups, this);
 	}
 
 	if(this.game.time.now > player.timerDomage){
@@ -220,6 +220,7 @@ Player.prototype.move = function(){
 Player.prototype.creationTurret = function(){
 	if (this.nbrTurrets < this.maxTurrets){
 		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game));
+		this.nbrTurrets++;
 	}
 }
 
@@ -266,6 +267,9 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 			break;
 		case 'bluestone':
 			player.numberStoneBlue++;
+			break;
+		case 'turret':
+			player.nbrTurrets--;
 			break;
 	}
 	powerups.alive = false;

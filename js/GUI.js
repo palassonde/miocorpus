@@ -187,7 +187,7 @@ GUI.prototype.setDisplayHealth = function (){
 }
 
 GUI.prototype.setDisplayTurrets = function (){
-	this.turretsCapacity.text = "X " + (this.player.maxTurrets - this.player.nbrTurrets);
+	this.turretsCapacity.text = "X " + this.player.nbrTurrets + " / " + this.player.maxTurrets;
 }
 
 
@@ -212,7 +212,10 @@ GUI.prototype.displayWave = function(waveCount){
 GUI.prototype.endGame = function(waveCount){
 
     this.player.kill();
-
+    reset = this.game.add.button(450, 500, 'back-button', this.back, this,2, 1, 0, 2)
+    reset.scale.setTo(4,2);
+    reset.anchor.setTo(0.5, 0.5);
+    reset.fixedToCamera = true;
     end = this.game.add.sprite(350, 170, 'gameover');
    	end.fixedToCamera = true;
    	end.alpha = 0;
@@ -363,7 +366,5 @@ GUI.prototype.fusion = function(sprite){
 
 GUI.prototype.back = function(){
 
-	this.game.state.clearCurrentState()
-
-	this.game.state.start('boot', true, true);
+	this.game.state.start('menu');
 }
