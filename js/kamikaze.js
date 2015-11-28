@@ -48,6 +48,7 @@ Kamikaze.prototype = Object.create(Phaser.Sprite.prototype);
 Kamikaze.prototype.action = function(time, powerups, stage){
 
 
+    this.game.physics.arcade.overlap(this.player.turrets, this.spikes, this.spikeCollision, null, this);
     this.game.physics.arcade.overlap(this.player, this.spikes, this.spikeCollision, null, this);
 
  
@@ -149,9 +150,9 @@ Kamikaze.prototype.homing = function(){
     this.body.velocity.y = Math.sin(this.rotation) * this.speed;
 }
 
-Kamikaze.prototype.spikeCollision = function(player, spike){
+Kamikaze.prototype.spikeCollision = function(target, spike){
 
-    this.player.hurt(this.domage * 100);
+    target.hurt(this.domage * 100);
     spike.destroy();
 
 }
