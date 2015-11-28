@@ -26,8 +26,6 @@ MyGame.Game = function (game) {
 MyGame.Game.prototype = {
 
     create : function () {
-
-
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
@@ -35,50 +33,41 @@ MyGame.Game.prototype = {
         // Instantiate Player
         player = new Player(200, 1000, this.game);
         this.game.add.existing(player);
-
         // Instantiate Stage
         stage = new Stage(this.game, player,enemies);
         stage.createPlatforms();
-		
         // Instantiate GUI
         gui = new GUI(this.game, stage, player);
-		
 		//Powerups
 		powerups = this.game.add.group();
-
+        // On top of 
         player.bringToTop();
-
     },
 
     update : function () {
-
         // Actions
         player.action(stage.platforms,enemies, powerups);
         stage.action(this.time, player, enemies, player.turrets, gui, powerups);
         gui.action();
-
         for (var x in enemies.children){
-
             if (enemies.children[x].body.x < 30 && stage.gameOver === false){
                 stage.gameOver = true;
                 gui.endGame(stage.waveCount);
             }
-
 			 enemies.children[x].action(this.time, powerups, stage, player);             
 		}
-		
 		for (var x in powerups.children){
 			powerups.children[x].action();   
 		} 
-
     }
 }
 
 //Retourne une random name stone
 function getRandomStone(){
+
 	var random = Math.random();
 	
-	if(random<0.1){
+	if(random < 0.1){
 		return 'heart';
 	}else if(random < 0.4){
 		return 'redstone';
@@ -87,6 +76,4 @@ function getRandomStone(){
 	}else{
 		return 'bluestone';
 	}
-
-
 }

@@ -22,9 +22,6 @@ Enemy = function (x, y, game, speed,hp) {
     this.anchor.set(0.5);
 	
 	this.timerDomage = 0;
-
-	 // var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-	 // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -39,8 +36,6 @@ Enemy.prototype.action = function(time, powerups, stage){
 		this.createResource(powerups);
         this.destroy();
     }
-
-    
 }
 
 Enemy.prototype.createResource = function(){
@@ -52,13 +47,6 @@ Enemy.prototype.createResource = function(){
 Enemy.prototype.hurt = function(dmg){
 
     this.hp -= dmg;    
-}
-
-Enemy.prototype.displayHP = function(){
-
-    this.text.setText(this.hp);
-    this.text.x = this.body.x
-    this.text.y = this.body.y - 30
 }
 
 Enemy.prototype.jump = function(time){

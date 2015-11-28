@@ -216,5 +216,3 @@ Bullet.prototype.ajuster = function(){
 	this.stop = true;
 	
 }
-
-

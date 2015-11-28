@@ -62,7 +62,6 @@ MyGame.Preloader.prototype = {
     create: function () {
 
         this.loadingBar.cropEnabled = true;
-
     },
 
     update: function () {

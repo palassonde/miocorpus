@@ -27,20 +27,11 @@ Kamikaze = function (x, y, game, speed, hp, player) {
     this.body.checkCollision.left = false;
     this.body.checkCollision.right = false;
     this.exploding = false;
-
-    //this.body.velocity.x = -speed;        
-    //this.body.gravity.y = 500;
-
     this.animations.add('left', [6,7,8], 5, true);
     this.animations.play('left');
     this.anchor.set(0.5);
 	
 	this.timerDomage = 0;
-
-    //this.move = this.game.add.tween(this).to({x: this.player.body.x, y: this.player.body.y }, 5000, "Linear", true);
-
-	 // var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-     // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Kamikaze.prototype = Object.create(Phaser.Sprite.prototype);
@@ -86,20 +77,6 @@ Kamikaze.prototype.dropResource = function(){
 Kamikaze.prototype.hurt = function(dmg){
 
     this.hp -= dmg;    
-}
-
-Kamikaze.prototype.displayHP = function(){
-
-    this.text.setText(this.hp);
-    this.text.x = this.body.x
-    this.text.y = this.body.y - 30
-}
-
-Kamikaze.prototype.slowDown = function(){
-
-    this.body.velocity.x = -10;
-    this.body.gravity.y = 0;
-    this.body.velocity.y = 0;
 }
 
 Kamikaze.prototype.explode = function(){
@@ -155,4 +132,11 @@ Kamikaze.prototype.spikeCollision = function(target, spike){
     target.hurt(this.domage * 100);
     spike.destroy();
 
+}
+
+Kamikaze.prototype.slowDown = function(){
+
+    this.body.velocity.x = -10;
+    this.body.gravity.y = 0;
+    this.body.velocity.y = 0;
 }

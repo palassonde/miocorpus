@@ -6,6 +6,7 @@ MyGame.Menu = function (game) {
 MyGame.Menu.prototype = {
     create: function () {
 
+        // Layout menu
         this.world.setBounds(0, 0, 1024, 600);
         this.stage.backgroundColor = '#000000';
 
@@ -59,7 +60,7 @@ MyGame.Menu.prototype = {
     },
 
     update: function () {
-        // Normalement, il y a quelque chose ici
+
     },
 
     startGame: function (pointer) {
@@ -94,9 +95,6 @@ MyGame.Menu.prototype = {
         this.add.tween(this.optionMusic).to({x: 1600}, 500, "Linear", true);
         this.add.tween(this.optionSound).to({x: 1600}, 500, "Linear", true);
         this.add.tween(this.controlsList).to({x: 1000}, 500, "Linear", true);
-
-        //this.add.tween(this.playButton).to({x: this.world.centerX}, 300, "Linear", true);
-        //this.add.tween(this.playButton).to({x: this.world.centerX}, 300, "Linear", true);
     },
 
     showControls: function (pointer) {

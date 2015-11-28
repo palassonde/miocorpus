@@ -39,9 +39,6 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
     this.body.collideWorldBounds = true;
 
 	this.timerDomage = 0;
-
-	// var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-    // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Minion.prototype = Object.create(Phaser.Sprite.prototype);

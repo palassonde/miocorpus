@@ -22,7 +22,6 @@ Powerups.prototype.action = function(player){
 	
 	var velocityX = this.body.velocity.x;
 	
-	
 	//Ralentissement droite
 	if(velocityX > 0){	
 		if(this.body.touching.down){

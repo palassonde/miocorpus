@@ -15,8 +15,6 @@ GUI = function (game, stage, player) {
 	this.greenstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
 
 	this.turretsCapacity = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
-
-	//number = this.game.add.text(this.game.camera.x, this.game.camera.y, "1", resourcesStyle);
 	
 	// TOP LEFT
 	this.hearts = this.game.add.group();
@@ -48,18 +46,16 @@ GUI = function (game, stage, player) {
     g = this.stones.create(900, 120, 'greenstone');
     g.scale.setTo(0.5, 0.5);
     this.stones.setAll('fixedToCamera', true);
-
 	
 	//Machine de fusion	
-	
 	this.game.add.text(90, 120, "R : RESET", resourcesStyle);
 	this.game.add.text(345, 120, "F : FUSION", resourcesStyle);
 	
 	var nbItem = 4;
-	this.positionMileu = (nbItem*90/2) - (3*90)/2; //Sert a centrer
+	this.positionMilieu = (nbItem*90/2) - (3*90)/2; //Sert a centrer
 	//var distance = 90; //Serte a faire une distance
 	
-	this.game.add.text(this.positionMileu + 90 + 42, 300, "MACHINE À FUSION", resourcesStyle);
+	this.game.add.text(this.positionMilieu + 90 + 42, 300, "MACHINE À FUSION", resourcesStyle);
 	
 	//Group d'élémet de fusion
 	this.graphics = this.game.add.graphics(90,150);
@@ -83,10 +79,6 @@ GUI = function (game, stage, player) {
 	var x = (nbItem*90) + 40;
 	
 	this.legend(x);
-	
-
-
-
 }
 
 //Player
@@ -126,9 +118,8 @@ GUI.prototype.setDisplayHealth = function (){
 }
 
 GUI.prototype.setDisplayTurrets = function (){
-	this.turretsCapacity.text = "X " + this.player.nbrTurrets + " / " + this.player.maxTurrets;
+	this.turretsCapacity.text = this.player.nbrTurrets + " / " + this.player.maxTurrets;
 }
-
 
 GUI.prototype.action = function(){
 
@@ -163,7 +154,6 @@ GUI.prototype.endGame = function(waveCount){
    	endInfo = this.game.add.text(this.game.camera.x + 100, this.game.camera.y + 65, "Wave: "+waveCount, style);
    	//endInfo.fixedToCamera = true;
    	endInfo.anchor.set(0.5);
-
 }
 
 //Pour la machine de fusion
@@ -171,8 +161,7 @@ GUI.prototype.legend = function(x){
 	
 	this.graphics.beginFill(0xbbbbbb, 0.7);
 	this.graphics.drawRect(x, -115, 360, 550);
-	this.graphics.endFill();
-	
+	this.graphics.endFill();	
 	
 	this.game.add.text(x+45+180, 40, "LEGENDE", resourcesStyle);
 	
@@ -265,7 +254,7 @@ GUI.prototype.createMachine = function(nbItem, elementF){
 	this.graphics.lineStyle(5, 0x666666,1);
 	this.graphics.beginFill(0xbbbbbb, 0.7);
 	for(var a = 0; a < 3; a++){
-		this.graphics.drawRect(this.positionMileu + 90*a, 180, 90, 90);
+		this.graphics.drawRect(this.positionMilieu + 90*a, 180, 90, 90);
 	}
 	this.graphics.endFill();
 }
@@ -290,7 +279,7 @@ GUI.prototype.dragStop = function(sprite){
 		sprite.y = this.positionDrag.y;
 	}else{
 		var nb = this.tabFusion.length;
-		sprite.x = this.positionMileu + 90*nb + 135;
+		sprite.x = this.positionMilieu + 90*nb + 135;
 		sprite.y = 330 + 45;
 		sprite.inputEnabled = false;
 		this.tabFusion.push(sprite);
@@ -324,8 +313,6 @@ GUI.prototype.fusion = function(sprite){
 				works = true;
 				console.log("nombre de turret augmenter");
 			}
-
-
 		}
 	}else{
 		if (tabObject[0] && tabObject[1]){
@@ -335,7 +322,6 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus2 = true; //Active un power au prochain turret
 				works = true;
 				console.log("nouvelle turret red + blue");
-
 			}
 		}
 		if (tabObject[0] && tabObject[2]){
@@ -345,9 +331,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus1 = true; //Active un power au prochain turret
 				works = true;
 				console.log("nouvelle turret red + vert");
-
 			}
-
 		}
 		if (tabObject[1] && tabObject[2]){
 			if(this.player.numberStoneGreen >= 10 && this.player.numberStoneBlue >= 10){
@@ -356,7 +340,6 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus3 = true; //Active un power au prochain turret	
 				works = true;
 				console.log("nouvelle turret vert + blue");
-
 			}
 		}
 		if (tabObject[3] && tabObject[0]){
@@ -366,8 +349,6 @@ GUI.prototype.fusion = function(sprite){
 				works = true;
 				console.log("augmente la force");
 			}
-
-
 		}
 		if (tabObject[3] && tabObject[1]){
 			if(this.player.numberStoneBlue >= 10){
@@ -376,8 +357,6 @@ GUI.prototype.fusion = function(sprite){
 				works = true;
 				console.log("augmente la def");
 			}
-
-
 		}
 		if (tabObject[3] && tabObject[2]){
 			if(this.player.numberStoneGreen >= 10){
@@ -386,7 +365,6 @@ GUI.prototype.fusion = function(sprite){
 				console.log("augmente la vitesse")
 				works = true;
 			}
-
 		}
 	}
 	if(!works){

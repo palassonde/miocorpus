@@ -24,23 +24,17 @@
 <body>
 <div id="game"></div>
 <script type="text/javascript">
-
 window.onload = function() {
-
     // L'application
     var game = new Phaser.Game(1024, 600, Phaser.AUTO, 'game');
-
     // Les états possibles
     game.state.add('boot', MyGame.Boot);
     game.state.add('preloader', MyGame.Preloader);
     game.state.add('menu', MyGame.Menu);
     game.state.add('game', MyGame.Game);
-
     // On démarre avec l'état 'boot'
     game.state.start('boot');
-
 };
-
 </script>
 </body>
 </html>

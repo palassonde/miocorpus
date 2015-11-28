@@ -36,18 +36,13 @@ Player = function (x, y, game) {
 	this.actionKey_shift = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 	this.actionKey_T = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
 	this.actionKey_T.onDown.add(this.creationTurret, this);
-	
 	this.actionKey_Q = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
-	
 	this.actionKey_W = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-	
-	
 	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	this.cursors = this.game.input.keyboard.createCursorKeys();	
 	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-	
 	
 	//Turrets
 	this.maxTurrets = 5;
@@ -60,7 +55,8 @@ Player = function (x, y, game) {
 	
 	this.bonus1 = false; //Creer un rond d'attaque
 	this.bonus2 = false; //Met des missile dans le chemin
-	this.bonus3 = false; //Invinsible
+	this.bonus3 = false; //Invincible
+
 	//misille
 	this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
@@ -86,15 +82,14 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.overlap(player, enemy, this.hurtPlayer, null, this);
 	this.game.physics.arcade.overlap(this.turrets, enemy, this.hurtTurret, null, this);
 	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtEnnemie, null, this);
-
-	
+	// Collision bullet turret
+	this.game.physics.arcade.overlap(this.bullets, this.turrets, this.hurtTurret, null, this);
 
 	if (this.actionKey_A.isDown){
 		this.fire();
 	}else{
 		this.move();
 	}
-
 
 	this.manageSpeed();
 	

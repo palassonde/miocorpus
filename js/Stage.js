@@ -22,11 +22,6 @@ Stage = function(game, player, enemy){
 	this.timeEscorte = 0;
 	this.newWave = true;
 	this.enemieToSpwan = 5;
-
-    // Full screen
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    //this.game.input.onDown.add(this.fullscreen, this);
-	
 	
 	//Jungle
 	this.timeJungleSpwan = 0;
