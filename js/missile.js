@@ -1,4 +1,4 @@
-Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestination, cursor){
+Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestination, facing){
 	
 	this.speed = 300;
     this.angleMax = 0.5;
@@ -8,7 +8,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.rayon = rayon; //Distance de tir
 	this.timeDomageEffet = game.time.now;
 	this.nbScale = 0.1;
-	this.cursor = cursor;
+	this.facing = facing;
 	
 	this.tween;
 	this.time = 0;
@@ -73,17 +73,19 @@ Bullet.prototype.simpleFire = function(){
 	if(this.stop){
 		return;
 	}
-	var vistesse = 600;
+	var vitesse = 600;
 	
-	if(this.cursor.left.isDown){
-		this.body.velocity.x = -vistesse;
-	}else if (this.cursor.up.isDown){
-		this.body.velocity.y = -vistesse;
-	}else if(this.cursor.down.isDown){
-		this.body.velocity.y = vistesse;
-	}else{
-		this.body.velocity.x = vistesse;
+	if(this.facing === 'left'){
+		this.body.velocity.x = -vitesse;
+	}else if (this.facing === 'right'){
+		this.body.velocity.x = vitesse;
+	}else if (this.facing === 'up'){
+		this.body.velocity.y = -vitesse;
 	}
+	else if (this.facing === 'down'){
+		this.body.velocity.y = vitesse;
+	}
+
 	this.scale.setTo(2,2);
 	this.stop = true;
 }

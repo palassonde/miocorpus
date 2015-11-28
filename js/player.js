@@ -47,7 +47,7 @@ Player = function (x, y, game) {
 	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-	this.actionKey_A.onDown.add(this.fire, this);
+	//this.actionKey_A.onDown.add(this.fire, this);
 	
 	
 	//Turrets
@@ -85,7 +85,13 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.overlap(this.turrets, enemy, this.hurtTurret, null, this);
 	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtEnnemie, null, this);
 
-	this.move();
+	
+
+	if (this.actionKey_A.isDown){
+		this.fire();
+	}else{
+		this.move();
+	}
 
 
 	this.manageSpeed();
@@ -103,10 +109,30 @@ Player.prototype.action = function(platforms, enemy, powerups){
 }
 
 Player.prototype.fire = function(powerups){
+
+	// ANIMATION PLAYER SHOOT idle
+
+	this.body.velocity.x = 0;
 	
 	if(this.game.time.now > this.shotTime){
-		this.shotTime = this.game.time.now + 400;
-		this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, this.cursors));
+
+		if(this.cursors.right.isDown){
+			// ANIMATION PLAYER SHOOT right
+			this.shotTime = this.game.time.now + 400;
+			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'right'));
+		}else if(this.cursors.left.isDown){
+			// ANIMATION PLAYER SHOOT left
+			this.shotTime = this.game.time.now + 400;
+			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'left'));
+		}else if(this.cursors.up.isDown){
+			// ANIMATION PLAYER SHOOT up
+			this.shotTime = this.game.time.now + 400;
+			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'up'));
+		}else if(this.cursors.down.isDown){
+			// ANIMATION PLAYER SHOOT down
+			this.shotTime = this.game.time.now + 400;
+			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'down'));
+		}
 	}
 
 }
