@@ -79,7 +79,7 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
     }
 	
 	//Si tout les ennemie son créer
-	if(enemies.children.length === 1 && !this.newWave){
+	if(enemies.children.length === 1 && !this.newWave && this.enemieToSpwan<=0){
 		if(this.waveCount%10 === 0){
 			enemiesByWave = enemiesByWave * 2;
 		}else{
@@ -241,12 +241,13 @@ Stage.prototype.createWave = function(enemies, GUI){
 	if(this.waveCount%10 ===0){
 		//Bird
 		var hpBoss = 100*this.waveCount;
+		console.log(hpBoss);
 		var speedBoss = 10;
 		var chanceBoss = 1;
 		var nbItemBoss = 10;
 		var domageBoss = 3;
 		
-		enemies.add(new Minion(2000,700, this.game, speedBoss,hpB,3, chanceBoss, nbItemBoss, domageBoss));
+		enemies.add(new Minion(2000,700, this.game, speedBoss,hpBoss,3, chanceBoss, nbItemBoss, domageBoss));
 		this.enemieToSpwan = 0;
 	}else{
 

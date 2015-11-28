@@ -83,7 +83,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 	}
 	if (this.hp <= 0){
 		this.createResource();
-		stage.timeJungleSpwan = this.game.time.now + 10000; //fait reaparaitre apres 1 min
+		stage.timeJungleSpwan = this.game.time.now + 100000; //fait reaparaitre apres 1 min
 		for(var x in this.bullets.children){
 			this.bullets.children[x].graphic.destroy();
 		}

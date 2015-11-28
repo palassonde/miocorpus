@@ -53,7 +53,7 @@ Minion.prototype.action = function(time, powerups, stage){
         this.destroy();
     }
 
-    
+    console.log(this.hp);
 }
 
 Minion.prototype.createResource = function(){
