@@ -47,6 +47,7 @@ Player = function (x, y, game) {
 	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+	this.actionKey_A.onDown.add(this.fire, this);
 	
 	
 	//Turrets
@@ -84,14 +85,12 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.overlap(this.turrets, enemy, this.hurtTurret, null, this);
 	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtEnnemie, null, this);
 
-	if(!this.actionKey_A.isDown){
-		this.move();
-	}
+	this.move();
+
 
 	this.manageSpeed();
 	
 	this.launchResource(powerups);
-	this.fire();
 	
 	for (var x in this.turrets.children){
 		this.turrets.children[x].actionTurret(enemy, powerups, this);
@@ -105,11 +104,11 @@ Player.prototype.action = function(platforms, enemy, powerups){
 
 Player.prototype.fire = function(powerups){
 	
-	if(this.game.time.now > this.shotTime && this.actionKey_A.isDown){
+	if(this.game.time.now > this.shotTime){
 		this.shotTime = this.game.time.now + 400;
 		this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, this.cursors));
-		
 	}
+
 }
 
 Player.prototype.launchResource = function(powerups){

@@ -7,6 +7,7 @@ Kamikaze = function (x, y, game, speed, hp, player) {
     this.speed = 400;
     this.spikeSpeed = 200;
 	this.domage = 1;
+    this.exploded = false;
 
     this.angleMax = 0.5;
 
@@ -64,14 +65,20 @@ Kamikaze.prototype.action = function(time, powerups, stage){
 
 
     if (this.hp <= 0){
-        this.createResource(powerups);
-        this.kill();
+        this.dropResource(powerups);
+        this.destroy();
+    }
+
+    if (this.exploded){
+
+        this.kill()
+        this.game.time.events.add(Phaser.Timer.SECOND * 4, this.destroy, this);
     }
 
     
 }
 
-Kamikaze.prototype.createResource = function(){
+Kamikaze.prototype.dropResource = function(){
     powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true));
 }
 
@@ -98,15 +105,19 @@ Kamikaze.prototype.explode = function(){
 
     var angle = 0;
 
-    for (var i = 0; i < 10 ; i++) {
+    if (this.alive){
 
-        spike = this.spikes.create(this.body.x,this.body.y, 'bullet');
-        spike.body.velocity.x = Math.cos(angle) * this.spikeSpeed;
-        spike.body.velocity.y = Math.sin(angle) * this.spikeSpeed;
-        angle += ((2 * Math.PI) / 10);
+        for (var i = 0; i < 10 ; i++) {
+
+            spike = this.spikes.create(this.body.x,this.body.y, 'bullet');
+            spike.body.velocity.x = Math.cos(angle) * this.spikeSpeed;
+            spike.body.velocity.y = Math.sin(angle) * this.spikeSpeed;
+            angle += ((2 * Math.PI) / 10);
+        }
+        this.exploded = true;
     }
 
-    this.kill();
+
 }
 
 Kamikaze.prototype.homing = function(){
@@ -139,7 +150,7 @@ Kamikaze.prototype.homing = function(){
 
 Kamikaze.prototype.spikeCollision = function(player, spike){
 
-    this.player.hurt(this.dmg * 100);
-    spike.kill();
+    this.player.hurt(this.domage * 100);
+    spike.destroy();
 
 }

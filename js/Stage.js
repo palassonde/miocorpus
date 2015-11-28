@@ -36,7 +36,7 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 	this.game.physics.arcade.collide(powerups, this.platforms);
 
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
-	
+
 	if(player.health <= 0 && this.gameOver === false){
         this.gameOver = true;
 		GUI.endGame(this.waveCount);
@@ -160,19 +160,6 @@ Stage.prototype.createPlatforms = function(){
     this.platforms.setAll('body.checkCollision.right', false);
     this.jungleGround.body.checkCollision.down = true;
 
-
-}
-
-Stage.prototype.fullscreen = function() {
-
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
-    }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
 
 }
 
