@@ -47,7 +47,6 @@ Player = function (x, y, game) {
 	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-	//this.actionKey_A.onDown.add(this.fire, this);
 	
 	
 	//Turrets
@@ -59,6 +58,9 @@ Player = function (x, y, game) {
     this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
 	this.game.world.bringToTop(this.turrets);
 	
+	this.bonus1 = false; //Creer un rond d'attaque
+	this.bonus2 = false; //Met des missile dans le chemin
+	this.bonus3 = false; //Invinsible
 	//misille
 	this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
@@ -166,7 +168,7 @@ Player.prototype.launchResource = function(powerups){
 			velocite = -200;
 		}
 		
-		var stone = new Powerups(this.x,this.y, this.game, nature,false);
+		var stone = new Powerups(this.x,this.y, this.game, nature,false,1);
 		//this.game.add.existing(stone);
 		powerups.add(stone);
 		
@@ -244,7 +246,8 @@ Player.prototype.move = function(){
 
 Player.prototype.creationTurret = function(){
 	if (this.nbrTurrets < this.maxTurrets){
-		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game));
+		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game, this.bonus1, this.bonus2, this.bonus3));
+		this.bonus1 = this.bonus2 = this.bonus3 = false;
 		this.nbrTurrets++;
 	}
 }
@@ -282,16 +285,19 @@ Player.prototype.manageSpeed = function(){
 Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
 	if(!powerups.collidePlayer)return;
-	if(player.health < 10) player.health++;
+
 	switch(powerups.key){
 		case 'redstone':
-			player.numberStoneRed++;
+			player.numberStoneRed += powerups.number;
 			break;
 		case 'greenstone':
-			player.numberStoneGreen++;
+			player.numberStoneGreen += powerups.number;
 			break;
 		case 'bluestone':
-			player.numberStoneBlue++;
+			player.numberStoneBlue += powerups.number;
+			break;
+		case 'heart':
+			if(player.health < 10) player.health++;
 			break;
 		case 'turret':
 			player.nbrTurrets--;
@@ -308,6 +314,7 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 				turret.rayon = turret.rayon + 50;
 			}else{
 				turret.kind = 3;
+				turret.tint = 0xFF0000; 
 			}
 			break;
 		case 'greenstone':
@@ -315,6 +322,7 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 				turret.cooldown = turret.cooldown-500;
 			}else{
 				turret.kind = 2;
+				turret.tint = 0x28c700; 
 			}
 			break;
 		case 'bluestone':
@@ -322,11 +330,14 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 				turret.numberEnemyShoot++;
 			}else{
 				turret.kind = 1;
+				turret.tint = 0x00aee1; 
 			}
 			break;
 	}
-	turret.domage = turret.domage + 0.1;
-	powerups.alive = false;
+	if(powerups.key !== "heart"){
+		turret.domage = turret.domage + 0.1;
+		powerups.alive = false;
+	}
 	
 }
 

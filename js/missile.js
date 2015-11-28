@@ -47,6 +47,9 @@ Bullet.prototype.actionMissile = function(){
 	
 	//Mouvement
 	switch(this.behavior){
+		case -1:
+			this.simpleFireTurret();
+			break;
 		case 0: 
 			this.simpleFire();
 			break;
@@ -65,6 +68,27 @@ Bullet.prototype.actionMissile = function(){
 			break;
 	}
 
+}
+
+//Simple
+Bullet.prototype.simpleFireTurret = function(){
+	
+	if(this.stop){
+		return;
+	}
+	var angleTarget = this.game.math.angleBetween(
+		this.x, this.y, this.target.x, this.target.y
+	);
+	
+	var x = (Math.cos(angleTarget) * this.rayon) + this.x;
+	var y = (Math.sin(angleTarget) * this.rayon) + this.y;
+	
+	this.timeLive = 1000;
+	
+	this.tween = this.game.add.tween(this).to( { x: x, y: y}, this.timeLive);
+	this.tween.start();
+	this.tween.onComplete.removeAll();
+	this.stop = true;
 }
 
 //Fire personnage

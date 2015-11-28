@@ -1,4 +1,4 @@
-Turret = function(x, y, game){
+Turret = function(x, y, game, bonus1, bonus2, bonus3){
 
 	this.time = 0;
 
@@ -8,9 +8,9 @@ Turret = function(x, y, game){
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
-	this.bonus1 = false; //Creer un rond d'attaque
-	this.bonus2 = false; //Met des missile dans le chemin
-	this.bonus3 = false; //Invisible
+	this.bonus1 = bonus1; //Creer un rond d'attaque
+	this.bonus2 = bonus2; //Met des missile dans le chemin
+	this.bonus3 = bonus3; //Invinsible
 	this.hp = 100;
 	
 	//Missile
@@ -18,7 +18,7 @@ Turret = function(x, y, game){
     this.bullets.enableBody = true;
     //this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 	
-	
+
 	//Caractéristique
 	this.numberEnemyShoot = 2;
 	this.cooldown = 8000; //ICI 
@@ -26,7 +26,7 @@ Turret = function(x, y, game){
 	this.rayon = 200;
 	
 	this.cooldownTemp = 0;
-	this.kind = 1;
+	this.kind = -1;
 	this.enemyList = [];
 	this.changeEnemyList = [];
 }
@@ -101,7 +101,7 @@ Turret.prototype.collisionMissile = function(bullet,enemy){
 	if(bullet.behavior ===  2 || bullet.behavior ===  4){
 		if(bullet.timeDomageEffet < this.game.time.now){
 			enemy.hurt(this.domage*25);
-			bullet.timeDomageEffet = this.game.time.now + 1000;
+			bullet.timeDomageEffet = this.game.time.now + 500;
 		}
 	}else{
 		enemy.hurt(this.domage*100);

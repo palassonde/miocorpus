@@ -1,4 +1,4 @@
-Powerups = function(x,y,game, name, isCollidePlayer){
+Powerups = function(x,y,game, name, isCollidePlayer,number){
 	Phaser.Sprite.call(this, game, x, y, name);
 	this.anchor.x = 0.5;
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -7,6 +7,8 @@ Powerups = function(x,y,game, name, isCollidePlayer){
 	this.scale.setTo(0.35,0.35);
 	//Caracteristique
 	this.collidePlayer = isCollidePlayer;
+	
+	this.number = number;
 }
 
 

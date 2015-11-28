@@ -1,6 +1,12 @@
-MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon){
-	Phaser.Sprite.call(this, game, x, y, 'turret');
+MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax){
+	Phaser.Sprite.call(this, game, x, y, 'player');
+	this.animations.add('left', [6,7,8], 5, true);
+	this.animations.add('right', [3,4,5], 5, true);
+	this.animations.add('notMove', [0,1,2], 5, true);
 	this.anchor.x = 0.5;
+	this.anchor.y = 0.1;
+	this.scale.y = 3;
+	this.scale.x = 3;
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
 	this.body.collideWorldBounds = true;
@@ -16,23 +22,73 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon){
 	this.cooldownTemp = 0;
 	this.turretList = [];
 	this.changeTurretList = [];
+	this.nbResMax = nbResMax;
 	
 	//Missile
 	this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
+	
+	//Mouvement
+	this.tween;
+	this.direction;
+	this.timePause = 0;
+	this.moveLeft();
 }
 
 MasterTurret.prototype = Object.create(Phaser.Sprite.prototype);
 
-MasterTurret.prototype.action = function(a,b,c,player){	
+MasterTurret.prototype.moveRigth = function(){
+	this.tween = this.game.add.tween(this).to( { x: this.x+700}, 15000);
+	this.tween.onComplete.add(this.moveLeft,this);
+	this.tween.start(3000);
+	this.animations.play('right');
+	this.direction = 'right';
+}
+
+MasterTurret.prototype.moveLeft = function(){
+	this.tween = this.game.add.tween(this).to( { x: this.x-700}, 15000);
+	this.tween.onComplete.add(this.moveRigth,this);
+	this.tween.start(3000);
+	this.animations.play('left');
+	this.direction = 'left';
+}
+
+MasterTurret.prototype.reviveJungle = function(hp,domage,nbr,cooldown,nrRessource){
+	this.revive();
+	this.hp = hp;
+	this.nbrMissile = nbr;
+	this.cooldown = cooldown;
+	this.domage = domage;
+	this.nbResMax = nrRessource;
+	this.cooldownTemp = 0;
+	this.x = 2150;
+	this.y = 50;
+	
+	//Refaire bullet
+	this.bullets = this.game.add.group();
+    this.bullets.enableBody = true;
+	
+	//Mouvement
+	this.tween = null;
+	this.direction;
+	this.timePause = 0;
+	this.moveLeft();
+}
+
+MasterTurret.prototype.action = function(a,b,stage,player){	
 
 	//Mort
+	if(this.alive === false){
+		return;
+	}
 	if (this.hp <= 0){
+		this.createResource();
+		stage.timeJungleSpwan = this.game.time.now + 10000; //fait reaparaitre apres 1 min
 		for(var x in this.bullets.children){
 			this.bullets.children[x].graphic.destroy();
 		}
 		this.bullets.destroy();
-        this.destroy();
+        this.kill();
 		return;
     }
 
@@ -90,8 +146,20 @@ MasterTurret.prototype.action = function(a,b,c,player){
 	//Verifier une collision
 	this.game.physics.arcade.overlap(player, this.bullets, this.collisionMissile, null, this);
 	//this.game.physics.arcade.overlap(player.turrets, this.bullets, this.collisionMissile, null, this);
+	
+	//Restart annimation
+	if(this.tween.isPaused && this.timePause <= this.game.time.now){
+		this.animations.play(this.direction);
+		this.tween.resume();
+		this.timePause = 0;
+	}
 }
 
+MasterTurret.prototype.createResource = function(){
+	powerups.add(new Powerups(this.x,this.y,this.game,'redstone', true, Math.floor(this.nbResMax * Math.random())+1   ));
+	powerups.add(new Powerups(this.x,this.y,this.game,'greenstone', true, Math.floor(this.nbResMax * Math.random())+1));
+	powerups.add(new Powerups(this.x,this.y,this.game,'bluestone', true, Math.floor(this.nbResMax * Math.random())+1));
+}
 
 MasterTurret.prototype.collisionMissile = function(cible,bullet){
 	if(bullet.behavior ===  2 || bullet.behavior ===  4){
@@ -142,6 +210,9 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 	}
 	
 	if(isShoot){
+		this.tween.pause();
+		this.timePause = this.game.time.now + 4000;
+		this.animations.play('notMove');
 		this.time = 0;
 		this.cooldownTemp = this.cooldown * ((this.nbrMissile - maxEnemy)/this.nbrMissile);
 	}

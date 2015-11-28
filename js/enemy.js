@@ -24,7 +24,7 @@ Enemy = function (x, y, game, speed,hp) {
 	this.timerDomage = 0;
 
 	 // var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: this.width, align: "center" };
-     // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
+	 // this.text = this.game.add.text(this.body.x, this.body.y , this.hp, style);
 }
 
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
@@ -44,7 +44,9 @@ Enemy.prototype.action = function(time, powerups, stage){
 }
 
 Enemy.prototype.createResource = function(){
-	powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true));
+	if(Math.random() < 0.8){
+		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, 1));
+	}
 }
 
 Enemy.prototype.hurt = function(dmg){

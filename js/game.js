@@ -27,33 +27,17 @@ MyGame.Game.prototype = {
 
     create : function () {
 
-        // Couleur de fond
-        this.stage.backgroundColor = '#78fdff';
 
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
         enemies = this.game.add.group();
-		
-        // Fuckups
-		var essaie1 = new MasterTurret(1730, 50, this.game,1,1,8000,1000,300);
-		enemies.add(essaie1);
-		
-		var essaie1 = new MasterTurret(1480, 50, this.game,1,1,8000,1000,300);
-		enemies.add(essaie1);
-		
-		var essaie1 = new MasterTurret(1230, 50, this.game,1,1,8000,1000,300);
-		enemies.add(essaie1);
-		
-		var essaie1 = new MasterTurret(1480, 350, this.game,1,1,8000,1000,300);
-		enemies.add(essaie1);
-		
         // Instantiate Player
         player = new Player(200, 1000, this.game);
         this.game.add.existing(player);
 
         // Instantiate Stage
-        stage = new Stage(this.game, player);
+        stage = new Stage(this.game, player,enemies);
         stage.createPlatforms();
 		
         // Instantiate GUI
@@ -94,12 +78,15 @@ MyGame.Game.prototype = {
 function getRandomStone(){
 	var random = Math.random();
 	
-	if(random <= 0.33){
+	if(random<0.1){
+		return 'heart';
+	}else if(random < 0.4){
 		return 'redstone';
-	}else if(random <= 0.66){
+	}else if(random < 0.7){
 		return 'greenstone';
 	}else{
 		return 'bluestone';
 	}
-	
+
+
 }

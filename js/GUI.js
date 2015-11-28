@@ -82,68 +82,7 @@ GUI = function (game, stage, player) {
 	//Legende
 	var x = (nbItem*90) + 40;
 	
-	this.graphics.beginFill(0xbbbbbb, 0.7);
-	this.graphics.drawRect(x, -115, 360, 550);
-	this.graphics.endFill();
-	
-	
-	this.game.add.text(x+45+180, 40, "LEGENDE", resourcesStyle);
-	
-	var distance = 75;
-	var ressourceNbStyle = { font: "10px Arial", fill: "#f26c4f", align: "left" };
-	
-	var tabLeg = [["redstone","bluestone"],["redstone","greenstone"],["bluestone","greenstone"],["player","redstone"],["player","bluestone"],["player","greenstone"],["redstone","bluestone","greenstone"]]
-	for(var i = 0; i < 7; i++){
-		this.game.add.text(x + 90*1 + 85, 80 + distance * i, "+", resourcesStyle);
-		
-		if(i < 6){
-			this.game.add.text(x + 90*2 + 85, 88 + distance * i, "=", resourcesStyle);
-		}else{
-			this.game.add.text(x + 90*2 + 85, 80 + distance * i, "+", resourcesStyle);
-			this.game.add.text(x + 90*3 + 85, 88 + distance * i, "=", resourcesStyle);
-		}
-
-
-		if(tabLeg[i][0] == "player"){
-			this.game.add.text(x + 90 + 40, 60 + distance * i, "X1", ressourceNbStyle);
-		}else{
-			this.game.add.text(x + 90 + 35, 65 + distance * i, "X10", ressourceNbStyle);
-		}
-		this.game.add.text(x + 90*2 + 35, 65 + distance * i, "X10", ressourceNbStyle);
-		
-		this.graphics.lineStyle(2, 0xf26c4f, 1);
-		this.graphics.moveTo(x+90-10,-45 + distance * i);
-		this.graphics.lineTo(x+90+10,-45 + distance * i);
-		this.graphics.lineTo(x+90+5,-50 + distance * i);
-		
-		this.graphics.moveTo(x+90+10,-40 + distance * i);
-		this.graphics.lineTo(x+90-10,-40 + distance * i);
-		this.graphics.lineTo(x+90-5,-35 + distance * i);
-		
-		var imageF1 = this.game.add.sprite(x + 90 + 45,100 + distance * i, tabLeg[i][0]);
-		imageF1.anchor.set(0.5);
-		imageF1.scale.setTo(0.5,0.5);
-	
-		var imageF1 = this.game.add.sprite(x + 90*2 + 45,100 + distance * i, tabLeg[i][1]);
-		imageF1.anchor.set(0.5);
-		imageF1.scale.setTo(0.5,0.5);
-		
-		if(i===6){
-			var imageF1 = this.game.add.sprite(x + 90*3 + 45,100 + distance * i, tabLeg[i][2]);
-			imageF1.anchor.set(0.5);
-			imageF1.scale.setTo(0.5,0.5);
-			
-			this.graphics.moveTo(x+90*2-10,-45 + distance * i);
-			this.graphics.lineTo(x+90*2+10,-45 + distance * i);
-			this.graphics.lineTo(x+90*2+5,-50 + distance * i);
-		
-			this.graphics.moveTo(x+90*2+10,-40 + distance * i);
-			this.graphics.lineTo(x+90*2-10,-40 + distance * i);
-			this.graphics.lineTo(x+90*2-5,-35 + distance * i);
-			
-			this.game.add.text(x + 90*3 + 35, 65 + distance * i, "X10", ressourceNbStyle);
-		}
-	}
+	this.legend(x);
 	
 
 
@@ -228,6 +167,71 @@ GUI.prototype.endGame = function(waveCount){
 }
 
 //Pour la machine de fusion
+GUI.prototype.legend = function(x){
+	
+	this.graphics.beginFill(0xbbbbbb, 0.7);
+	this.graphics.drawRect(x, -115, 360, 550);
+	this.graphics.endFill();
+	
+	
+	this.game.add.text(x+45+180, 40, "LEGENDE", resourcesStyle);
+	
+	var distance = 75;
+	var ressourceNbStyle = { font: "10px Arial", fill: "#f26c4f", align: "left" };
+	
+	var tabLeg = [["redstone","bluestone"],["greenstone","redstone"],["bluestone","greenstone"],["player","redstone"],["player","bluestone"],["player","greenstone"],["redstone","bluestone","greenstone"]]
+	for(var i = 0; i < 7; i++){
+		this.game.add.text(x + 90*1 + 85, 80 + distance * i, "+", resourcesStyle);
+		
+		if(i < 6){
+			this.game.add.text(x + 90*2 + 85, 88 + distance * i, "=", resourcesStyle);
+		}else{
+			this.game.add.text(x + 90*2 + 85, 80 + distance * i, "+", resourcesStyle);
+			this.game.add.text(x + 90*3 + 85, 88 + distance * i, "=", resourcesStyle);
+		}
+
+
+		if(tabLeg[i][0] == "player"){
+			this.game.add.text(x + 90 + 40, 60 + distance * i, "X1", ressourceNbStyle);
+		}else{
+			this.game.add.text(x + 90 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		}
+		this.game.add.text(x + 90*2 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		
+		this.graphics.lineStyle(2, 0xf26c4f, 1);
+		this.graphics.moveTo(x+90-10,-45 + distance * i);
+		this.graphics.lineTo(x+90+10,-45 + distance * i);
+		this.graphics.lineTo(x+90+5,-50 + distance * i);
+		
+		this.graphics.moveTo(x+90+10,-40 + distance * i);
+		this.graphics.lineTo(x+90-10,-40 + distance * i);
+		this.graphics.lineTo(x+90-5,-35 + distance * i);
+		
+		var imageF1 = this.game.add.sprite(x + 90 + 45,100 + distance * i, tabLeg[i][0]);
+		imageF1.anchor.set(0.5);
+		imageF1.scale.setTo(0.5,0.5);
+	
+		var imageF1 = this.game.add.sprite(x + 90*2 + 45,100 + distance * i, tabLeg[i][1]);
+		imageF1.anchor.set(0.5);
+		imageF1.scale.setTo(0.5,0.5);
+		
+		if(i===6){
+			var imageF1 = this.game.add.sprite(x + 90*3 + 45,100 + distance * i, tabLeg[i][2]);
+			imageF1.anchor.set(0.5);
+			imageF1.scale.setTo(0.5,0.5);
+			
+			this.graphics.moveTo(x+90*2-10,-45 + distance * i);
+			this.graphics.lineTo(x+90*2+10,-45 + distance * i);
+			this.graphics.lineTo(x+90*2+5,-50 + distance * i);
+		
+			this.graphics.moveTo(x+90*2+10,-40 + distance * i);
+			this.graphics.lineTo(x+90*2-10,-40 + distance * i);
+			this.graphics.lineTo(x+90*2-5,-35 + distance * i);
+			
+			this.game.add.text(x + 90*3 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		}
+	}
+}
 GUI.prototype.createMachine = function(nbItem, elementF){
 
 	this.graphics.lineStyle(5, 0x666666,1);
@@ -316,46 +320,73 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.numberStoneRed -= 10;
 				this.player.numberStoneGreen -= 10;
-				this.player.maxTurrret++;
+				this.player.maxTurrets++;
+				works = true;
+				console.log("nombre de turret augmenter");
 			}
-			console.log("nombre de turret augmenter");
-			works = true;
+
+
 		}
 	}else{
 		if (tabObject[0] && tabObject[1]){
-			console.log("nouvelle turret red + blue");
-			works = true;
+			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10){
+				this.player.numberStoneBlue -= 10;
+				this.player.numberStoneRed -= 10;
+				this.player.bonus2 = true; //Active un power au prochain turret
+				works = true;
+				console.log("nouvelle turret red + blue");
+
+			}
 		}
 		if (tabObject[0] && tabObject[2]){
-			console.log("nouvelle turret red  + green");
-			works = true;
+			if(this.player.numberStoneGreen >= 10 && this.player.numberStoneRed >= 10){
+				this.player.numberStoneGreen -= 10;
+				this.player.numberStoneRed -= 10;
+				this.player.bonus1 = true; //Active un power au prochain turret
+				works = true;
+				console.log("nouvelle turret red + vert");
+
+			}
+
 		}
 		if (tabObject[1] && tabObject[2]){
-			console.log("nouvelle turret blue + green");
-			works = true;
+			if(this.player.numberStoneGreen >= 10 && this.player.numberStoneBlue >= 10){
+				this.player.numberStoneGreen -= 10;
+				this.player.numberStoneBlue -= 10;
+				this.player.bonus3 = true; //Active un power au prochain turret	
+				works = true;
+				console.log("nouvelle turret vert + blue");
+
+			}
 		}
 		if (tabObject[3] && tabObject[0]){
 			if(this.player.numberStoneRed >= 10){
 				this.player.numberStoneRed -= 10;
 				this.player.domage++;
+				works = true;
+				console.log("augmente la force");
 			}
-			console.log("augmente la force");
-			works = true;
+
+
 		}
 		if (tabObject[3] && tabObject[1]){
 			if(this.player.numberStoneBlue >= 10){
 				this.player.numberStoneBlue -= 10;
 				this.player.def +=0.5;
+				works = true;
+				console.log("augmente la def");
 			}
-			console.log("augmente la def");
-			works = true;
+
+
 		}
 		if (tabObject[3] && tabObject[2]){
 			if(this.player.numberStoneGreen >= 10){
 				this.player.numberStoneGreen -= 10;
 				this.player.MAX_SPEED +=50;
+				console.log("augmente la vitesse")
+				works = true;
 			}
-			works = true;
+
 		}
 	}
 	if(!works){
