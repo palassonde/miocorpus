@@ -112,6 +112,7 @@ Kamikaze.prototype.explode = function(){
             spike = this.spikes.create(this.body.x,this.body.y, 'bullet');
             spike.body.velocity.x = Math.cos(angle) * this.spikeSpeed;
             spike.body.velocity.y = Math.sin(angle) * this.spikeSpeed;
+            spike.lifespan = 4000;
             angle += ((2 * Math.PI) / 10);
         }
         this.exploded = true;
