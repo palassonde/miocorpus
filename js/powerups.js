@@ -5,6 +5,9 @@ Powerups = function(x,y,game, name, isCollidePlayer,number){
 	this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
 	this.scale.setTo(0.35,0.35);
+	if (name === 'turret'){
+		this.scale.setTo(0.15,0.15);
+	}
 	//Caracteristique
 	this.collidePlayer = isCollidePlayer;
 	

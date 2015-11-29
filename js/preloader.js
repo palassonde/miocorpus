@@ -17,14 +17,13 @@ MyGame.Preloader.prototype = {
         this.load.image('play-button', 'assets/play-button.png');
         this.load.image('options-button', 'assets/options-button.png');
         this.load.image('controls-button', 'assets/controls-button.png');
-        this.load.image('cell', 'assets/cell.png');
         this.load.image('cursor', 'assets/cursor.png');
         this.load.image('options', 'assets/options.png');
         this.load.image('back-button', 'assets/back-button.png');
         this.load.image('controls', 'assets/controls.png');
+        this.load.image('reset-button', 'assets/reset-button.png');
 
         // Stage
-		this.load.image('core', 'assets/core.png');
         this.load.image('fond_degrader', 'assets/fond_degrader.png');
         this.load.image('skin', 'assets/skin.png');
         this.load.image('platform', 'assets/platform.png');
@@ -43,6 +42,11 @@ MyGame.Preloader.prototype = {
 
         // Enemies
         this.load.spritesheet('enemy', 'assets/ennemies.png', 50, 100);
+        this.load.spritesheet('birds', 'assets/birds.png', 600, 300);
+        this.load.spritesheet('zombie', 'assets/zombie.png', 500, 1000);
+        this.load.spritesheet('puker', 'assets/puker.png', 500, 1000);
+        this.load.spritesheet('fatass', 'assets/fatass.png', 500, 1000);
+        this.load.spritesheet('kamikaze', 'assets/kamikaze.png', 500, 1000);
         
         // Audio
         this.add.audio('maintheme');

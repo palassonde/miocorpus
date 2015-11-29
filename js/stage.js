@@ -8,8 +8,8 @@ Stage = function(game, player, enemy){
     transitiondown = this.game.add.audio('transitiondown');
 
     // Constantes
-	this.background_image = game.add.sprite(0,0, 'fond_degrader');
-    this.background_image.fixedToCamera = true;
+	//this.background_image = game.add.sprite(0,0, 'fond_degrader');
+    //this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
 
@@ -289,7 +289,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 		//Ajout du Lapin
 		if(this.waveCount>=15){
 
-			enemies.add(new Kamikaze(x, y, this.game, speed,hp, this.player));
+			enemies.add(new Kamikaze(2000, 700 + 100, this.game, 100,100, this.player));
 	
 		}
 	}

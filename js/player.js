@@ -3,7 +3,6 @@ Player = function (x, y, game) {
 	// Constantes
 	MAX_SPEED = 300;
 
-
 	// sons
 	pickup = game.add.audio('pickup');
 	pickup.allowMultiple = true;
@@ -255,7 +254,7 @@ Player.prototype.creationTurret = function(){
 	if (this.nbrTurrets < this.maxTurrets){
 
 		construction.play();
-		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game, this.bonus1, this.bonus2, this.bonus3));
+		this.turrets.add(new Turret(this.x + 30, this.y - 50,this.game, this.bonus1, this.bonus2, this.bonus3));
 		this.bonus1 = this.bonus2 = this.bonus3 = false;
 		this.nbrTurrets++;
 	}

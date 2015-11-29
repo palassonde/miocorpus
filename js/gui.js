@@ -48,7 +48,7 @@ GUI = function (game, stage, player, music) {
     this.turretsCapacity.fixedToCamera = true;
     this.turretsCapacity.cameraOffset.setTo(800, 45);
     this.turret = this.game.add.sprite(770, 45, 'turret')
-    this.turret.scale.setTo(0.5, 0.5);
+    this.turret.scale.setTo(0.1, 0.1);
     this.turret.fixedToCamera = true;
 
     this.stones = this.game.add.group();
@@ -157,11 +157,11 @@ GUI.prototype.displayWave = function(waveCount){
 GUI.prototype.endGame = function(waveCount){
 
     this.player.kill();
-    reset = this.game.add.button(450, 500, 'back-button', this.back, this,2, 1, 0, 2)
-    reset.scale.setTo(4,2);
+    reset = this.game.add.button(530, 400, 'reset-button', this.back, this,2, 1, 0, 2)
+    reset.scale.setTo(2,2);
     reset.anchor.setTo(0.5, 0.5);
     reset.fixedToCamera = true;
-    end = this.game.add.sprite(350, 170, 'gameover');
+    end = this.game.add.sprite(350, 70, 'gameover');
    	end.fixedToCamera = true;
    	end.alpha = 0;
    	tween = this.game.add.tween(end).to( { alpha: 1 }, 1000, "Linear", true, 0, -1).repeat(0);
@@ -169,6 +169,7 @@ GUI.prototype.endGame = function(waveCount){
    	endInfo = this.game.add.text(this.game.camera.x + 100, this.game.camera.y + 65, "Wave: "+waveCount, style);
    	//endInfo.fixedToCamera = true;
    	endInfo.anchor.set(0.5);
+
 }
 
 //Pour la machine de fusion

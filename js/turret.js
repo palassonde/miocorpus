@@ -8,6 +8,7 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3){
 	//Attribut
 	Phaser.Sprite.call(this, game, x, y, 'turret');
 	this.anchor.x = 0.5;
+	this.scale.setTo(0.25,0.25);
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;

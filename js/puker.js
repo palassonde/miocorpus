@@ -13,7 +13,7 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
 	// sons
 	puke = this.game.add.audio('puker');
 
-	Phaser.Sprite.call(this, game, x, y, "player")
+	Phaser.Sprite.call(this, game, x, y, "puker")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
     this.body.velocity.x = -speed;        
@@ -23,11 +23,11 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
     this.animations.add('left', [6,7,8], 5, true);
     this.animations.play('left');
     this.anchor.set(0.5);
+    this.scale.setTo(0.15,0.15);
 	
 	this.timerDomage = 0;
 	
 	this.timeRandom = Math.floor((6)*Math.random() + 5);
-	console.log(this.timeRandom);
 	
 	//Tire a chaque 5 à 10 seconde
 	this.eventFire = game.time.events.add(this.timeRandom * 1000, this.fire, this);	

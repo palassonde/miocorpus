@@ -16,18 +16,20 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 	
 	if(type === 1){
 		//Zombie
-		Phaser.Sprite.call(this, game, x, y, "player")
-		this.animations.add('left', [6,7,8], 5, true);
+		Phaser.Sprite.call(this, game, x, y, "zombie")
+		this.animations.add('left', [0,1,2], 4, true);
 		this.animations.play('left');
 		this.anchor.set(0.5);
+		this.scale.setTo(0.10,0.10);
 
 	}else if(type === 2){
 		//Birds
 		warcry.play();
-		Phaser.Sprite.call(this, game, x, y, "player")
-		this.animations.add('left', [6,7,8], 5, true);
+		Phaser.Sprite.call(this, game, x, y, "birds")
+		this.animations.add('left', [0,1,2,3], 5, true);
 		this.animations.play('left');
 		this.anchor.set(0.5);
+		this.scale.setTo(0.15,0.15);
 
 	}else{
 		//BOSS
