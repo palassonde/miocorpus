@@ -6,13 +6,16 @@ MyGame.Menu = function (game) {
 MyGame.Menu.prototype = {
     create: function () {
 
+        // Sons du menu
+        this.music = this.add.audio('maintheme');
+        this.music.play();
+        click = this.add.audio('clic');
+        choice = this.add.audio('playertire');
+
         // Layout menu
         this.world.setBounds(0, 0, 1024, 600);
         this.stage.backgroundColor = '#000000';
-
-        // On démarre la musique
-        this.music = this.add.audio('maintheme');
-        this.music.play();
+        
 
         // Title
         this.titleSprite = this.add.sprite(this.world.centerX, this.world.centerY -170, "title");
@@ -65,11 +68,15 @@ MyGame.Menu.prototype = {
 
     startGame: function (pointer) {
 
+        choice.play();
+
         this.music.stop();
         this.state.start('game');
     },
 
     showOptions: function (pointer) {
+
+        choice.play();
 
         this.removeTitle();
 
@@ -83,6 +90,8 @@ MyGame.Menu.prototype = {
     },
 
     back: function (pointer) {
+
+        choice.play();
 
         this.add.tween(this.titleSprite).to({x: 500}, 500, "Linear", true);
         this.add.tween(this.playButton).to({x: 500}, 500, "Linear", true);
@@ -98,6 +107,8 @@ MyGame.Menu.prototype = {
     },
 
     showControls: function (pointer) {
+
+        choice.play();
 
         this.removeTitle();
 
@@ -116,6 +127,8 @@ MyGame.Menu.prototype = {
 
     fullscreen: function(pointer){
 
+        choice.play();
+
 
         if (this.scale.isFullScreen)
             {
@@ -128,6 +141,8 @@ MyGame.Menu.prototype = {
     },
 
     mute: function(pointer){
+
+        choice.play();
 
 
         if (this.sound.mute)
@@ -142,6 +157,8 @@ MyGame.Menu.prototype = {
 
     noMusic: function(pointer){
 
+        choice.play();
+
 
         if (this.music.mute)
             {
@@ -155,6 +172,8 @@ MyGame.Menu.prototype = {
 };
 
 function over(button) {
+
+    click.play();
 
     this.tween = this.add.tween(button.scale).to({x: 4.5, y: 2.5}, 300, "Linear", true);
 }

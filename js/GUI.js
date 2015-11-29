@@ -4,6 +4,18 @@ GUI = function (game, stage, player) {
 	this.player = player;
 	this.stage = stage;
 	this.numberHeart = 10;
+
+	forceaugmente = this.game.add.audio('forceaugmente');
+	capaciteaugmente = this.game.add.audio('capaciteaugmente');
+	vitessedepegase = this.game.add.audio('vitessedepegase');
+	rayonbrutal = this.game.add.audio('rayonbrutal');
+	peaudebelier = this.game.add.audio('peaudebelier');
+	murdeboules = this.game.add.audio('murdeboules');
+	immunitedivine = this.game.add.audio('immunitedivine');
+	mauvaisecombinaison = this.game.add.audio('mauvaisecombinaison');
+	error = this.game.add.audio('error');
+	gong = this.game.add.audio('gong');
+	gong.volume = 0.5;
 	
 	// CSS styles
 	style = { font: "40px Arial", fill: "#f26c4f", align: "left" };
@@ -137,6 +149,8 @@ GUI.prototype.displayWave = function(waveCount){
 	//tween = this.game.add.tween(waveInfos).to( { alpha: 1 }, 2000, "Linear", true)
 	var tween = this.game.add.tween(waveInfos).to( { alpha: 1 }, 2000, "Linear", true, 0, -1).repeat(0);
 	tween.yoyo(true, 3000);
+
+	gong.play();
 }
 
 GUI.prototype.endGame = function(waveCount){
@@ -311,7 +325,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneGreen -= 10;
 				this.player.maxTurrets++;
 				works = true;
-				console.log("nombre de turret augmenter");
+				capaciteaugmente.play();
 			}
 		}
 	}else{
@@ -347,7 +361,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneRed -= 10;
 				this.player.domage++;
 				works = true;
-				console.log("augmente la force");
+				forceaugmente.play();
 			}
 		}
 		if (tabObject[3] && tabObject[1]){
@@ -355,20 +369,21 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.def +=0.5;
 				works = true;
-				console.log("augmente la def");
+				peaudebelier.play();
 			}
 		}
 		if (tabObject[3] && tabObject[2]){
 			if(this.player.numberStoneGreen >= 10){
 				this.player.numberStoneGreen -= 10;
 				this.player.MAX_SPEED +=50;
-				console.log("augmente la vitesse")
+				vitessedepegase.play();
 				works = true;
 			}
 		}
 	}
 	if(!works){
-		console.log("Echec");
+		mauvaisecombinaison.play();
+		error.play();
 	}
 	this.initItemFusion();
 }

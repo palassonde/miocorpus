@@ -10,6 +10,8 @@ Enemy = function (x, y, game, speed,hp) {
 
     this.hp = hp;
 
+    enemyhurt = this.game.add.audio('enemyhurt');
+
 	Phaser.Sprite.call(this, game, x, y, "player")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -46,6 +48,7 @@ Enemy.prototype.createResource = function(){
 
 Enemy.prototype.hurt = function(dmg){
 
+    enemyhurt.play();
     this.hp -= dmg;    
 }
 

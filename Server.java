@@ -14,7 +14,7 @@ public class Server {
 	public static void main(String args[]) {
 
 		ServerSocket socket;
-		int port = 8080;
+		int port = 80;
 
 		try{
 			socket = new ServerSocket(port);

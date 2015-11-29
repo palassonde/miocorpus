@@ -3,6 +3,16 @@ Player = function (x, y, game) {
 	// Constantes
 	MAX_SPEED = 300;
 
+
+	// sons
+	pickup = game.add.audio('pickup');
+	pickup.allowMultiple = true;
+	construction = game.add.audio('construction');
+	construction.allowMultiple = true;
+	playerhurt = game.add.audio('playerhurt');
+	playerjump = game.add.audio('playerjump');
+	turretfeed = game.add.audio('turretfeed');
+
 	// Player attributes
 	this.maxspeed = MAX_SPEED;
 	this.friction = 20;
@@ -213,6 +223,7 @@ Player.prototype.move = function(){
     if (this.cursors.up.isDown && this.body.touching.down)
     {
 		this.body.velocity.y = -400;
+		playerjump.play();
     }
     if (!this.body.touching.down)
 	{
@@ -240,7 +251,10 @@ Player.prototype.move = function(){
 }
 
 Player.prototype.creationTurret = function(){
+
 	if (this.nbrTurrets < this.maxTurrets){
+
+		construction.play();
 		this.turrets.add(new Turret(this.x + 30, this.y + 14,this.game, this.bonus1, this.bonus2, this.bonus3));
 		this.bonus1 = this.bonus2 = this.bonus3 = false;
 		this.nbrTurrets++;
@@ -281,6 +295,8 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
 	if(!powerups.collidePlayer)return;
 
+	pickup.play();
+
 	switch(powerups.key){
 		case 'redstone':
 			player.numberStoneRed += powerups.number;
@@ -302,6 +318,8 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 }
 
 Player.prototype.upGradeTurret = function(turret, powerups){
+
+	turretfeed.play();
 	
 	switch(powerups.key){
 		case 'redstone':
@@ -337,7 +355,8 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 }
 
 Player.prototype.hurt = function(dmg){
-    this.health -= (dmg/100)/this.def;  	
+    this.health -= (dmg/100)/this.def;
+    playerhurt.play();	
 }
 
 Player.prototype.hurtPlayer = function(player, enemies){
@@ -346,6 +365,7 @@ Player.prototype.hurtPlayer = function(player, enemies){
         player.health -= enemies.domage / this.def;
         player.timerDomage = this.game.time.now + 1000;
         this.tint = 0xff0000;
+        playerhurt.play(); 
     }
     
 }

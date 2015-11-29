@@ -26,6 +26,10 @@ MyGame.Game = function (game) {
 MyGame.Game.prototype = {
 
     create : function () {
+
+        this.music = this.add.audio('level');
+        this.music.play();
+
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies

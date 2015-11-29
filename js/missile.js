@@ -9,6 +9,21 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.timeDomageEffet = game.time.now;
 	this.nbScale = 0.1;
 	this.facing = facing;
+
+	boomerang = game.add.audio('boomerang');
+	boomerang.volume = 2;
+	boomerang.allowMultiple = true;
+	lasers = game.add.audio('laser');
+	lasers.allowMultiple = true;
+	turretneutretir = game.add.audio('turretneutretir');
+	turretneutretir.volume = 0.5;
+	turretneutretir.allowMultiple = true;
+	playertire = game.add.audio('playertire');
+	homingmissile = game.add.audio('homingmissile');
+	homingmissile.allowMultiple = true;
+
+	if (this.behavior === 5)
+		homingmissile.play();
 	
 	this.tween;
 	this.time = 0;
@@ -20,6 +35,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.graphic = game.add.graphics(0, 0);
 	
 	if(kind === 2){
+		boomerang.play();
 		Phaser.Sprite.call(this, game, x, y, 'boomerang');
 	}else if(kind === 4){
 		this.circle(game,x,y);
@@ -28,6 +44,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
+		lasers.play();
 		this.kill();
 	}
 }
@@ -41,6 +58,7 @@ Bullet.prototype.actionMissile = function(){
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
 	if(this.time >= this.timeLive || this.needDestroy){
+		lasers.stop();
 		this.destroy();
 		return;
 	}
@@ -50,7 +68,7 @@ Bullet.prototype.actionMissile = function(){
 		case -1:
 			this.simpleFireTurret();
 			break;
-		case 0: 
+		case 0:
 			this.simpleFire();
 			break;
 		case 1:
@@ -76,19 +94,24 @@ Bullet.prototype.simpleFireTurret = function(){
 	if(this.stop){
 		return;
 	}
-	var angleTarget = this.game.math.angleBetween(
+	else{
+
+		turretneutretir.play();
+		var angleTarget = this.game.math.angleBetween(
 		this.x, this.y, this.target.x, this.target.y
-	);
+		);
+		
+		var x = (Math.cos(angleTarget) * this.rayon) + this.x;
+		var y = (Math.sin(angleTarget) * this.rayon) + this.y;
+		
+		this.timeLive = 1000;
+		
+		this.tween = this.game.add.tween(this).to( { x: x, y: y}, this.timeLive);
+		this.tween.start();
+		this.tween.onComplete.removeAll();
+		this.stop = true;
+	}
 	
-	var x = (Math.cos(angleTarget) * this.rayon) + this.x;
-	var y = (Math.sin(angleTarget) * this.rayon) + this.y;
-	
-	this.timeLive = 1000;
-	
-	this.tween = this.game.add.tween(this).to( { x: x, y: y}, this.timeLive);
-	this.tween.start();
-	this.tween.onComplete.removeAll();
-	this.stop = true;
 }
 
 //Fire personnage
@@ -97,6 +120,8 @@ Bullet.prototype.simpleFire = function(){
 	if(this.stop){
 		return;
 	}
+
+	playertire.play();
 	var vitesse = 600;
 	
 	if(this.facing === 'left'){
