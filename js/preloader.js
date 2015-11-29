@@ -79,6 +79,7 @@ MyGame.Preloader.prototype = {
         this.load.audio('transitiondown', 'assets/audio/transitiondown.mp3');
         this.load.audio('transitionup', 'assets/audio/transitionup.mp3');
         this.load.audio('turretfeed', 'assets/audio/turretfeed.mp3');
+        this.load.audio('destroyturret', 'assets/audio/destroyturret.mp3');
 
         // Fonts
         this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');

@@ -1,14 +1,18 @@
 Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
+
     this.speed = speed;
     this.hp = hp;
 	this.domage = domage;
 	this.chance = chanceDrop;
 	this.nbrR = Math.floor(nbDrop * Math.random())+1; //1 à nbDrop
+	this.type = type;
 
+	// sons
 	warcry = game.add.audio('birds');
 	warcry.volume = 0.3;
 	enemyhurt = game.add.audio('enemyhurt');
-	ennemibouffecore = game.add.audio('ennemibouffecore');	
+	ennemibouffecore = game.add.audio('ennemibouffecore');
+	drum2 = game.add.audio('drum2');
 	
 	if(type === 1){
 		//Zombie
@@ -53,8 +57,15 @@ Minion.prototype.action = function(time, powerups, stage){
 
     if (this.hp <= 0){
 		this.createResource(powerups);
+		drum2.stop();
         this.destroy();
     }
+
+    if (this.type === 3 && !drum2.isPlaying){
+
+    	drum2.play('',0,1,true);
+    }
+    
 
 }
 

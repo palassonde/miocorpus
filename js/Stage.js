@@ -3,6 +3,10 @@ Stage = function(game, player, enemy){
 	this.game = game;
     this.player = player;
 
+    // sons
+    transitionup = this.game.add.audio('transitionup');
+    transitiondown = this.game.add.audio('transitiondown');
+
     // Constantes
 	this.background_image = game.add.sprite(0,0, 'fond_degrader');
     this.background_image.fixedToCamera = true;
@@ -113,10 +117,17 @@ Stage.prototype.moveCamera = function(player){
         if (player.y < 570){
             if (this.game.camera.y > 30){
                 this.game.camera.y -= 15;
+                if (!transitionup.isPlaying){
+                	transitionup.play();
+                }
+                
             }
         }else {
         if (this.game.camera.y < 600){
             this.game.camera.y += 15;
+            if (!transitiondown.isPlaying){
+                	transitiondown.play();
+            }
         }
     }
 }
@@ -154,16 +165,10 @@ Stage.prototype.createPlatforms = function(){
 	//Creat jungle plateform
 	this.p = this.platforms.create(2050-1050,500,'platform');
 
-
-
     this.p.scale.setTo(0.4, 0.5);
-
-
-
 	
 	this.p = this.platforms.create(2050-1050,400,'platform');
     this.p.scale.setTo(0.4, 0.5);
-
 	
 	this.p = this.platforms.create(2050-840,400,'platform');
     this.p.scale.setTo(0.4, 0.5);
@@ -180,29 +185,12 @@ Stage.prototype.createPlatforms = function(){
 	this.p = this.platforms.create(2050,400,'platform');
     this.p.scale.setTo(0.4, 0.5);
 		
-
-
-
-	
     this.platforms.setAll('body.immovable', true);
     this.platforms.setAll('body.checkCollision.down', false);
     this.platforms.setAll('body.checkCollision.left', false);
     this.platforms.setAll('body.checkCollision.right', false);
     this.jungleGround.body.checkCollision.down = true;
 
-
-}
-
-Stage.prototype.fullscreen = function() {
-
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
-    }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
 
 }
 
@@ -224,7 +212,6 @@ Stage.prototype.createJungle = function(enemy) {
 	this.domageJ += 1;
 	this.nbrMissileJ += 1;
 	this.cooldownJ -= 200;
-	
 	this.jungleEnemy.reviveJungle(this.hpJ, this.domageJ, this.nbrMissileJ, this.cooldownJ, this.nbResMax);
 
 }
@@ -245,7 +232,6 @@ Stage.prototype.createWave = function(enemies, GUI){
 		enemies.add(new Minion(2000,700, this.game, speedBoss,hpBoss,3, chanceBoss, nbItemBoss, domageBoss));
 		this.enemieToSpwan = 0;
 	}else{
-
 
 		//Zombie
 		var hpZ = 40+ 10*this.waveCount;
@@ -290,8 +276,6 @@ Stage.prototype.createWave = function(enemies, GUI){
 			}	
 		}
 
-
-
 		//Ajout du Puker
 		if(this.waveCount>=12){
 			var hpP = 40+ 10*this.waveCount;
@@ -302,13 +286,12 @@ Stage.prototype.createWave = function(enemies, GUI){
 			enemies.add(new Puker(2050, 1100, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
 		}
 
-
-
 		//Ajout du Lapin
 		if(this.waveCount>=15){
+
+			enemies.add(new Kamikaze(x, y, this.game, speed,hp, this.player));
 	
 		}
 	}
 
 }
-//enemies.add(new Kamikaze(x, y, this.game, speed,hp, this.player));

@@ -27,9 +27,12 @@ MyGame.Game.prototype = {
 
     create : function () {
 
-        this.music = this.add.audio('level');
-        this.music.play();
+        music = this.add.audio('level');
 
+        if (this.game.state.states['menu'].playMusic){
+            music.play('',0,1,true);
+        }
+        
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
@@ -41,7 +44,7 @@ MyGame.Game.prototype = {
         stage = new Stage(this.game, player,enemies);
         stage.createPlatforms();
         // Instantiate GUI
-        gui = new GUI(this.game, stage, player);
+        gui = new GUI(this.game, stage, player, music);
 		//Powerups
 		powerups = this.game.add.group();
         // On top of 

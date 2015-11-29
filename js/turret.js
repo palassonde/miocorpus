@@ -2,6 +2,9 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3){
 
 	this.time = 0;
 
+	// sons
+	destroyturret = game.add.audio('destroyturret');
+
 	//Attribut
 	Phaser.Sprite.call(this, game, x, y, 'turret');
 	this.anchor.x = 0.5;
@@ -18,7 +21,6 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3){
     this.bullets.enableBody = true;
     //this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 	
-
 	//Caractéristique
 	this.numberEnemyShoot = 2;
 	this.cooldown = 8000; //ICI 
@@ -41,6 +43,7 @@ Turret.prototype.actionTurret = function(enemies, powerup, player){
 		}
 		this.bullets.destroy();
 		this.createResource(powerups)
+		destroyturret.play();
         this.destroy();
 		return;
     }

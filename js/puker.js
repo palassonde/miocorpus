@@ -10,6 +10,9 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
 	this.chance = chanceDrop;
 	this.nbrR = Math.floor(nbDrop * Math.random())+1; //1 à nbDrop
 
+	// sons
+	puke = this.game.add.audio('puker');
+
 	Phaser.Sprite.call(this, game, x, y, "player")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -59,6 +62,7 @@ Puker.prototype.action = function(time, powerups, stage){
 Puker.prototype.fire = function(){
 
 	var missile = this.game.add.sprite(this.x,this.y, 'bullet');
+	puke.play();
 	this.bullets.add(missile);
 	this.game.physics.enable(missile, Phaser.Physics.ARCADE);
 	missile.body.gravity.y = 200;
@@ -69,7 +73,7 @@ Puker.prototype.fire = function(){
 	
 	missile.body.velocity.x = Math.cos(angle) * 400;
 	missile.body.velocity.y = Math.sin(angle) * 400;
-//Lol
+
 	if(this.nbFire > 0){
 		this.eventFire = this.game.time.events.add(100, this.fire, this);
 		this.nbFire--;

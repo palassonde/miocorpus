@@ -1,4 +1,5 @@
 MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax){
+
 	Phaser.Sprite.call(this, game, x, y, 'player');
 	this.animations.add('left', [6,7,8], 5, true);
 	this.animations.add('right', [3,4,5], 5, true);
@@ -12,6 +13,10 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 	this.body.collideWorldBounds = true;
 	
 	this.time = 0;
+
+	// sons
+	drum1 = game.add.audio('drum1');
+	this.distance = 1000;
 	
 	//Caractéristique
 	this.hp = hp;
@@ -153,6 +158,14 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 		this.tween.resume();
 		this.timePause = 0;
 	}
+
+	if ((Phaser.Point.distance(this.position, player.position) < this.distance) && !drum1.isPlaying && player.y < 570 && this.alive){
+		drum1.play('',0,1,true);
+	}else if(Phaser.Point.distance(this.position, player.position) > this.distance || player.y >= 570 || !this.alive){
+		drum1.stop();
+	}
+		
+
 }
 
 MasterTurret.prototype.createResource = function(){

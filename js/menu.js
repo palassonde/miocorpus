@@ -8,15 +8,15 @@ MyGame.Menu.prototype = {
 
         // Sons du menu
         this.music = this.add.audio('maintheme');
-        this.music.play();
+        this.music.play('',0,1,true);
         click = this.add.audio('clic');
         choice = this.add.audio('playertire');
+        this.playMusic = true;
 
         // Layout menu
         this.world.setBounds(0, 0, 1024, 600);
         this.stage.backgroundColor = '#000000';
         
-
         // Title
         this.titleSprite = this.add.sprite(this.world.centerX, this.world.centerY -170, "title");
         this.titleSprite.anchor.setTo(0.5, 0.5);
@@ -67,8 +67,6 @@ MyGame.Menu.prototype = {
     },
 
     startGame: function (pointer) {
-
-        choice.play();
 
         this.music.stop();
         this.state.start('game');
@@ -163,10 +161,12 @@ MyGame.Menu.prototype = {
         if (this.music.mute)
             {
                 this.music.mute = false;
+                this.playMusic = true;
             }
         else
             {
                 this.music.mute = true;
+                this.playMusic = false;
             }
     }
 };

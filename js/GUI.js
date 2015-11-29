@@ -1,9 +1,10 @@
-GUI = function (game, stage, player) {
+GUI = function (game, stage, player, music) {
 
 	this.game = game;
 	this.player = player;
 	this.stage = stage;
 	this.numberHeart = 10;
+	this.music = music;
 
 	forceaugmente = this.game.add.audio('forceaugmente');
 	capaciteaugmente = this.game.add.audio('capaciteaugmente');
@@ -335,7 +336,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneRed -= 10;
 				this.player.bonus2 = true; //Active un power au prochain turret
 				works = true;
-				console.log("nouvelle turret red + blue");
+				murdeboules.play();
 			}
 		}
 		if (tabObject[0] && tabObject[2]){
@@ -344,7 +345,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneRed -= 10;
 				this.player.bonus1 = true; //Active un power au prochain turret
 				works = true;
-				console.log("nouvelle turret red + vert");
+				rayonbrutal.play();
 			}
 		}
 		if (tabObject[1] && tabObject[2]){
@@ -353,7 +354,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.bonus3 = true; //Active un power au prochain turret	
 				works = true;
-				console.log("nouvelle turret vert + blue");
+				immunitedivine.play();
 			}
 		}
 		if (tabObject[3] && tabObject[0]){
@@ -389,6 +390,6 @@ GUI.prototype.fusion = function(sprite){
 }
 
 GUI.prototype.back = function(){
-
+	this.music.stop();
 	this.game.state.start('menu');
 }

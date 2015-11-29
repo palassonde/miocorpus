@@ -22,9 +22,11 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	homingmissile = game.add.audio('homingmissile');
 	homingmissile.allowMultiple = true;
 
-	if (this.behavior === 5)
+	if (kind === 1){
 		homingmissile.play();
-	
+
+	}
+		
 	this.tween;
 	this.time = 0;
 	this.needDestroy = false;
@@ -58,6 +60,7 @@ Bullet.prototype.actionMissile = function(){
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
 	if(this.time >= this.timeLive || this.needDestroy){
+		homingmissile.stop();
 		lasers.stop();
 		this.destroy();
 		return;
