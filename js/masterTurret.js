@@ -82,6 +82,14 @@ MasterTurret.prototype.reviveJungle = function(hp,domage,nbr,cooldown,nrRessourc
 MasterTurret.prototype.action = function(a,b,stage,player){	
 
 	//Mort
+	var distancePlayerJungle = Phaser.Point.distance(this.position, player.position);
+	if ((distancePlayerJungle < this.distance) && !drum1.isPlaying && player.y < 570 && this.alive){
+		drum1.play('',0,1,true);
+	}else if(distancePlayerJungle > this.distance || player.y >= 570 || !this.alive){
+		drum1.stop();
+	}
+	
+	//Mort
 	if(this.alive === false){
 		return;
 	}
@@ -158,13 +166,6 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 		this.tween.resume();
 		this.timePause = 0;
 	}
-
-	if ((Phaser.Point.distance(this.position, player.position) < this.distance) && !drum1.isPlaying && player.y < 570 && this.alive){
-		drum1.play('',0,1,true);
-	}else if(Phaser.Point.distance(this.position, player.position) > this.distance || player.y >= 570 || !this.alive){
-		drum1.stop();
-	}
-		
 
 }
 
