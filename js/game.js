@@ -74,11 +74,11 @@ function getRandomStone(){
 
 	var random = Math.random();
 	
-	if(random < 0.1){
-		return 'heart';
-	}else if(random < 0.4){
+	if(random < 0.333){
+
+
 		return 'redstone';
-	}else if(random < 0.7){
+	}else if(random < 0.666){
 		return 'greenstone';
 	}else{
 		return 'bluestone';

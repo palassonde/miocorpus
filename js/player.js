@@ -89,10 +89,10 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.overlap(this.turrets, powerups, this.upGradeTurret, null, this);
 	//ennemie
 	this.game.physics.arcade.overlap(player, enemy, this.hurtPlayer, null, this);
-	this.game.physics.arcade.overlap(this.turrets, enemy, this.hurtTurret, null, this);
-	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtEnnemie, null, this);
+	this.game.physics.arcade.overlap(this.turrets, enemy, this.destroyTurret, null, this);
+	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtTarget, null, this);
 	// Collision bullet turret
-	this.game.physics.arcade.overlap(this.bullets, this.turrets, this.hurtTurret, null, this);
+	this.game.physics.arcade.overlap(this.bullets, this.turrets, this.hurtTarget, null, this);
 
 	if (this.actionKey_A.isDown){
 		this.fire();
@@ -177,7 +177,7 @@ Player.prototype.launchResource = function(powerups){
 		powerups.add(stone);
 		
 		stone.body.velocity.x = velocite;
-		stone.body.gravity.y = 10;
+		stone.body.gravity.y = 100;
 	}
 }
 
@@ -292,7 +292,7 @@ Player.prototype.manageSpeed = function(){
 
 Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
-	if(!powerups.collidePlayer)return;
+	if(!powerups.collidePlayer || !powerups.alive)return;
 
 	pickup.play();
 
@@ -318,12 +318,17 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 
 Player.prototype.upGradeTurret = function(turret, powerups){
 
-	turretfeed.play();
+
+	
+	//Si le powerUp est deja utilisé mais pas effacé
+	if(!powerups.alive)return;
 	
 	switch(powerups.key){
 		case 'redstone':
 			if(turret.kind === 3){
-				turret.rayon = turret.rayon + 50;
+				if(turret.rayon < 1000){
+					turret.rayon = turret.rayon + 10; //80 boule pour atteindre 200 -> 1000 de rayon
+				}
 			}else{
 				turret.kind = 3;
 				turret.tint = 0xFF0000; 
@@ -331,7 +336,9 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 			break;
 		case 'greenstone':
 			if(turret.kind === 2){
-				turret.cooldown = turret.cooldown-500;
+				if(turret.cooldown > 2000){
+					turret.cooldown = turret.cooldown-75; //80 boule pour 8000 -> 2000 (2sec) de cooldown
+				}
 			}else{
 				turret.kind = 2;
 				turret.tint = 0x28c700; 
@@ -339,16 +346,19 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 			break;
 		case 'bluestone':
 			if(turret.kind === 1){
-				turret.numberEnemyShoot++;
+				if(turret.numberEnemyShoot < 10){
+					turret.numberEnemyShoot += 0.1125; //80 boule pour 1 -> 10 target (MAX)
+				}
 			}else{
 				turret.kind = 1;
 				turret.tint = 0x00aee1; 
 			}
 			break;
 	}
-	if(powerups.key !== "heart"){
-		turret.domage = turret.domage + 0.1;
+	if(powerups.key !== "heart" && powerups.key !== "turret"){
+		turret.domage = turret.domage + 0.1; //2 boule = un wave 
 		powerups.alive = false;
+		turretfeed.play();
 	}
 	
 }
@@ -369,18 +379,15 @@ Player.prototype.hurtPlayer = function(player, enemies){
     
 }
 
-Player.prototype.hurtEnnemie = function(bullet,enemy){
+Player.prototype.hurtTarget = function(bullet,enemy){
+	if(bullet.needDestroy) return;
 	enemy.hurt(this.domage*50);
 	bullet.needDestroy = true;
 }
 
-Player.prototype.hurtTurret = function(turret, enemies){
-    
+Player.prototype.destroyTurret = function(turret, enemies){ 
+
     if(this.game.time.now > enemies.timerDomage){
-		if(!turret.bonus3){
-			turret.hp = 0;
-		}
-        enemies.timerDomage = this.game.time.now + 3000;
-    }
-    
+		turret.hurt(enemies.domage*20, enemies);
+    }   
 }

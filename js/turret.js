@@ -23,7 +23,7 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3){
     //this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 	
 	//Caractéristique
-	this.numberEnemyShoot = 2;
+	this.numberEnemyShoot = 1;
 	this.cooldown = 8000; //ICI 
 	this.domage = 1;
 	this.rayon = 200;
@@ -104,29 +104,39 @@ Turret.prototype.createResource = function(){
 Turret.prototype.collisionMissile = function(bullet,enemy){
 	if(bullet.behavior ===  2 || bullet.behavior ===  4){
 		if(bullet.timeDomageEffet < this.game.time.now){
-			enemy.hurt(this.domage*25);
+			enemy.hurt(this.domage*30);
 			bullet.timeDomageEffet = this.game.time.now + 500;
 		}
 	}else{
-		enemy.hurt(this.domage*100);
+		enemy.hurt(this.domage*50);
 		bullet.needDestroy = true;
 	}
 	
 }
 
-Turret.prototype.hurt = function(dmg){
+Turret.prototype.hurt = function(dmg,enemies){
 
-    this.hp -= dmg;    
+	if(!this.bonus3){
+		this.hp -= dmg;
+		
+		if(enemies != null){
+			enemies.timerDomage = this.game.time.now + 1000;
+		}
+	}  
 }
 
 //Créer un missile s'il est a une bonne distance et remet un cooldown qui depend du nombre de missile lancé
 Turret.prototype.shootMissile = function (enemy,cooldown){
-	var maxEnemy = this.numberEnemyShoot; // Combien d'enemi qu'il peu tirer a la fois
+	var maxEnemy = Math.floor(this.numberEnemyShoot); // Combien d'enemi qu'il peu tirer a la fois
 	
 	var isShoot = false; 
 	 
 	for (var x in enemy.children){
 		
+		//Si l'ennemie visé n'est pas en vie
+		if(!enemy.children[x].alive){
+			continue;
+		}
 		//Arret la boucle s'il ne peut plus tirer
 		if(maxEnemy <= 0){
 			break; 
@@ -165,7 +175,7 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 	
 	if(isShoot){
 		this.time = 0;
-		this.cooldownTemp = this.cooldown * ((this.numberEnemyShoot - maxEnemy)/this.numberEnemyShoot);
+		this.cooldownTemp = this.cooldown;
 	}
 }
 

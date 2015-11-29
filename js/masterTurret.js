@@ -74,7 +74,6 @@ MasterTurret.prototype.reviveJungle = function(hp,domage,nbr,cooldown,nrRessourc
     this.bullets.enableBody = true;
 	
 	//Mouvement
-	this.tween = null;
 	this.direction;
 	this.timePause = 0;
 	this.moveLeft();
@@ -94,6 +93,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 		}
 		this.bullets.destroy();
         this.kill();
+		this.tween.stop();
 		return;
     }
 
@@ -169,7 +169,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 }
 
 MasterTurret.prototype.createResource = function(){
-	powerups.add(new Powerups(this.x,this.y,this.game,'redstone', true, Math.floor(this.nbResMax * Math.random())+1   ));
+	powerups.add(new Powerups(this.x,this.y,this.game,'redstone', true, Math.floor(this.nbResMax * Math.random())+1));
 	powerups.add(new Powerups(this.x,this.y,this.game,'greenstone', true, Math.floor(this.nbResMax * Math.random())+1));
 	powerups.add(new Powerups(this.x,this.y,this.game,'bluestone', true, Math.floor(this.nbResMax * Math.random())+1));
 }
@@ -227,7 +227,7 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 		this.timePause = this.game.time.now + 4000;
 		this.animations.play('notMove');
 		this.time = 0;
-		this.cooldownTemp = this.cooldown * ((this.nbrMissile - maxEnemy)/this.nbrMissile);
+		this.cooldownTemp = this.cooldown;
 	}
 }
 

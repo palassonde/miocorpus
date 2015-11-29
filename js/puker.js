@@ -20,7 +20,7 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
     this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
 
-    this.animations.add('left', [6,7,8], 5, true);
+    this.animations.add('left', [0,1,2], 5, true);
     this.animations.play('left');
     this.anchor.set(0.5);
     this.scale.setTo(0.15,0.15);
@@ -84,8 +84,11 @@ Puker.prototype.fire = function(){
 }
 
 Puker.prototype.createResource = function(){
-	if(Math.random() < 0.8){
+	if(Math.random() < this.chance){
 		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, this.nbrR));
+	}
+	if(Math.random() < 0.05){
+		powerups.add(new Powerups(this.x,this.y,this.game,'heart', true, 1));
 	}
 }
 

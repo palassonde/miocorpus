@@ -9,6 +9,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.timeDomageEffet = game.time.now;
 	this.nbScale = 0.1;
 	this.facing = facing;
+	this.timeLaser = 0;
 
 	boomerang = game.add.audio('boomerang');
 	boomerang.volume = 2;
@@ -188,6 +189,7 @@ Bullet.prototype.boomerang = function(){
 		return;
 	}
 	
+	this.timeLive = 3000;
 	var angleTarget = this.game.math.angleBetween(
 		this.x, this.y, this.target.x, this.target.y
 	);
@@ -216,7 +218,10 @@ Bullet.prototype.laser = function(){
 	
 	this.graphic.moveTo(this.x, this.y);
 	this.graphic.lineTo(this.target.x,this.target.y);
-	this.target.hurt(this.domage);
+	if(this.timeLaser < this.game.time.now){
+		this.target.hurt(this.domage*2.5);
+		this.timeLaser = this.game.time.now + 100;
+	}
 }
 
 //Bonus

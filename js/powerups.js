@@ -17,7 +17,7 @@ Powerups = function(x,y,game, name, isCollidePlayer,number){
 
 Powerups.prototype = Object.create(Phaser.Sprite.prototype);
 
-Powerups.prototype.action = function(player){
+Powerups.prototype.action = function(){
 	if(!this.alive){
 		this.destroy();
 		return;

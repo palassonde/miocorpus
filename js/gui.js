@@ -321,7 +321,7 @@ GUI.prototype.fusion = function(sprite){
 	
 	if(this.tabFusion.length ===3){
 		if(tabObject[0] && tabObject[1] && tabObject[2]){
-			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10 && this.player.numberStoneGreen >= 10){
+			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10 && this.player.numberStoneGreen >= 10 && this.player.maxTurrets < 20){
 				this.player.numberStoneBlue -= 10;
 				this.player.numberStoneRed -= 10;
 				this.player.numberStoneGreen -= 10;

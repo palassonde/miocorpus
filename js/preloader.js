@@ -46,7 +46,7 @@ MyGame.Preloader.prototype = {
         this.load.spritesheet('zombie', 'assets/zombie.png', 500, 1000);
         this.load.spritesheet('puker', 'assets/puker.png', 500, 1000);
         this.load.spritesheet('fatass', 'assets/fatass.png', 500, 1000);
-        this.load.spritesheet('kamikaze', 'assets/kamikaze.png', 500, 1000);
+        this.load.spritesheet('kamikaze', 'assets/kamikaze.png', 500, 1000); //Il a un erreur avec lui !?
         
         // Audio
         this.add.audio('maintheme');

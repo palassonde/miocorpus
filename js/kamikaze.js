@@ -1,22 +1,20 @@
-Kamikaze = function (x, y, game, speed, hp, player) {
-
-	this.game = game;
+Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
 
     this.player = player;
 
-    this.speed = 400;
+    this.speed = speed;
     this.spikeSpeed = 200;
-	this.domage = 1;
+	this.domage = domage;
+	this.hp = hp;
+	this.chance = chance;
+	this.nbrR = Math.floor(nbItem * Math.random())+1; //1 à nbItem
     this.exploded = false;
 
     this.angleMax = 0.5;
-
     this.distance = 200;
 
-    this.spikes = this.game.add.group();
+    this.spikes = game.add.group();
     this.spikes.enableBody = true;
-
-    this.hp = hp;
 
 	Phaser.Sprite.call(this, game, x, y, "player")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -38,13 +36,12 @@ Kamikaze.prototype = Object.create(Phaser.Sprite.prototype);
 
 Kamikaze.prototype.action = function(time, powerups, stage){
 
-
     this.game.physics.arcade.overlap(this.player.turrets, this.spikes, this.spikeCollision, null, this);
     this.game.physics.arcade.overlap(this.player, this.spikes, this.spikeCollision, null, this);
 
+	if(!this.alive)return;
  
     if ((Phaser.Point.distance(this.position, this.player.position) < this.distance) && !this.exploding){
-
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         this.game.time.events.add(Phaser.Timer.SECOND * 2, this.explode, this);
@@ -71,7 +68,12 @@ Kamikaze.prototype.action = function(time, powerups, stage){
 }
 
 Kamikaze.prototype.dropResource = function(){
-    powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true));
+    if(Math.random() < this.chance){
+		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, this.nbrR));
+	}
+	if(Math.random() < 0.05){
+		powerups.add(new Powerups(this.x,this.y,this.game,'heart', true, 1));
+	}
 }
 
 Kamikaze.prototype.hurt = function(dmg){

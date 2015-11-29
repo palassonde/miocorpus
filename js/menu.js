@@ -5,7 +5,6 @@ MyGame.Menu = function (game) {
 
 MyGame.Menu.prototype = {
     create: function () {
-
         // Sons du menu
         this.music = this.add.audio('maintheme');
         this.music.play('',0,1,true);

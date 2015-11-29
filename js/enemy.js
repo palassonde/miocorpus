@@ -1,4 +1,4 @@
-Enemy = function (x, y, game, speed,hp) {
+Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage) {
 
 	this.game = game;
 
@@ -6,8 +6,9 @@ Enemy = function (x, y, game, speed,hp) {
     this.jumpTime = 500;
     this.jumpHeight = 300;
     this.speed = speed;
-	this.domage = 1;
-
+	this.domage = domage;
+	this.chance = chanceDrop;
+	this.nbrR = Math.floor(nbDrop * Math.random())+1; //1 à nbDrop
     this.hp = hp;
 
     enemyhurt = this.game.add.audio('enemyhurt');
@@ -41,8 +42,11 @@ Enemy.prototype.action = function(time, powerups, stage){
 }
 
 Enemy.prototype.createResource = function(){
-	if(Math.random() < 0.8){
-		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, 1));
+	if(Math.random() < this.chance){
+		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, this.nbrR));
+	}
+	if(Math.random() < 0.05){
+		powerups.add(new Powerups(this.x,this.y,this.game,'heart', true, 1));
 	}
 }
 

@@ -32,13 +32,15 @@ Stage = function(game, player, enemy){
 	this.domageJ = 1;
 	this.nbrMissileJ = 1;
 	this.cooldownJ = 8000;
-	this.hpJ = 100;
+	this.hpJ = 500;
 	this.royonJ = 450;
 	this.nbResMax = 10;
 	
 	this.jungleEnemy = new MasterTurret(2150, 50, this.game,this.domageJ,this.nbrMissileJ,this.cooldownJ,this.hpJ,this.royonJ, this.nbResMax);
 	enemy.add(this.jungleEnemy);
 	
+	//Boss
+	this.nbItemBoss = 0;
 }
 
 Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups){
@@ -194,12 +196,6 @@ Stage.prototype.createPlatforms = function(){
 
 }
 
-Stage.prototype.createEnemy = function(enemies, x, y, speed,hp){
-
-	enemies.add(new Enemy(x, y, this.game, speed,hp));
-
-}
-
 Stage.prototype.slowEnemy = function(skin, enemy) {
 
     enemy.slowDown();
@@ -210,8 +206,14 @@ Stage.prototype.createJungle = function(enemy) {
 	this.nbResMax += 10; //Nbr de ressource max (1 à nbResMax)
 	this.hpJ += 500; 
 	this.domageJ += 1;
-	this.nbrMissileJ += 1;
-	this.cooldownJ -= 200;
+	
+	if(this.nbrMissileJ < 5){
+		this.nbrMissileJ += 1;
+	}
+	if(this.cooldownJ > 1000){
+		this.cooldownJ -= 1000;
+	}
+	
 	this.jungleEnemy.reviveJungle(this.hpJ, this.domageJ, this.nbrMissileJ, this.cooldownJ, this.nbResMax);
 
 }
@@ -221,33 +223,35 @@ Stage.prototype.createWave = function(enemies, GUI){
 	
 	//Wave boss
 	if(this.waveCount%10 ===0){
-		//Bird
+
+		//Boss
 		var hpBoss = 100*this.waveCount;
-		console.log(hpBoss);
-		var speedBoss = 10;
+
+		var speedBoss = 50;
 		var chanceBoss = 1;
-		var nbItemBoss = 10;
+		this.nbItemBoss += 10;
 		var domageBoss = 3;
 		
-		enemies.add(new Minion(2000,700, this.game, speedBoss,hpBoss,3, chanceBoss, nbItemBoss, domageBoss));
+		enemies.add(new Minion(2000,700, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss));
 		this.enemieToSpwan = 0;
 	}else{
 
 		//Zombie
-		var hpZ = 40+ 10*this.waveCount;
-		var speedZ = 30;
-		var chanceD = 0.8;
+		var hpZ = 50+ 10*(this.waveCount-1);
+		var speedZ = 50;
+		var chanceD = 0.5;
 		var nbItem = 1;
 		var domageZ = 1;
 		
 		enemies.add(new Minion(2000, 1100, this.game, speedZ,hpZ,1, chanceD, nbItem,domageZ));
 		this.enemieToSpwan--;
+		
 		//Ajout du Bird
 		if(this.waveCount>=3){
 			//Bird
-			var hpB = 10+ 10*this.waveCount;
-			var speedB = 50;
-			var chanceB = 0.8;
+			var hpB = 10+ 10*(this.waveCount-1);
+
+			var chanceB = 0.3;
 			var nbItemB = 2;
 			var domageB = 1;
 			
@@ -256,6 +260,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 				numberEnemie = this.enemieToSpwan;
 			}
 			for (var i = 0; i < numberEnemie; i++) {
+				var speedB = Math.floor(Math.random()*(21)+50); //50 - 70
 				enemies.add(new Minion(2000, 700 + 100*i, this.game, speedB,hpB,2, chanceB, nbItemB,domageB));
 				this.enemieToSpwan--;
 			}	
@@ -269,28 +274,41 @@ Stage.prototype.createWave = function(enemies, GUI){
 				numberEnemie = this.enemieToSpwan;
 			}
 			
+			var hpJ = 100+ 10*(this.waveCount-1);
+			var chanceJ = 0.7;
+			var nbJ = 3;
+			var domage = 1;
+			
 			for (var i = 0; i < numberEnemie; i++) {
-				speed = 40 * (Math.random() + 1);
-				this.createEnemy(enemies, 2000, 700 + 100*i, speed,40+ 10*this.waveCount);
+				var speed = Math.floor(Math.random()*(31)+40); //40 - 70			
+
+				enemies.add(new Enemy(2000, 700 + 100*i, this.game, speed,hpB, chanceJ, nbJ,domage));
 				this.enemieToSpwan--;
 			}	
 		}
 
 		//Ajout du Puker
 		if(this.waveCount>=12){
-			var hpP = 40+ 10*this.waveCount;
-			var speedP = 30;
-			var chanceP = 0.8;
-			var nbItemP = 1;
-			var domageP = 1;
+			var hpP = 200+ 10*(this.waveCount-1);
+			var speedP = 40;
+			var chanceP = 0.7;
+			var nbItemP = 4;
+			var domageP = 2;
 			enemies.add(new Puker(2050, 1100, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+			this.enemieToSpwan--;
 		}
 
 		//Ajout du Lapin
-		if(this.waveCount>=15){
+		if(this.waveCount>=12){
 
-			enemies.add(new Kamikaze(2000, 700 + 100, this.game, 100,100, this.player));
-	
+			var hpP = 70+ 10*(this.waveCount-1);
+			var speedP = 500;
+			var chanceP = 1;
+			var nbItemP = 5;
+			var domageP = 3;
+			enemies.add(new Kamikaze(2050, 1100, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+
+			
 		}
 	}
 
