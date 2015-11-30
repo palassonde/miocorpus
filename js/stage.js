@@ -8,7 +8,9 @@ Stage = function(game, player, enemy){
     transitiondown = this.game.add.audio('transitiondown');
 
     // Constantes
-	 this.background_image = game.add.sprite(0,0, 'fond_etoile');
+	this.background_image = game.add.sprite(0,0, 'fond_etoile');
+	this.background_image.alpha = 0;
+	game.add.tween(this.background_image).to( { alpha: 1 }, 25000, Phaser.Easing.Exponential.InOut, true, 0, -1, true);
     // this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
@@ -41,6 +43,10 @@ Stage = function(game, player, enemy){
 	
 	//Boss
 	this.nbItemBoss = 0;
+	
+	//Kamikaze
+	this.IsShoot = false;
+	this.eventKami;
 }
 
 Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups){
@@ -81,14 +87,20 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 	
 	//Si tout les ennemie son créer
 	if(enemies.children.length === 1 && !this.newWave && this.enemieToSpwan<=0){
-		if(this.waveCount%10 === 0){
-			enemiesByWave = enemiesByWave * 2;
-		}else{
-			enemiesByWave = enemiesByWave +5;
+		
+		//Maximum de 105 ennemie a fois
+		if(enemiesByWave < 105){
+			enemiesByWave = enemiesByWave + 4;
 		}
 		this.timeWave = this.game.time.now + 15000; //A chaque 15 seconde
 		this.enemieToSpwan = enemiesByWave;
 		this.newWave = true;
+		
+		if(this.IsShoot){
+			this.game.time.events.remove(this.eventKami);
+			this.IsShoot = false; //Kamiakaze
+		}
+
 	}
 	
 }
@@ -269,7 +281,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 		//Ajout du jumper
 		if(this.waveCount>=7){
 
-			var numberEnemie = 5; //5 jumper a fois (si on peu apparaitre moins on change)
+			var numberEnemie = 3; //5 jumper a fois (si on peu apparaitre moins on change)
 			if(this.enemieToSpwan < numberEnemie){
 				numberEnemie = this.enemieToSpwan;
 			}
@@ -289,6 +301,11 @@ Stage.prototype.createWave = function(enemies, GUI){
 
 		//Ajout du Puker
 		if(this.waveCount>=12){
+			
+			if(this.enemieToSpwan < 1){
+				return; //Si le nombre ennemie est atteint
+			}
+			
 			var hpP = 200+ 10*(this.waveCount-1);
 			var speedP = 40;
 			var chanceP = 0.7;
@@ -299,17 +316,28 @@ Stage.prototype.createWave = function(enemies, GUI){
 		}
 
 		//Ajout du Lapin
-		if(this.waveCount>=12){
-
-			var hpP = 70+ 10*(this.waveCount-1);
-			var speedP = 500;
-			var chanceP = 1;
-			var nbItemP = 5;
-			var domageP = 3;
-			enemies.add(new Kamikaze(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
-
+		if(this.waveCount >= 12){
 			
+			if(!this.IsShoot && this.enemieToSpwan > 0){
+				this.createKamikaze(enemies);
+				this.IsShoot = true;
+			}
+	
 		}
 	}
 
+}
+
+Stage.prototype.createKamikaze = function(enemies) {
+		this.enemieToSpwan--;		
+		var hpP = 70+ 10*(this.waveCount-1);
+		var speedP = 500;
+		var chanceP = 1;
+		var nbItemP = 5;
+		var domageP = 3;
+		enemies.add(new Kamikaze(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+			
+		var timeRandom = Math.floor((5)*Math.random() + 8); // 8 - 12
+		this.eventKami = this.game.time.events.add(timeRandom * 1000, this.createKamikaze,this,enemies);	
+		
 }

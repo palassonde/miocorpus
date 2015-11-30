@@ -15,6 +15,7 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 	this.time = 0;
 
 	// sons
+	explosionMusic = game.add.audio('turretneutretir');
 	drum1 = game.add.audio('drum1');
 	this.distance = 1000;
 	
@@ -32,6 +33,12 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 	//Missile
 	this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
+	
+	this.spikes = game.add.group();
+    this.spikes.enableBody = true;
+	this.eventFire;
+	this.nbrExplose = 3;
+	this.currentNbrExplose = 1;
 	
 	//Mouvement
 	this.tween;
@@ -72,6 +79,7 @@ MasterTurret.prototype.reviveJungle = function(hp,domage,nbr,cooldown,nrRessourc
 	//Refaire bullet
 	this.bullets = this.game.add.group();
     this.bullets.enableBody = true;
+	this.eventFire;
 	
 	//Mouvement
 	this.direction;
@@ -102,6 +110,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 		this.bullets.destroy();
         this.kill();
 		this.tween.stop();
+		this.game.time.events.remove(this.eventFire);
 		return;
     }
 
@@ -158,6 +167,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 	
 	//Verifier une collision
 	this.game.physics.arcade.overlap(player, this.bullets, this.collisionMissile, null, this);
+	this.game.physics.arcade.overlap(player, this.spikes, this.collisionMissile, null, this);
 	//this.game.physics.arcade.overlap(player.turrets, this.bullets, this.collisionMissile, null, this);
 	
 	//Restart annimation
@@ -198,9 +208,13 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 	var dis = Phaser.Point.distance(this.position, player.position);
 	if(dis < this.rayon){
 		this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 1, this.domage, 4000));
-		this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 2, this.domage, 4000));
+		//this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 2, this.domage, 4000));
 		this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 3, this.domage, 4000));
 		maxEnemy -= 1;
+		if(!isShoot){
+			this.currentNbrExplose = 1;
+			this.explode(0);
+		}
 		isShoot = true;
 	}
 
@@ -216,9 +230,13 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 		//Tir
 		if(dis < this.rayon){
 			this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 1, this.domage, 5000));
-			this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 2, this.domage, 5000));
+			//this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 2, this.domage, 5000));
 			this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 3, this.domage, 5000));
 			maxEnemy -= 1;
+			if(!isShoot){
+				this.currentNbrExplose = 1;
+				this.explode(0);
+			}
 			isShoot = true;
 		}
 	}
@@ -230,6 +248,35 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 		this.time = 0;
 		this.cooldownTemp = this.cooldown;
 	}
+}
+
+MasterTurret.prototype.explode = function(angleDebut){
+
+    var angle = angleDebut * (Math.PI/180);
+
+    if (this.alive){
+
+        for (var i = 0; i < 10 ; i++) {
+
+            spike = this.spikes.create(this.x,this.y, 'bullet');
+            spike.body.velocity.x = Math.cos(angle) * 200;
+            spike.body.velocity.y = Math.sin(angle) * 200;
+            spike.lifespan = 4000;
+            angle += ((2 * Math.PI) / 10);
+        }
+        explosionMusic.play();
+    }
+	
+	if(this.currentNbrExplose>=this.nbrExplose) return;
+	
+	this.currentNbrExplose++;
+	
+	if(angleDebut === 0){
+		this.eventFire = this.game.time.events.add(1000, this.explode,this,18);
+	}else{
+		this.eventFire = this.game.time.events.add(1000, this.explode,this,0);
+	}
+
 }
 
 MasterTurret.prototype.hurt = function(dmg){
