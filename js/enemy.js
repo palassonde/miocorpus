@@ -68,7 +68,11 @@ Enemy.prototype.jump = function(time){
 }
 
 Enemy.prototype.slowDown = function(){
-
+	
+	if(!ennemibouffecore.isPlaying){
+		ennemibouffecore.play();
+	}
+	
     this.body.velocity.x = -10;
     this.body.gravity.y = 0;
     this.body.velocity.y = 0;

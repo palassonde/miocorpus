@@ -8,8 +8,8 @@ Stage = function(game, player, enemy){
     transitiondown = this.game.add.audio('transitiondown');
 
     // Constantes
-	//this.background_image = game.add.sprite(0,0, 'fond_degrader');
-    //this.background_image.fixedToCamera = true;
+	 this.background_image = game.add.sprite(0,0, 'fond_etoile');
+    // this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
 
@@ -232,7 +232,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 		this.nbItemBoss += 10;
 		var domageBoss = 3;
 		
-		enemies.add(new Minion(2000,700, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss));
+		enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss));
 		this.enemieToSpwan = 0;
 	}else{
 
@@ -294,7 +294,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 			var chanceP = 0.7;
 			var nbItemP = 4;
 			var domageP = 2;
-			enemies.add(new Puker(2050, 1100, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+			enemies.add(new Puker(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
 			this.enemieToSpwan--;
 		}
 
@@ -306,7 +306,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 			var chanceP = 1;
 			var nbItemP = 5;
 			var domageP = 3;
-			enemies.add(new Kamikaze(2050, 1100, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+			enemies.add(new Kamikaze(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
 
 			
 		}

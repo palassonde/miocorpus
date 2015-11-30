@@ -49,6 +49,7 @@ MyGame.Game.prototype = {
 		powerups = this.game.add.group();
         // On top of 
         player.bringToTop();
+		this.game.world.bringToTop(enemies);
     },
 
     update : function () {
@@ -75,8 +76,6 @@ function getRandomStone(){
 	var random = Math.random();
 	
 	if(random < 0.333){
-
-
 		return 'redstone';
 	}else if(random < 0.666){
 		return 'greenstone';

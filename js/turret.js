@@ -26,7 +26,7 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3){
 	this.numberEnemyShoot = 1;
 	this.cooldown = 8000; //ICI 
 	this.domage = 1;
-	this.rayon = 200;
+	this.rayon = 250;
 	
 	this.cooldownTemp = 0;
 	this.kind = -1;

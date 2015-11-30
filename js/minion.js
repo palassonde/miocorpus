@@ -12,6 +12,7 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 	warcry.volume = 0.3;
 	enemyhurt = game.add.audio('enemyhurt');
 	ennemibouffecore = game.add.audio('ennemibouffecore');
+	ennemibouffecore.volume = 4;
 	drum2 = game.add.audio('drum2');
 	
 	if(type === 1){
@@ -33,12 +34,11 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 
 	}else{
 		//BOSS
-		Phaser.Sprite.call(this, game, x, y, "player")
-		this.animations.add('left', [6,7,8], 5, true);
+		Phaser.Sprite.call(this, game, x, y, "fatass")
+		this.animations.add('left', [0,1,2], 5, true);
 		this.animations.play('left');
 		this.anchor.set(0.5);
-		this.scale.y = 3;
-		this.scale.x = 2;
+		this.scale.setTo(0.55,0.55);
 	}
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
@@ -95,8 +95,9 @@ Enemy.prototype.displayHP = function(){
 
 Minion.prototype.slowDown = function(){
 
-
-	ennemibouffecore.play();
+	if(!ennemibouffecore.isPlaying){
+		ennemibouffecore.play();
+	}
 
     this.body.velocity.x = -10;
     this.body.gravity.y = 0;

@@ -35,7 +35,8 @@ MyGame.Preloader.prototype = {
         // Turrets stuff
         this.load.image('turret', 'assets/turret.png');
         this.load.image('bullet', 'assets/bullet.png');
-		this.load.image('boomerang', 'assets/boomerang.png');
+		this.load.image('boomerang', 'assets/boomerang.png');		
+		this.load.image('missile', 'assets/missile.png'); 
 
         // Player
         this.load.spritesheet('player', 'assets/player.png', 50, 100);
@@ -46,7 +47,7 @@ MyGame.Preloader.prototype = {
         this.load.spritesheet('zombie', 'assets/zombie.png', 500, 1000);
         this.load.spritesheet('puker', 'assets/puker.png', 500, 1000);
         this.load.spritesheet('fatass', 'assets/fatass.png', 500, 1000);
-        this.load.spritesheet('kamikaze', 'assets/kamikaze.png', 500, 1000); //Il a un erreur avec lui !?
+		this.load.image('kamikaze', 'assets/kamikaze.png');
         
         // Audio
         this.add.audio('maintheme');
@@ -86,7 +87,7 @@ MyGame.Preloader.prototype = {
         this.load.audio('destroyturret', 'assets/audio/destroyturret.mp3');
 
         // Fonts
-        this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+        //this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
         // GUI
         this.load.image('heart', 'assets/heart.png');
@@ -94,6 +95,9 @@ MyGame.Preloader.prototype = {
         this.load.image('bluestone', 'assets/bluestone.png');
         this.load.image('greenstone', 'assets/greenstone.png');
         this.load.image('gameover', 'assets/gameover.png');
+		this.load.image('fond_etoile', 'assets/fond_etoile.png');
+		
+		this.load.image('wave', 'assets/wave.png'); //a ajouter
     },
 
     create: function () {

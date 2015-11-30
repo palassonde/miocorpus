@@ -13,10 +13,18 @@ Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
     this.angleMax = 0.5;
     this.distance = 200;
 
+	//Son
+	explosionMusic = game.add.audio('turretneutretir');
+	ennemibouffecore = game.add.audio('ennemibouffecore');
+	ennemibouffecore.volume = 4;
+	
+	//Spike
     this.spikes = game.add.group();
     this.spikes.enableBody = true;
 
-	Phaser.Sprite.call(this, game, x, y, "player")
+	//Kamikaze
+	Phaser.Sprite.call(this, game, x, y, "kamikaze");
+	this.scale.setTo(0.2,0.2);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
     this.body.collideWorldBounds = false;
@@ -25,8 +33,7 @@ Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
     this.body.checkCollision.left = false;
     this.body.checkCollision.right = false;
     this.exploding = false;
-    this.animations.add('left', [6,7,8], 5, true);
-    this.animations.play('left');
+	
     this.anchor.set(0.5);
 	
 	this.timerDomage = 0;
@@ -82,7 +89,7 @@ Kamikaze.prototype.hurt = function(dmg){
 }
 
 Kamikaze.prototype.explode = function(){
-
+	explosionMusic.play();
     var angle = 0;
 
     if (this.alive){
@@ -107,8 +114,10 @@ Kamikaze.prototype.homing = function(){
 
     angleTarget = this.game.math.angleBetween(this.x, this.y, this.player.x, this.player.y);
 
-    if(this.rotation !== angleTarget){
-        var differenceAngle = angleTarget - this.rotation;
+	var rotation = (this.angle - 90) * (Math.PI/180); 
+	
+    if(rotation !== angleTarget){
+        var differenceAngle = angleTarget - rotation;
         
         if(differenceAngle > Math.PI){
             differenceAngle -= Math.PI * 2;
@@ -117,16 +126,19 @@ Kamikaze.prototype.homing = function(){
         }
         
         if(Math.abs(differenceAngle) < this.angleMax){
-            this.rotation = angleTarget;
+            rotation = angleTarget;
         }else if (differenceAngle > 0){
-            this.rotation += this.angleMax;
+            rotation += this.angleMax;
         }else{
-            this.rotation -= this.angleMax;
+            rotation -= this.angleMax;
         }
     }
     
-    this.body.velocity.x = Math.cos(this.rotation) * this.speed;
-    this.body.velocity.y = Math.sin(this.rotation) * this.speed;
+    this.body.velocity.x = Math.cos(rotation) * this.speed;
+    this.body.velocity.y = Math.sin(rotation) * this.speed;
+	
+	this.rotation = rotation;
+	this.angle += 90;
 }
 
 Kamikaze.prototype.spikeCollision = function(target, spike){
@@ -137,6 +149,10 @@ Kamikaze.prototype.spikeCollision = function(target, spike){
 }
 
 Kamikaze.prototype.slowDown = function(){
+
+	if(!ennemibouffecore.isPlaying){
+		ennemibouffecore.play();
+	}
 
     this.body.velocity.x = -10;
     this.body.gravity.y = 0;

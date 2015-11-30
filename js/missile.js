@@ -14,19 +14,14 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	boomerang = game.add.audio('boomerang');
 	boomerang.volume = 2;
 	boomerang.allowMultiple = true;
-	lasers = game.add.audio('laser');
-	lasers.allowMultiple = true;
+	this.lasers = game.add.audio('laser');
+	this.lasers.allowMultiple = true;
 	turretneutretir = game.add.audio('turretneutretir');
 	turretneutretir.volume = 0.5;
 	turretneutretir.allowMultiple = true;
 	playertire = game.add.audio('playertire');
 	homingmissile = game.add.audio('homingmissile');
 	homingmissile.allowMultiple = true;
-
-	if (kind === 1){
-		homingmissile.play();
-
-	}
 		
 	this.tween;
 	this.time = 0;
@@ -42,12 +37,16 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 		Phaser.Sprite.call(this, game, x, y, 'boomerang');
 	}else if(kind === 4){
 		this.circle(game,x,y);
+	}else if(kind === 1){
+		Phaser.Sprite.call(this, game, x, y, 'missile');
+		this.scale.setTo(0.15,0.15);
+		this.trackSound = homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
-		lasers.play();
+		this.trackLaser = this.lasers.play();
 		this.kill();
 	}
 }
@@ -61,8 +60,11 @@ Bullet.prototype.actionMissile = function(){
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
 	if(this.time >= this.timeLive || this.needDestroy){
-		homingmissile.stop();
-		lasers.stop();
+		if(this.behavior === 1){
+			this.trackSound.stop();
+		}else if(this.behavior === 3){
+			this.trackLaser.stop();
+		}
 		this.destroy();
 		return;
 	}
@@ -213,7 +215,11 @@ Bullet.prototype.laser = function(){
 	
 	if(dis >= this.rayon || !this.target.alive){
 		this.needChangeTarget = true;
+		this.trackLaser.pause();
 		return;
+	}
+	if(this.trackLaser.paused){
+		this.trackLaser.resume();
 	}
 	
 	this.graphic.moveTo(this.x, this.y);

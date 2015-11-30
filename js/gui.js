@@ -175,67 +175,114 @@ GUI.prototype.endGame = function(waveCount){
 //Pour la machine de fusion
 GUI.prototype.legend = function(x){
 	
-	this.graphics.beginFill(0xbbbbbb, 0.7);
-	this.graphics.drawRect(x, -115, 360, 550);
+	var resourcesStyleLegend = { font: "18px Arial", fill: "#f26c4f", align: "left" };
+	
+	this.graphics.beginFill(0xbbbbbb, 1);
+	this.graphics.drawRect(x - 10, -120, 410, 565);
 	this.graphics.endFill();	
 	
-	this.game.add.text(x+45+180, 40, "LEGENDE", resourcesStyle);
+	//Titre
+	this.game.add.text(x+45+200 , 35, "LEGENDE", resourcesStyleLegend);
+	
+	//Menu
+	var menu = this.game.add.text(x+45+42, 205, "TURRET", resourcesStyleLegend);
+	menu.angle = -90;
+	
+	this.graphics.lineStyle(2, 0xf26c4f, 1);
+	this.graphics.moveTo(x+7,-20);
+	this.graphics.lineTo(x+7,-90);
+	this.graphics.lineTo(x+100,-90);
+	
+	this.graphics.lineStyle(2, 0xf26c4f, 1);
+	this.graphics.moveTo(x+7,60);
+	this.graphics.lineTo(x+7,130);
+	this.graphics.lineTo(x+100,130);
+	
+	var menu = this.game.add.text(x+45+42, 500, "PERSONNAGE", resourcesStyleLegend);
+	menu.angle = -90;
+	
+	this.graphics.lineStyle(2, 0xf26c4f, 1);
+	this.graphics.moveTo(x+7,220);
+	this.graphics.lineTo(x+7,140);
+	this.graphics.lineTo(x+100,140);
+	
+	this.graphics.lineStyle(2, 0xf26c4f, 1);
+	this.graphics.moveTo(x+7,355);
+	this.graphics.lineTo(x+7,435);
+	this.graphics.lineTo(x+100,435);
 	
 	var distance = 75;
 	var ressourceNbStyle = { font: "10px Arial", fill: "#f26c4f", align: "left" };
 	
-	var tabLeg = [["redstone","bluestone"],["greenstone","redstone"],["bluestone","greenstone"],["player","redstone"],["player","bluestone"],["player","greenstone"],["redstone","bluestone","greenstone"]]
+	var tabLeg = [["redstone","bluestone", "MUR"],["greenstone","redstone","CERCLE"],["bluestone","greenstone", "INVINCIBLE"],["player","redstone","FORCE"],["player","bluestone","DEFENCE"],["player","greenstone", "VITESSE"],["redstone","bluestone","greenstone", "TURRET"]]
 	for(var i = 0; i < 7; i++){
-		this.game.add.text(x + 90*1 + 85, 80 + distance * i, "+", resourcesStyle);
+		
+		var separation = 0;
+		if(i>= 3){
+			separation = 10;
+		}
+		
+		this.game.add.text(x + 90*1 + 85, 80 + separation + distance * i, "+", resourcesStyle);
 		
 		if(i < 6){
-			this.game.add.text(x + 90*2 + 85, 88 + distance * i, "=", resourcesStyle);
+			this.game.add.text(x + 90*2 + 85, 88 + separation + distance * i, "=", resourcesStyle);
+			this.game.add.text(x + 90*2 + 85 + 25, 88 + separation + distance * i, tabLeg[i][2], resourcesStyle);
 		}else{
-			this.game.add.text(x + 90*2 + 85, 80 + distance * i, "+", resourcesStyle);
-			this.game.add.text(x + 90*3 + 85, 88 + distance * i, "=", resourcesStyle);
+			this.game.add.text(x + 90*2 + 85, 80 + separation + distance * i, "+", resourcesStyle);
+			this.game.add.text(x + 90*3 + 85, 88 + separation + distance * i, "=", resourcesStyle);
+			this.game.add.text(x + 90*3 + 85 + 25, 88 + separation + distance * i, tabLeg[i][3], resourcesStyle);
 		}
 
 
 		if(tabLeg[i][0] == "player"){
-			this.game.add.text(x + 90 + 40, 60 + distance * i, "X1", ressourceNbStyle);
+			this.game.add.text(x + 90 + 40, 60 + separation + distance * i, "X1", ressourceNbStyle);
 		}else{
-			this.game.add.text(x + 90 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+			this.game.add.text(x + 90 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
 		}
-		this.game.add.text(x + 90*2 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+		this.game.add.text(x + 90*2 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
 		
 		this.graphics.lineStyle(2, 0xf26c4f, 1);
-		this.graphics.moveTo(x+90-10,-45 + distance * i);
-		this.graphics.lineTo(x+90+10,-45 + distance * i);
-		this.graphics.lineTo(x+90+5,-50 + distance * i);
+		this.graphics.moveTo(x+90-10,-45 + separation + distance * i);
+		this.graphics.lineTo(x+90+10,-45 + separation + distance * i);
+		this.graphics.lineTo(x+90+5,-50 + separation + distance * i);
 		
-		this.graphics.moveTo(x+90+10,-40 + distance * i);
-		this.graphics.lineTo(x+90-10,-40 + distance * i);
-		this.graphics.lineTo(x+90-5,-35 + distance * i);
+		this.graphics.moveTo(x+90+10,-40 + separation + distance * i);
+		this.graphics.lineTo(x+90-10,-40 + separation + distance * i);
+		this.graphics.lineTo(x+90-5,-35 + separation + distance * i);
 		
-		var imageF1 = this.game.add.sprite(x + 90 + 45,100 + distance * i, tabLeg[i][0]);
+		var imageF1 = this.game.add.sprite(x + 90 + 45,100 + separation + distance * i, tabLeg[i][0]);
 		imageF1.anchor.set(0.5);
 		imageF1.scale.setTo(0.5,0.5);
 	
-		var imageF1 = this.game.add.sprite(x + 90*2 + 45,100 + distance * i, tabLeg[i][1]);
+		var imageF1 = this.game.add.sprite(x + 90*2 + 45,100 + separation + distance * i, tabLeg[i][1]);
 		imageF1.anchor.set(0.5);
 		imageF1.scale.setTo(0.5,0.5);
 		
 		if(i===6){
-			var imageF1 = this.game.add.sprite(x + 90*3 + 45,100 + distance * i, tabLeg[i][2]);
+			var imageF1 = this.game.add.sprite(x + 90*3 + 45,100 + separation + distance * i, tabLeg[i][2]);
 			imageF1.anchor.set(0.5);
 			imageF1.scale.setTo(0.5,0.5);
 			
-			this.graphics.moveTo(x+90*2-10,-45 + distance * i);
-			this.graphics.lineTo(x+90*2+10,-45 + distance * i);
-			this.graphics.lineTo(x+90*2+5,-50 + distance * i);
+			this.graphics.moveTo(x+90*2-10,-45 + separation + distance * i);
+			this.graphics.lineTo(x+90*2+10,-45 + separation + distance * i);
+			this.graphics.lineTo(x+90*2+5,-50 + separation + distance * i);
 		
-			this.graphics.moveTo(x+90*2+10,-40 + distance * i);
-			this.graphics.lineTo(x+90*2-10,-40 + distance * i);
-			this.graphics.lineTo(x+90*2-5,-35 + distance * i);
+			this.graphics.moveTo(x+90*2+10,-40 + separation + distance * i);
+			this.graphics.lineTo(x+90*2-10,-40 + separation + distance * i);
+			this.graphics.lineTo(x+90*2-5,-35 + separation + distance * i);
 			
-			this.game.add.text(x + 90*3 + 35, 65 + distance * i, "X10", ressourceNbStyle);
+			this.game.add.text(x + 90*3 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
 		}
 	}
+	
+	//Resultat
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + distance * 0, "MUR", resourcesStyle);
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + distance * 1, "CERCLE", resourcesStyle);
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + distance * 2, "INVINCIBLE", resourcesStyle);
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + 10 + distance * 3, "FORCE", resourcesStyle);
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + 10 + distance * 4, "DEFENSE", resourcesStyle);
+	// this.game.add.text(x + 90*2 + 85 + 25, 88 + 10 + distance * 5, "VITESSE", resourcesStyle);
+	// this.game.add.text(x + 90*3 + 85 + 25, 88 + 10 + distance * 6, "TURRET", resourcesStyle);
 }
 GUI.prototype.createMachine = function(nbItem, elementF){
 
@@ -391,6 +438,6 @@ GUI.prototype.fusion = function(sprite){
 }
 
 GUI.prototype.back = function(){
-	this.music.stop();
+	this.game.sound.stopAll();
 	this.game.state.start('menu');
 }
