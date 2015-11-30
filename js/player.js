@@ -92,7 +92,7 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.overlap(this.turrets, enemy, this.destroyTurret, null, this);
 	this.game.physics.arcade.overlap(this.bullets, enemy, this.hurtTarget, null, this);
 	// Collision bullet turret
-	this.game.physics.arcade.overlap(this.bullets, this.turrets, this.hurtTarget, null, this);
+	//this.game.physics.arcade.overlap(this.bullets, this.turrets, this.hurtTarget, null, this);
 
 	if (this.actionKey_A.isDown){
 		this.fire();

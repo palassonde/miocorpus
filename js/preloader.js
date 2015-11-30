@@ -48,6 +48,7 @@ MyGame.Preloader.prototype = {
         this.load.spritesheet('puker', 'assets/puker.png', 500, 1000);
         this.load.spritesheet('fatass', 'assets/fatass.png', 500, 1000);
 		this.load.image('kamikaze', 'assets/kamikaze.png');
+		this.load.spritesheet('boss', 'assets/boss.png', 500, 1000);
         
         // Audio
         this.add.audio('maintheme');
