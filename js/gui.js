@@ -17,6 +17,7 @@ GUI = function (game, stage, player, music) {
 	error = this.game.add.audio('error');
 	gong = this.game.add.audio('gong');
 	gong.volume = 0.5;
+	vousetesunechec = this.game.add.audio('vousetesunechec');
 	
 	// CSS styles
 	style = { font: "40px Arial", fill: "#f26c4f", align: "left" };
@@ -156,6 +157,7 @@ GUI.prototype.displayWave = function(waveCount){
 
 GUI.prototype.endGame = function(waveCount){
 
+	vousetesunechec.play();
     this.player.kill();
     reset = this.game.add.button(530, 400, 'reset-button', this.back, this,2, 1, 0, 2)
     reset.scale.setTo(2,2);
