@@ -18,7 +18,7 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 	if(type === 1){
 		//Zombie
 		Phaser.Sprite.call(this, game, x, y, "zombie")
-		this.animations.add('left', [0,1,2], 4, true);
+		this.animations.add('left', [0,1,0,2], 4, true);
 		this.animations.play('left');
 		this.anchor.set(0.5);
 		this.scale.setTo(0.10,0.10);
@@ -35,7 +35,7 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 	}else{
 		//BOSS
 		Phaser.Sprite.call(this, game, x, y, "fatass")
-		this.animations.add('left', [0,1,2], 5, true);
+		this.animations.add('left', [0,1,0,2], 5, true);
 		this.animations.play('left');
 		this.anchor.set(0.5);
 		this.scale.setTo(0.55,0.55);

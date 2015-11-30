@@ -13,14 +13,14 @@ Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage) {
 
     enemyhurt = this.game.add.audio('enemyhurt');
 
-	Phaser.Sprite.call(this, game, x, y, "player")
+	Phaser.Sprite.call(this, game, x, y, "enemy")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 
     this.body.velocity.x = -speed;        
     this.body.gravity.y = 500;
     this.body.collideWorldBounds = true;
 
-    this.animations.add('left', [6,7,8], 5, true);
+    this.animations.add('left', [6,7,6,8], 5, true);
     this.animations.play('left');
     this.anchor.set(0.5);
 	
