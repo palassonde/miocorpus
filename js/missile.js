@@ -43,6 +43,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 		this.trackSound = homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
+		this.scale.setTo(0.6,0.6);
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
@@ -141,7 +142,6 @@ Bullet.prototype.simpleFire = function(){
 		this.body.velocity.y = vitesse;
 	}
 
-	this.scale.setTo(2,2);
 	this.stop = true;
 }
 
