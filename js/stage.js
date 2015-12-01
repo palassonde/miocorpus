@@ -15,6 +15,9 @@ Stage = function(game, player, enemy){
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
 
+    this.buildings = game.add.sprite(30,600, 'fond1');
+    this.buildings.alpha = 0.5;
+
     // Stage variables
     this.skin = this.game.add.sprite(-200,0, 'skin');
     this.ground;
@@ -152,6 +155,7 @@ Stage.prototype.createPlatforms = function(){
     this.platforms.enableBody = true;
 
     this.grass = this.game.add.sprite(0,1140, 'grass');
+    this.grass.bringToTop();
     this.ground = this.platforms.create(0,1170, 'ground');
     
     this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);

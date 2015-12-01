@@ -40,6 +40,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	}else if(kind === 1){
 		Phaser.Sprite.call(this, game, x, y, 'missile');
 		this.scale.setTo(0.15,0.15);
+		turretneutretir.play();
 		this.trackSound = homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
@@ -50,6 +51,7 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 		this.trackLaser = this.lasers.play();
 		this.kill();
 	}
+
 }
 
 Bullet.prototype = Object.create(Phaser.Sprite.prototype);

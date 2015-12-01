@@ -40,6 +40,7 @@ MyGame.Game.prototype = {
         // Instantiate Player
         player = new Player(200, 1000, this.game);
         this.game.add.existing(player);
+        
         // Instantiate Stage
         stage = new Stage(this.game, player,enemies);
         stage.createPlatforms();

@@ -31,6 +31,7 @@ MyGame.Preloader.prototype = {
         this.load.image('grass', 'assets/grass.png');
         this.load.image('ground', 'assets/ground.png');
         this.load.image('jungleground', 'assets/jungleground.png');
+        this.load.image('fond1', 'assets/fond1.png');
 
         // Turrets stuff
         this.load.image('turret', 'assets/turret.png');
@@ -40,6 +41,7 @@ MyGame.Preloader.prototype = {
 
         // Player
         this.load.spritesheet('player', 'assets/player.png', 50, 100);
+        this.load.image('flash', 'assets/flash.png');
 
         // Enemies
         this.load.spritesheet('enemy', 'assets/ennemies.png', 50, 100);

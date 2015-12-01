@@ -20,8 +20,8 @@ GUI = function (game, stage, player, music) {
 	vousetesunechec = this.game.add.audio('vousetesunechec');
 	
 	// CSS styles
-	style = { font: "40px Arial", fill: "#f26c4f", align: "left" };
-	resourcesStyle = { font: "20px Arial", fill: "#f26c4f", align: "left" };
+	style = { font: "40px Arial", fill: "#000000", align: "left" };
+	resourcesStyle = { font: "20px Arial", fill: "#000000", align: "left" };
 
 	// Adding the GUI components
 	this.redstone = this.game.add.text(this.game.camera.x, this.game.camera.y, "X", resourcesStyle);
@@ -177,7 +177,7 @@ GUI.prototype.endGame = function(waveCount){
 //Pour la machine de fusion
 GUI.prototype.legend = function(x){
 	
-	var resourcesStyleLegend = { font: "18px Arial", fill: "#f26c4f", align: "left" };
+	var resourcesStyleLegend = { font: "18px Arial", fill: "#000000", align: "left" };
 	
 	this.graphics.beginFill(0xbbbbbb, 1);
 	this.graphics.drawRect(x - 10, -120, 410, 565);
@@ -214,7 +214,7 @@ GUI.prototype.legend = function(x){
 	this.graphics.lineTo(x+100,435);
 	
 	var distance = 75;
-	var ressourceNbStyle = { font: "10px Arial", fill: "#f26c4f", align: "left" };
+	var ressourceNbStyle = { font: "10px Arial", fill: "#000000", align: "left" };
 	
 	var tabLeg = [["redstone","bluestone", "MUR"],["greenstone","redstone","CERCLE"],["bluestone","greenstone", "INVINCIBLE"],["player","redstone","FORCE"],["player","bluestone","DEFENCE"],["player","greenstone", "VITESSE"],["redstone","bluestone","greenstone", "TURRET"]]
 	for(var i = 0; i < 7; i++){
@@ -385,6 +385,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.numberStoneRed -= 10;
 				this.player.bonus2 = true; //Active un power au prochain turret
+				this.player.flash.visible = true;
 				works = true;
 				murdeboules.play();
 			}
@@ -395,6 +396,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneRed -= 10;
 				this.player.bonus1 = true; //Active un power au prochain turret
 				works = true;
+				this.player.flash.visible = true;
 				rayonbrutal.play();
 			}
 		}
@@ -404,6 +406,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.bonus3 = true; //Active un power au prochain turret	
 				works = true;
+				this.player.flash.visible = true;
 				immunitedivine.play();
 			}
 		}

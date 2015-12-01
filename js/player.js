@@ -29,6 +29,9 @@ Player = function (x, y, game) {
 	Phaser.Sprite.call(this, game, x, y, "player")
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
+	this.flash = this.game.add.sprite(this.x, this.y - 30, 'flash');
+	this.flash.visible = false;
+
 	this.body.gravity.y = 600;
 	this.body.collideWorldBounds = true;
 	this.body.checkCollision.up = false;
@@ -48,6 +51,8 @@ Player = function (x, y, game) {
 	this.actionKey_Q = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	this.actionKey_W = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
 	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+	this.actionKey_Z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+	this.actionKey_Z.onDown.add(this.cheat, this);
 	this.cursors = this.game.input.keyboard.createCursorKeys();	
 	
 	//Pistolet
@@ -251,6 +256,8 @@ Player.prototype.move = function(){
 
 Player.prototype.creationTurret = function(){
 
+	this.flash.visible = false;
+
 	if (this.nbrTurrets < this.maxTurrets){
 
 		construction.play();
@@ -390,4 +397,13 @@ Player.prototype.destroyTurret = function(turret, enemies){
     if(this.game.time.now > enemies.timerDomage){
 		turret.hurt(enemies.domage*20, enemies);
     }   
+}
+
+Player.prototype.cheat = function(){ 
+
+    this.numberStoneBlue += 10;
+    this.numberStoneRed += 10;
+    this.numberStoneGreen += 10;
+    this.numberStoneGreen += 10;
+    this.maxTurrets += 10;
 }
