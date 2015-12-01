@@ -32,14 +32,14 @@ Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDe
 		Phaser.Sprite.call(this, game, x, y, 'missile');
 		this.scale.setTo(0.15,0.15);
 		this.sm.turretneutretir.play();
-		this.trackSound = this.sm.homingmissile.play();
+		this.sm.homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
 		this.scale.setTo(0.6,0.6);
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
-		this.trackLaser = this.sm.lasers.play();
+		this.sm.lasers.play();
 		this.kill();
 	}
 
@@ -55,9 +55,9 @@ Bullet.prototype.actionMissile = function(){
 	this.graphic.position = new Phaser.Point();
 	if(this.time >= this.timeLive || this.needDestroy){
 		if(this.behavior === 1){
-			this.trackSound.stop();
+			this.sm.homingmissile.stop();
 		}else if(this.behavior === 3){
-			this.trackLaser.stop();
+			this.sm.lasers.stop();
 		}
 		this.destroy();
 		return;
@@ -208,11 +208,11 @@ Bullet.prototype.laser = function(){
 	
 	if(dis >= this.rayon || !this.target.alive){
 		this.needChangeTarget = true;
-		this.trackLaser.pause();
+		this.sm.lasers.pause();
 		return;
 	}
-	if(this.trackLaser.paused){
-		this.trackLaser.resume();
+	if(this.sm.lasers.paused){
+		this.sm.lasers.resume();
 	}
 	
 	this.graphic.moveTo(this.x, this.y);
