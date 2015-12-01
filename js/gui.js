@@ -7,11 +7,17 @@ GUI = function (game, stage, player, music) {
 	this.music = music;
 
 	forceaugmente = this.game.add.audio('forceaugmente');
+	forceaugmente.volume = 2;
 	capaciteaugmente = this.game.add.audio('capaciteaugmente');
+	capaciteaugmente.volume = 2;
 	vitessedepegase = this.game.add.audio('vitessedepegase');
+	vitessedepegase.volume = 2;
 	rayonbrutal = this.game.add.audio('rayonbrutal');
+	rayonbrutal.volume = 2;
 	peaudebelier = this.game.add.audio('peaudebelier');
+	peaudebelier.volume = 2;
 	murdeboules = this.game.add.audio('murdeboules');
+	murdeboules.volume = 2;
 	immunitedivine = this.game.add.audio('immunitedivine');
 	mauvaisecombinaison = this.game.add.audio('mauvaisecombinaison');
 	error = this.game.add.audio('error');
