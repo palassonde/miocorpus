@@ -63,6 +63,7 @@ Kamikaze.prototype.action = function(time, powerups, stage){
     if (this.hp <= 0){
         this.dropResource(powerups);
         this.destroy();
+		return;
     }
 
     if (this.exploded){
@@ -89,11 +90,11 @@ Kamikaze.prototype.hurt = function(dmg){
 }
 
 Kamikaze.prototype.explode = function(){
-	explosionMusic.play();
+
     var angle = 0;
 
     if (this.alive){
-
+		explosionMusic.play();
         for (var i = 0; i < 10 ; i++) {
 
             spike = this.spikes.create(this.body.x,this.body.y, 'bullet');

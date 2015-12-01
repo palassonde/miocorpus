@@ -1,13 +1,14 @@
 MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax){
 
-	Phaser.Sprite.call(this, game, x, y, 'player');
-	this.animations.add('left', [6,7,8], 5, true);
-	this.animations.add('right', [3,4,5], 5, true);
-	this.animations.add('notMove', [0,1,2], 5, true);
+	Phaser.Sprite.call(this, game, x, y, 'boss');
+	this.animations.add('left', [0,1,2], 5, true);
+	this.animations.add('notMove', [0], 5, true);
 	this.anchor.x = 0.5;
 	this.anchor.y = 0.1;
-	this.scale.y = 3;
-	this.scale.x = 3;
+	scalex = 0.3;
+	
+	this.scale.x = scalex;
+	this.scale.y = 0.3;
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.body.gravity.y = 500;
 	this.body.collideWorldBounds = true;
@@ -50,18 +51,20 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 MasterTurret.prototype = Object.create(Phaser.Sprite.prototype);
 
 MasterTurret.prototype.moveRigth = function(){
-	this.tween = this.game.add.tween(this).to( { x: this.x+700}, 15000);
+	this.tween = this.game.add.tween(this).to( { x: this.x+800}, 15000);
 	this.tween.onComplete.add(this.moveLeft,this);
 	this.tween.start(3000);
-	this.animations.play('right');
+	this.animations.play('left');
+	this.scale.x = -scalex;
 	this.direction = 'right';
 }
 
 MasterTurret.prototype.moveLeft = function(){
-	this.tween = this.game.add.tween(this).to( { x: this.x-700}, 15000);
+	this.tween = this.game.add.tween(this).to( { x: this.x-800}, 15000);
 	this.tween.onComplete.add(this.moveRigth,this);
 	this.tween.start(3000);
 	this.animations.play('left');
+	this.scale.x = scalex;
 	this.direction = 'left';
 }
 
@@ -73,7 +76,7 @@ MasterTurret.prototype.reviveJungle = function(hp,domage,nbr,cooldown,nrRessourc
 	this.domage = domage;
 	this.nbResMax = nrRessource;
 	this.cooldownTemp = 0;
-	this.x = 2150;
+	this.x = 2100;
 	this.y = 50;
 	
 	//Refaire bullet
@@ -172,7 +175,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 	
 	//Restart annimation
 	if(this.tween.isPaused && this.timePause <= this.game.time.now){
-		this.animations.play(this.direction);
+		this.animations.play('left');
 		this.tween.resume();
 		this.timePause = 0;
 	}

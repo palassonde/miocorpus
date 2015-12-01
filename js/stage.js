@@ -41,7 +41,7 @@ Stage = function(game, player, enemy){
 	this.royonJ = 450;
 	this.nbResMax = 10;
 	
-	this.jungleEnemy = new MasterTurret(2150, 50, this.game,this.domageJ,this.nbrMissileJ,this.cooldownJ,this.hpJ,this.royonJ, this.nbResMax);
+	this.jungleEnemy = new MasterTurret(2100, 50, this.game,this.domageJ,this.nbrMissileJ,this.cooldownJ,this.hpJ,this.royonJ, this.nbResMax);
 	enemy.add(this.jungleEnemy);
 	
 	//Boss
