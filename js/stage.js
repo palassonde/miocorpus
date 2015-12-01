@@ -10,14 +10,13 @@ Stage = function(game, player, enemy){
     // Constantes
 	this.background_image = game.add.sprite(0,0, 'fond_etoile');
 	this.background_image.alpha = 0;
-	game.add.tween(this.background_image).to( { alpha: 1 }, 25000, Phaser.Easing.Exponential.InOut, true, 0, -1, true);
+	game.add.tween(this.background_image).to( { alpha: 0.6 }, 25000, Phaser.Easing.Exponential.InOut, true, 0, -1, true);
+	this.buildings = game.add.sprite(30,600, 'fond1');
+    this.buildings.alpha = 0.4;
+
     // this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);
     this.game.camera.y = 1200;
-
-    this.buildings = game.add.sprite(30,600, 'fond1');
-    this.buildings.alpha = 0.5;
-
     // Stage variables
     this.skin = this.game.add.sprite(-200,0, 'skin');
     this.ground;
@@ -154,8 +153,6 @@ Stage.prototype.createPlatforms = function(){
     this.platforms = this.game.add.group();
     this.platforms.enableBody = true;
 
-    this.grass = this.game.add.sprite(0,1140, 'grass');
-    this.grass.bringToTop();
     this.ground = this.platforms.create(0,1170, 'ground');
     
     this.game.physics.enable(this.skin, Phaser.Physics.ARCADE);

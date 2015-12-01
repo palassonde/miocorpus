@@ -62,18 +62,16 @@ Player = function (x, y, game) {
 	this.maxTurrets = 5;
 	this.nbrTurrets = 0;
 
-	this.turrets = this.game.add.group();
-    this.turrets.enableBody = true;
-    this.turrets.physicsBodyType = Phaser.Physics.ARCADE;
-	this.game.world.bringToTop(this.turrets);
+	//this.turrets = this.game.add.group();
+
 	
 	this.bonus1 = false; //Creer un rond d'attaque
 	this.bonus2 = false; //Met des missile dans le chemin
 	this.bonus3 = false; //Invincible
 
 	//misille
-	this.bullets = this.game.add.group();
-    this.bullets.enableBody = true;
+	//this.bullets = this.game.add.group();
+    
 
 }
 

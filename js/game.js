@@ -40,17 +40,26 @@ MyGame.Game.prototype = {
         // Instantiate Player
         player = new Player(200, 1000, this.game);
         this.game.add.existing(player);
-        
+
         // Instantiate Stage
         stage = new Stage(this.game, player,enemies);
         stage.createPlatforms();
+
         // Instantiate GUI
         gui = new GUI(this.game, stage, player, music);
 		//Powerups
 		powerups = this.game.add.group();
-        // On top of 
+
+        // On top of (z-order)
         player.bringToTop();
-		this.game.world.bringToTop(enemies);
+        player.turrets = this.game.add.group();
+        player.turrets.enableBody = true;
+        player.turrets.physicsBodyType = Phaser.Physics.ARCADE;
+        player.bullets = this.game.add.group();
+        player.bullets.enableBody = true;
+        this.game.world.bringToTop(enemies);
+        this.grass = this.game.add.sprite(0,1140, 'grass');
+
     },
 
     update : function () {
