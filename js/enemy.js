@@ -1,4 +1,4 @@
-Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage) {
+Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage, sm) {
 
 	this.game = game;
 
@@ -11,7 +11,7 @@ Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage) {
 	this.nbrR = Math.floor(nbDrop * Math.random())+1; //1 à nbDrop
     this.hp = hp;
 
-    enemyhurt = this.game.add.audio('enemyhurt');
+    this.sm = sm;
 
 	Phaser.Sprite.call(this, game, x, y, "enemy")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -53,7 +53,7 @@ Enemy.prototype.createResource = function(){
 Enemy.prototype.hurt = function(dmg, behavior){
 
     if (!(behavior ===  3)){
-        enemyhurt.play();
+        this.sm.enemyhurt.play();
     }
     this.hp -= dmg;    
 }
@@ -72,7 +72,7 @@ Enemy.prototype.jump = function(time){
 Enemy.prototype.slowDown = function(){
 	
 	if(!ennemibouffecore.isPlaying){
-		ennemibouffecore.play();
+		this.sm.ennemibouffecore.play();
 	}
 	
     this.body.velocity.x = -10;

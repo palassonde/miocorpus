@@ -1,9 +1,9 @@
-Turret = function(x, y, game, bonus1, bonus2, bonus3){
+Turret = function(x, y, game, bonus1, bonus2, bonus3, sm){
 
 	this.time = 0;
 
 	// sons
-	destroyturret = game.add.audio('destroyturret');
+	this.sm = sm;
 
 	//Attribut
 	Phaser.Sprite.call(this, game, x, y, 'turret');
@@ -44,7 +44,7 @@ Turret.prototype.actionTurret = function(enemies, powerup, player){
 		}
 		this.bullets.destroy();
 		this.createResource(powerups)
-		destroyturret.play();
+		this.sm.destroyturret.play();
         this.destroy();
 		return;
     }
@@ -145,13 +145,13 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 		var dis = Phaser.Point.distance(this.position, enemy.children[x].position);
 		//Tir
 		if(dis < this.rayon){
-			this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind, this.domage, 4000));
+			this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,enemy.children[x],this.rayon, this.kind, this.domage, 4000));
 			maxEnemy -= 1;
 			
 			//Premiere fois qui tire active les bonus
 			if(!isShoot){
 				if(this.bonus1){
-					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 4, this.domage, 4000));
+					this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,enemy.children[x],this.rayon, 4, this.domage, 4000));
 				}
 				if(this.bonus2){
 					//var point1 = new Phaser.Point(this.x + 70,this.y - 150);
@@ -162,9 +162,9 @@ Turret.prototype.shootMissile = function (enemy,cooldown){
 					
 					
 					//this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point1));
-					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point2));
-					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point3));
-					this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point4));
+					this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000));
+					this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000));
+					this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000));
 					//this.bullets.add( new Bullet(this.x, this.y,this.game,enemy.children[x],this.rayon, 5, this.domage, 4000, point5));
 				}
 			}

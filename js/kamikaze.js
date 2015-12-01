@@ -1,4 +1,4 @@
-Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
+Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage, sm) {
 
     this.player = player;
 
@@ -14,10 +14,7 @@ Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
     this.distance = 200;
 
 	//Son
-	explosionMusic = game.add.audio('turretneutretir');
-	ennemibouffecore = game.add.audio('ennemibouffecore');
-	ennemibouffecore.volume = 4;
-    enemyhurt = game.add.audio('enemyhurt');
+	this.sm = sm;
 	
 	//Spike
     this.spikes = game.add.group();
@@ -88,7 +85,7 @@ Kamikaze.prototype.dropResource = function(){
 Kamikaze.prototype.hurt = function(dmg, behavior){
 
     if (!(behavior ===  3)){
-        enemyhurt.play();
+        this.sm.enemyhurt.play();
     }
 
     this.hp -= dmg;    
@@ -99,7 +96,7 @@ Kamikaze.prototype.explode = function(){
     var angle = 0;
 
     if (this.alive){
-		explosionMusic.play();
+		this.sm.explosionMusic.play();
         for (var i = 0; i < 10 ; i++) {
 
             spike = this.spikes.create(this.body.x,this.body.y, 'bullet');
@@ -157,7 +154,7 @@ Kamikaze.prototype.spikeCollision = function(target, spike){
 Kamikaze.prototype.slowDown = function(){
 
 	if(!ennemibouffecore.isPlaying){
-		ennemibouffecore.play();
+		this.sm.ennemibouffecore.play();
 	}
 
     this.body.velocity.x = -10;

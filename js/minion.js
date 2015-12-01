@@ -1,4 +1,4 @@
-Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
+Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage, sm) {
 
     this.speed = speed;
     this.hp = hp;
@@ -8,12 +8,8 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 	this.type = type;
 
 	// sons
-	warcry = game.add.audio('birds');
-	warcry.volume = 0.3;
-	enemyhurt = game.add.audio('enemyhurt');
-	ennemibouffecore = game.add.audio('ennemibouffecore');
-	ennemibouffecore.volume = 4;
-	drum2 = game.add.audio('drum2');
+	this.sm = sm;
+
 	
 	if(type === 1){
 		//Zombie
@@ -25,7 +21,7 @@ Minion = function (x, y, game, speed,hp,type, chanceDrop, nbDrop, domage) {
 
 	}else if(type === 2){
 		//Birds
-		warcry.play();
+		this.sm.warcry.play();
 		Phaser.Sprite.call(this, game, x, y, "birds")
 		this.animations.add('left', [0,1,2,3], 5, true);
 		this.animations.play('left');
@@ -59,13 +55,13 @@ Minion.prototype.action = function(time, powerups, stage){
 
     if (this.hp <= 0){
 		this.createResource(powerups);
-		drum2.stop();
+		this.sm.drum2.stop();
         this.destroy();
     }
 
     if (this.type === 3 && !drum2.isPlaying){
 
-    	drum2.play('',0,1,true);
+    	this.sm.drum2.play('',0,1,true);
     }
     
 
@@ -83,7 +79,7 @@ Minion.prototype.createResource = function(){
 Minion.prototype.hurt = function(dmg, behavior){
 
 	if (!(behavior ===  3)){
-		enemyhurt.play();
+		this.sm.enemyhurt.play();
 	}
     this.hp -= dmg;    
 }
@@ -98,7 +94,7 @@ Enemy.prototype.displayHP = function(){
 Minion.prototype.slowDown = function(){
 
 	if(!ennemibouffecore.isPlaying){
-		ennemibouffecore.play();
+		this.sm.ennemibouffecore.play();
 	}
 
     this.body.velocity.x = -10;

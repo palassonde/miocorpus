@@ -1,11 +1,10 @@
-Stage = function(game, player, enemy){
+Stage = function(game, player, enemy, sm){
 
 	this.game = game;
     this.player = player;
 
     // sons
-    transitionup = this.game.add.audio('transitionup');
-    transitiondown = this.game.add.audio('transitiondown');
+    this.sm = sm;
 
     // Constantes
 	this.background_image = game.add.sprite(0,0, 'fond_etoile');
@@ -40,7 +39,7 @@ Stage = function(game, player, enemy){
 	this.royonJ = 450;
 	this.nbResMax = 10;
 	
-	this.jungleEnemy = new MasterTurret(2100, 50, this.game,this.domageJ,this.nbrMissileJ,this.cooldownJ,this.hpJ,this.royonJ, this.nbResMax);
+	this.jungleEnemy = new MasterTurret(2100, 50, this.game,this.domageJ,this.nbrMissileJ,this.cooldownJ,this.hpJ,this.royonJ, this.nbResMax, this.sm);
 	enemy.add(this.jungleEnemy);
 	
 	//Boss
@@ -133,16 +132,16 @@ Stage.prototype.moveCamera = function(player){
         if (player.y < 570){
             if (this.game.camera.y > 30){
                 this.game.camera.y -= 15;
-                if (!transitionup.isPlaying){
-                	transitionup.play();
+                if (!this.sm.transitionup.isPlaying){
+                	this.sm.transitionup.play();
                 }
                 
             }
         }else {
         if (this.game.camera.y < 600){
             this.game.camera.y += 15;
-            if (!transitiondown.isPlaying){
-                	transitiondown.play();
+            if (!this.sm.transitiondown.isPlaying){
+                	this.sm.transitiondown.play();
             }
         }
     }
@@ -245,7 +244,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 		this.nbItemBoss += 10;
 		var domageBoss = 3;
 		
-		enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss));
+		enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss, this.sm));
 		this.enemieToSpwan = 0;
 	}else{
 
@@ -256,7 +255,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 		var nbItem = 1;
 		var domageZ = 1;
 		
-		enemies.add(new Minion(2000, 1100, this.game, speedZ,hpZ,1, chanceD, nbItem,domageZ));
+		enemies.add(new Minion(2000, 1100, this.game, speedZ,hpZ,1, chanceD, nbItem,domageZ, this.sm));
 		this.enemieToSpwan--;
 		
 		//Ajout du Bird
@@ -274,7 +273,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 			}
 			for (var i = 0; i < numberEnemie; i++) {
 				var speedB = Math.floor(Math.random()*(21)+50); //50 - 70
-				enemies.add(new Minion(2000, 700 + 100*i, this.game, speedB,hpB,2, chanceB, nbItemB,domageB));
+				enemies.add(new Minion(2000, 700 + 100*i, this.game, speedB,hpB,2, chanceB, nbItemB,domageB, this.sm));
 				this.enemieToSpwan--;
 			}	
 		}
@@ -295,7 +294,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 			for (var i = 0; i < numberEnemie; i++) {
 				var speed = Math.floor(Math.random()*(31)+40); //40 - 70			
 
-				enemies.add(new Enemy(2000, 700 + 100*i, this.game, speed,hpB, chanceJ, nbJ,domage));
+				enemies.add(new Enemy(2000, 700 + 100*i, this.game, speed,hpB, chanceJ, nbJ,domage, this.sm));
 				this.enemieToSpwan--;
 			}	
 		}
@@ -312,7 +311,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 			var chanceP = 0.7;
 			var nbItemP = 4;
 			var domageP = 2;
-			enemies.add(new Puker(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+			enemies.add(new Puker(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP, this.sm));
 			this.enemieToSpwan--;
 		}
 
@@ -336,7 +335,7 @@ Stage.prototype.createKamikaze = function(enemies) {
 		var chanceP = 1;
 		var nbItemP = 5;
 		var domageP = 3;
-		enemies.add(new Kamikaze(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP));
+		enemies.add(new Kamikaze(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP, this.sm));
 			
 		var timeRandom = Math.floor((5)*Math.random() + 8); // 8 - 12
 		this.eventKami = this.game.time.events.add(timeRandom * 1000, this.createKamikaze,this,enemies);	

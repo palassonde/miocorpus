@@ -1,16 +1,10 @@
-Player = function (x, y, game) {
+Player = function (x, y, game, sm) {
 
 	// Constantes
 	MAX_SPEED = 300;
 
 	// sons
-	pickup = game.add.audio('pickup');
-	pickup.allowMultiple = true;
-	construction = game.add.audio('construction');
-	construction.allowMultiple = true;
-	playerhurt = game.add.audio('playerhurt');
-	playerjump = game.add.audio('playerjump');
-	turretfeed = game.add.audio('turretfeed');
+	this.sm = sm;
 
 	// Player attributes
 	this.maxspeed = MAX_SPEED;
@@ -138,19 +132,19 @@ Player.prototype.fire = function(powerups){
 		if(this.cursors.right.isDown){
 			// ANIMATION PLAYER SHOOT right
 			this.shotTime = this.game.time.now + 400;
-			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'right'));
+			this.bullets.add(new Bullet(this.sm, this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'right'));
 		}else if(this.cursors.left.isDown){
 			// ANIMATION PLAYER SHOOT left
 			this.shotTime = this.game.time.now + 400;
-			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'left'));
+			this.bullets.add(new Bullet(this.sm, this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'left'));
 		}else if(this.cursors.up.isDown){
 			// ANIMATION PLAYER SHOOT up
 			this.shotTime = this.game.time.now + 400;
-			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'up'));
+			this.bullets.add(new Bullet(this.sm, this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'up'));
 		}else if(this.cursors.down.isDown){
 			// ANIMATION PLAYER SHOOT down
 			this.shotTime = this.game.time.now + 400;
-			this.bullets.add(new Bullet(this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'down'));
+			this.bullets.add(new Bullet(this.sm, this.x, this.y,this.game,null,null, 0, this.domage, 500, null, 'down'));
 		}
 	}
 
@@ -235,7 +229,7 @@ Player.prototype.move = function(){
     if (this.cursors.up.isDown && this.body.touching.down)
     {
 		this.body.velocity.y = -400;
-		playerjump.play();
+		this.sm.playerjump.play();
     }
     if (!this.body.touching.down)
 	{
@@ -268,8 +262,8 @@ Player.prototype.creationTurret = function(){
 
 		this.flash.visible = false;
 
-		construction.play();
-		this.turrets.add(new Turret(this.x + 30, this.y - 50,this.game, this.bonus1, this.bonus2, this.bonus3));
+		this.sm.construction.play();
+		this.turrets.add(new Turret(this.x + 30, this.y - 50,this.game, this.bonus1, this.bonus2, this.bonus3, this.sm));
 		this.bonus1 = this.bonus2 = this.bonus3 = false;
 		this.nbrTurrets++;
 	}
@@ -309,7 +303,7 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 	
 	if(!powerups.collidePlayer || !powerups.alive)return;
 
-	pickup.play();
+	this.sm.pickup.play();
 
 	switch(powerups.key){
 		case 'redstone':
@@ -371,14 +365,14 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 	if(powerups.key !== "heart" && powerups.key !== "turret"){
 		turret.domage = turret.domage + 0.1; //2 boule = un wave 
 		powerups.alive = false;
-		turretfeed.play();
+		this.sm.turretfeed.play();
 	}
 	
 }
 
 Player.prototype.hurt = function(dmg){
     this.health -= (dmg/100)/this.def;
-    playerhurt.play();	
+    this.sm.playerhurt.play();	
 }
 
 Player.prototype.hurtPlayer = function(player, enemies){
@@ -387,7 +381,7 @@ Player.prototype.hurtPlayer = function(player, enemies){
         player.health -= enemies.domage / this.def;
         player.timerDomage = this.game.time.now + 1000;
         this.tint = 0xff0000;
-        playerhurt.play(); 
+        this.sm.playerhurt.play(); 
     }
 }
 

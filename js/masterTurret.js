@@ -1,4 +1,4 @@
-MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax){
+MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax, sm){
 
 	Phaser.Sprite.call(this, game, x, y, 'boss');
 	this.animations.add('left', [0,1,2], 5, true);
@@ -15,11 +15,9 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 	
 	this.time = 0;
 
-	// sons
-	explosionMusic = game.add.audio('turretneutretir');
-	drum1 = game.add.audio('drum1');
+	// distance du sons
 	this.distance = 1000;
-	enemyhurt = game.add.audio('enemyhurt');
+	this.sm = sm;
 	
 	//Caractéristique
 	this.hp = hp;
@@ -95,10 +93,10 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 
 	//Mort
 	var distancePlayerJungle = Phaser.Point.distance(this.position, player.position);
-	if ((distancePlayerJungle < this.distance) && !drum1.isPlaying && player.y < 570 && this.alive){
-		drum1.play('',0,1,true);
+	if ((distancePlayerJungle < this.distance) && !this.sm.drum1.isPlaying && player.y < 570 && this.alive){
+		this.sm.drum1.play('',0,1,true);
 	}else if(distancePlayerJungle > this.distance || player.y >= 570 || !this.alive){
-		drum1.stop();
+		this.sm.drum1.stop();
 	}
 	
 	//Mort
@@ -211,9 +209,9 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 	//Vise le player
 	var dis = Phaser.Point.distance(this.position, player.position);
 	if(dis < this.rayon){
-		this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 1, this.domage, 4000));
+		this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,player,this.rayon, 1, this.domage, 4000));
 		//this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 2, this.domage, 4000));
-		this.bullets.add( new Bullet(this.x, this.y,this.game,player,this.rayon, 3, this.domage, 4000));
+		this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,player,this.rayon, 3, this.domage, 4000));
 		maxEnemy -= 1;
 		if(!isShoot){
 			this.currentNbrExplose = 1;
@@ -233,9 +231,9 @@ MasterTurret.prototype.shootMissile = function (player,cooldown){
 		dis = Phaser.Point.distance(this.position, player.turrets.children[x].position);
 		//Tir
 		if(dis < this.rayon){
-			this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 1, this.domage, 5000));
+			this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,player.turrets.children[x],this.rayon, 1, this.domage, 5000));
 			//this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 2, this.domage, 5000));
-			this.bullets.add( new Bullet(this.x, this.y,this.game,player.turrets.children[x],this.rayon, 3, this.domage, 5000));
+			this.bullets.add( new Bullet(this.sm, this.x, this.y,this.game,player.turrets.children[x],this.rayon, 3, this.domage, 5000));
 			maxEnemy -= 1;
 			if(!isShoot){
 				this.currentNbrExplose = 1;
@@ -268,7 +266,7 @@ MasterTurret.prototype.explode = function(angleDebut){
             spike.lifespan = 4000;
             angle += ((2 * Math.PI) / 10);
         }
-        explosionMusic.play();
+        this.sm.turretneutretir.play();
     }
 	
 	if(this.currentNbrExplose>=this.nbrExplose) return;
@@ -286,7 +284,7 @@ MasterTurret.prototype.explode = function(angleDebut){
 MasterTurret.prototype.hurt = function(dmg, behavior){
 
 	if (!(behavior ===  3)){
-		enemyhurt.play();
+		this.sm.enemyhurt.play();
 	}
 
     this.hp -= dmg;    

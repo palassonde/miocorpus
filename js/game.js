@@ -32,21 +32,23 @@ MyGame.Game.prototype = {
         if (this.game.state.states['menu'].playMusic){
             music.play('',0,1,true);
         }
+
+        sm = new SoundManager(this.game);
         
         // Activate arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Create group Enemies
         enemies = this.game.add.group();
         // Instantiate Player
-        player = new Player(200, 1000, this.game);
+        player = new Player(200, 1000, this.game, sm);
         this.game.add.existing(player);
 
         // Instantiate Stage
-        stage = new Stage(this.game, player,enemies);
+        stage = new Stage(this.game, player, enemies, sm);
         stage.createPlatforms();
 
         // Instantiate GUI
-        gui = new GUI(this.game, stage, player, music);
+        gui = new GUI(this.game, stage, player, sm);
 		//Powerups
 		powerups = this.game.add.group();
 

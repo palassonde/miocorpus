@@ -1,29 +1,11 @@
-GUI = function (game, stage, player, music) {
+GUI = function (game, stage, player, sm) {
 
 	this.game = game;
 	this.player = player;
 	this.stage = stage;
 	this.numberHeart = 10;
-	this.music = music;
 
-	forceaugmente = this.game.add.audio('forceaugmente');
-	forceaugmente.volume = 2;
-	capaciteaugmente = this.game.add.audio('capaciteaugmente');
-	capaciteaugmente.volume = 2;
-	vitessedepegase = this.game.add.audio('vitessedepegase');
-	vitessedepegase.volume = 2;
-	rayonbrutal = this.game.add.audio('rayonbrutal');
-	rayonbrutal.volume = 2;
-	peaudebelier = this.game.add.audio('peaudebelier');
-	peaudebelier.volume = 2;
-	murdeboules = this.game.add.audio('murdeboules');
-	murdeboules.volume = 2;
-	immunitedivine = this.game.add.audio('immunitedivine');
-	mauvaisecombinaison = this.game.add.audio('mauvaisecombinaison');
-	error = this.game.add.audio('error');
-	gong = this.game.add.audio('gong');
-	gong.volume = 0.5;
-	vousetesunechec = this.game.add.audio('vousetesunechec');
+	this.sm = sm;
 	
 	// CSS styles
 	style = { font: "40px Arial", fill: "#000000", align: "left" };
@@ -158,12 +140,12 @@ GUI.prototype.displayWave = function(waveCount){
 	var tween = this.game.add.tween(waveInfos).to( { alpha: 1 }, 2000, "Linear", true, 0, -1).repeat(0);
 	tween.yoyo(true, 3000);
 
-	gong.play();
+	this.sm.gong.play();
 }
 
 GUI.prototype.endGame = function(waveCount){
 
-	vousetesunechec.play();
+	this.sm.vousetesunechec.play();
     this.player.kill();
     reset = this.game.add.button(530, 400, 'reset-button', this.back, this,2, 1, 0, 2)
     reset.scale.setTo(2,2);
@@ -382,7 +364,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneGreen -= 10;
 				this.player.maxTurrets++;
 				works = true;
-				capaciteaugmente.play();
+				this.sm.capaciteaugmente.play();
 			}
 		}
 	}else{
@@ -393,7 +375,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus2 = true; //Active un power au prochain turret
 				this.player.flash.visible = true;
 				works = true;
-				murdeboules.play();
+				this.sm.murdeboules.play();
 			}
 		}
 		if (tabObject[0] && tabObject[2]){
@@ -403,7 +385,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus1 = true; //Active un power au prochain turret
 				works = true;
 				this.player.flash.visible = true;
-				rayonbrutal.play();
+				this.sm.rayonbrutal.play();
 			}
 		}
 		if (tabObject[1] && tabObject[2]){
@@ -413,7 +395,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.bonus3 = true; //Active un power au prochain turret	
 				works = true;
 				this.player.flash.visible = true;
-				immunitedivine.play();
+				this.sm.immunitedivine.play();
 			}
 		}
 		if (tabObject[3] && tabObject[0]){
@@ -421,7 +403,7 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneRed -= 10;
 				this.player.domage++;
 				works = true;
-				forceaugmente.play();
+				this.sm.forceaugmente.play();
 			}
 		}
 		if (tabObject[3] && tabObject[1]){
@@ -429,21 +411,21 @@ GUI.prototype.fusion = function(sprite){
 				this.player.numberStoneBlue -= 10;
 				this.player.def +=0.5;
 				works = true;
-				peaudebelier.play();
+				this.sm.peaudebelier.play();
 			}
 		}
 		if (tabObject[3] && tabObject[2]){
 			if(this.player.numberStoneGreen >= 10){
 				this.player.numberStoneGreen -= 10;
 				this.player.MAX_SPEED +=50;
-				vitessedepegase.play();
+				this.sm.vitessedepegase.play();
 				works = true;
 			}
 		}
 	}
 	if(!works){
-		mauvaisecombinaison.play();
-		error.play();
+		this.sm.mauvaisecombinaison.play();
+		this.sm.error.play();
 	}
 	this.initItemFusion();
 }

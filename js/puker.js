@@ -1,4 +1,4 @@
-Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
+Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage, sm) {
 
 	this.game = game;
 
@@ -11,12 +11,7 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
 	this.nbrR = Math.floor(nbDrop * Math.random())+1; //1 à nbDrop
 
 	// sons
-	puke = this.game.add.audio('puker');
-	puke.volume = 6;
-	puke.allowMultiple = true;
-	ennemibouffecore = game.add.audio('ennemibouffecore');
-	ennemibouffecore.volume = 4;
-	enemyhurt = game.add.audio('enemyhurt');
+	this.sm = sm;
 	
 	Phaser.Sprite.call(this, game, x, y, "puker")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -69,7 +64,7 @@ Puker.prototype.fire = function(){
 	var missile = this.game.add.sprite(this.x,this.y, 'bullet');
 	
 	if(this.nbFire === 4){
-		puke.play();
+		this.sm.puke.play();
 		this.game.time.events.add(3000, this.stopSound, this);
 	}
 	
@@ -110,7 +105,7 @@ Puker.prototype.createResource = function(){
 Puker.prototype.hurt = function(dmg, behavior){
 
 	if (!(behavior ===  3)){
-		enemyhurt.play();
+		this.sm.enemyhurt.play();
 	}
 
     this.hp -= dmg;    
@@ -124,7 +119,7 @@ Puker.prototype.hurtPlayer = function(cible,bullet){
 Puker.prototype.slowDown = function(){
 
 	if(!ennemibouffecore.isPlaying){
-		ennemibouffecore.play();
+		this.sm.ennemibouffecore.play();
 	}
 
     this.body.velocity.x = -10;

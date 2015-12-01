@@ -1,4 +1,4 @@
-Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestination, facing){
+Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDestination, facing){
 	
 	this.speed = 300;
     this.angleMax = 0.5;
@@ -11,17 +11,8 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.facing = facing;
 	this.timeLaser = 0;
 
-	boomerang = game.add.audio('boomerang');
-	boomerang.volume = 2;
-	boomerang.allowMultiple = true;
-	this.lasers = game.add.audio('laser');
-	this.lasers.allowMultiple = true;
-	turretneutretir = game.add.audio('turretneutretir');
-	turretneutretir.volume = 0.5;
-	turretneutretir.allowMultiple = true;
-	playertire = game.add.audio('playertire');
-	homingmissile = game.add.audio('homingmissile');
-	homingmissile.allowMultiple = true;
+	// sons
+	this.sm = sm;
 		
 	this.tween;
 	this.time = 0;
@@ -33,22 +24,22 @@ Bullet = function(x,y,game, target, rayon, kind, domage, timeLive, pointDestinat
 	this.graphic = game.add.graphics(0, 0);
 	
 	if(kind === 2){
-		boomerang.play();
+		this.sm.boomerang.play();
 		Phaser.Sprite.call(this, game, x, y, 'boomerang');
 	}else if(kind === 4){
 		this.circle(game,x,y);
 	}else if(kind === 1){
 		Phaser.Sprite.call(this, game, x, y, 'missile');
 		this.scale.setTo(0.15,0.15);
-		turretneutretir.play();
-		this.trackSound = homingmissile.play();
+		this.sm.turretneutretir.play();
+		this.trackSound = this.sm.homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
 		this.scale.setTo(0.6,0.6);
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
-		this.trackLaser = this.lasers.play();
+		this.trackLaser = this.sm.lasers.play();
 		this.kill();
 	}
 
@@ -105,7 +96,7 @@ Bullet.prototype.simpleFireTurret = function(){
 	}
 	else{
 
-		turretneutretir.play();
+		this.sm.turretneutretir.play();
 		var angleTarget = this.game.math.angleBetween(
 		this.x, this.y, this.target.x, this.target.y
 		);
@@ -130,7 +121,7 @@ Bullet.prototype.simpleFire = function(){
 		return;
 	}
 
-	playertire.play();
+	this.sm.playertire.play();
 	var vitesse = 600;
 	
 	if(this.facing === 'left'){
