@@ -10,9 +10,10 @@ Stage = function(game, player, enemy){
     // Constantes
 	this.background_image = game.add.sprite(0,0, 'fond_etoile');
 	this.background_image.alpha = 0;
-	game.add.tween(this.background_image).to( { alpha: 0.6 }, 25000, Phaser.Easing.Exponential.InOut, true, 0, -1, true);
+	game.add.tween(this.background_image).to( { alpha: 0.8 }, 25000, Phaser.Easing.Exponential.InOut, true, 0, -1, true);
 	this.buildings = game.add.sprite(30,600, 'fond1');
     this.buildings.alpha = 0.4;
+    game.add.tween(this.buildings.scale).to( { x: 2}, 25000, Phaser.Easing.Linear.InOut, true, 0, -1, true);
 
     // this.background_image.fixedToCamera = true;
     this.game.world.setBounds(0, 0, 2200, 1200);

@@ -33,7 +33,7 @@ GUI = function (game, stage, player, music) {
 	// TOP LEFT
 	this.hearts = this.game.add.group();
     for (var i = this.numberHeart - 1; i >= 0; i--) {
-    	h = this.hearts.create((i*35) + 15, 10, 'heart');
+    	h = this.hearts.create((i*35) + 15, 34, 'heart');
     	h.scale.setTo(0.3, 0.3);
     }
     this.hearts.setAll('fixedToCamera', true);
@@ -48,7 +48,7 @@ GUI = function (game, stage, player, music) {
 
     this.turretsCapacity.fixedToCamera = true;
     this.turretsCapacity.cameraOffset.setTo(800, 45);
-    this.turret = this.game.add.sprite(770, 45, 'turret')
+    this.turret = this.game.add.sprite(770, 35, 'turret')
     this.turret.scale.setTo(0.1, 0.1);
     this.turret.fixedToCamera = true;
 

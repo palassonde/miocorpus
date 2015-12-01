@@ -51,14 +51,19 @@ MyGame.Game.prototype = {
 		powerups = this.game.add.group();
 
         // On top of (z-order)
-        player.bringToTop();
+        //degrader = this.game.add.sprite(0,0, 'fond_degrader');
+        //degrader.fixedToCamera = true;
         player.turrets = this.game.add.group();
         player.turrets.enableBody = true;
         player.turrets.physicsBodyType = Phaser.Physics.ARCADE;
         player.bullets = this.game.add.group();
         player.bullets.enableBody = true;
+        player.bringToTop();
         this.game.world.bringToTop(enemies);
         this.grass = this.game.add.sprite(0,1140, 'grass');
+        player.flash = this.game.add.sprite(this.x, this.y - 20, 'flash');
+        player.flash.visible = false;
+        player.flash.anchor.set(0.5);
 
     },
 

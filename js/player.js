@@ -29,9 +29,6 @@ Player = function (x, y, game) {
 	Phaser.Sprite.call(this, game, x, y, "player")
 	this.game.physics.enable(this, Phaser.Physics.ARCADE);
 
-	this.flash = this.game.add.sprite(this.x, this.y - 30, 'flash');
-	this.flash.visible = false;
-
 	this.body.gravity.y = 600;
 	this.body.collideWorldBounds = true;
 	this.body.checkCollision.up = false;
@@ -114,6 +111,19 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	if(this.game.time.now > player.timerDomage){
 		this.tint = 0xFFFFFF;
 	}
+
+	if (this.y > 1120){
+		this.y = 1000;
+
+	}
+
+	if (this.flash.visible === true){
+		this.flash.x = this.x;
+		this.flash.y = this.y - 74;
+		this.flash.angle += 10;
+	}
+
+
 	
 }
 
@@ -254,9 +264,9 @@ Player.prototype.move = function(){
 
 Player.prototype.creationTurret = function(){
 
-	this.flash.visible = false;
-
 	if (this.nbrTurrets < this.maxTurrets){
+
+		this.flash.visible = false;
 
 		construction.play();
 		this.turrets.add(new Turret(this.x + 30, this.y - 50,this.game, this.bonus1, this.bonus2, this.bonus3));
@@ -323,8 +333,6 @@ Player.prototype.collisionPlayerPowerUp = function(player, powerups){
 
 Player.prototype.upGradeTurret = function(turret, powerups){
 
-
-	
 	//Si le powerUp est deja utilisé mais pas effacé
 	if(!powerups.alive)return;
 	
@@ -381,7 +389,6 @@ Player.prototype.hurtPlayer = function(player, enemies){
         this.tint = 0xff0000;
         playerhurt.play(); 
     }
-    
 }
 
 Player.prototype.hurtTarget = function(bullet,enemy){
@@ -401,7 +408,6 @@ Player.prototype.cheat = function(){
 
     this.numberStoneBlue += 10;
     this.numberStoneRed += 10;
-    this.numberStoneGreen += 10;
     this.numberStoneGreen += 10;
     this.maxTurrets += 10;
 }
