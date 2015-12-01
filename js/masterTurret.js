@@ -283,7 +283,7 @@ MasterTurret.prototype.explode = function(angleDebut){
 
 }
 
-MasterTurret.prototype.hurt = function(dmg){
+MasterTurret.prototype.hurt = function(dmg, behavior){
 
 	if (!(behavior ===  3)){
 		enemyhurt.play();
