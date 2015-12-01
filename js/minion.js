@@ -80,9 +80,11 @@ Minion.prototype.createResource = function(){
 	}
 }
 
-Minion.prototype.hurt = function(dmg){
+Minion.prototype.hurt = function(dmg, behavior){
 
-	enemyhurt.play();
+	if (!(behavior ===  3)){
+		enemyhurt.play();
+	}
     this.hp -= dmg;    
 }
 

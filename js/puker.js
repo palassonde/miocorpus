@@ -16,6 +16,7 @@ Puker = function (x, y, game, speed,hp, player, chanceDrop, nbDrop, domage) {
 	puke.allowMultiple = true;
 	ennemibouffecore = game.add.audio('ennemibouffecore');
 	ennemibouffecore.volume = 4;
+	enemyhurt = game.add.audio('enemyhurt');
 	
 	Phaser.Sprite.call(this, game, x, y, "puker")
 	game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -106,7 +107,11 @@ Puker.prototype.createResource = function(){
 	}
 }
 
-Puker.prototype.hurt = function(dmg){
+Puker.prototype.hurt = function(dmg, behavior){
+
+	if (!(behavior ===  3)){
+		enemyhurt.play();
+	}
 
     this.hp -= dmg;    
 }

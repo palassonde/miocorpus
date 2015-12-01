@@ -17,6 +17,7 @@ Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage) {
 	explosionMusic = game.add.audio('turretneutretir');
 	ennemibouffecore = game.add.audio('ennemibouffecore');
 	ennemibouffecore.volume = 4;
+    enemyhurt = game.add.audio('enemyhurt');
 	
 	//Spike
     this.spikes = game.add.group();
@@ -84,7 +85,11 @@ Kamikaze.prototype.dropResource = function(){
 	}
 }
 
-Kamikaze.prototype.hurt = function(dmg){
+Kamikaze.prototype.hurt = function(dmg, behavior){
+
+    if (!(behavior ===  3)){
+        enemyhurt.play();
+    }
 
     this.hp -= dmg;    
 }

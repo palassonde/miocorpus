@@ -19,6 +19,7 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax)
 	explosionMusic = game.add.audio('turretneutretir');
 	drum1 = game.add.audio('drum1');
 	this.distance = 1000;
+	enemyhurt = game.add.audio('enemyhurt');
 	
 	//Caractéristique
 	this.hp = hp;
@@ -283,5 +284,10 @@ MasterTurret.prototype.explode = function(angleDebut){
 }
 
 MasterTurret.prototype.hurt = function(dmg){
+
+	if (!(behavior ===  3)){
+		enemyhurt.play();
+	}
+
     this.hp -= dmg;    
 }

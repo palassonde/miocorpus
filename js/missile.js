@@ -227,7 +227,7 @@ Bullet.prototype.laser = function(){
 	this.graphic.moveTo(this.x, this.y);
 	this.graphic.lineTo(this.target.x,this.target.y);
 	if(this.timeLaser < this.game.time.now){
-		this.target.hurt(this.domage*2.5);
+		this.target.hurt(this.domage*2.5, this.behavior);
 		this.timeLaser = this.game.time.now + 100;
 	}
 }

@@ -50,9 +50,11 @@ Enemy.prototype.createResource = function(){
 	}
 }
 
-Enemy.prototype.hurt = function(dmg){
+Enemy.prototype.hurt = function(dmg, behavior){
 
-    enemyhurt.play();
+    if (!(behavior ===  3)){
+        enemyhurt.play();
+    }
     this.hp -= dmg;    
 }
 
