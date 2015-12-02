@@ -96,7 +96,7 @@ Kamikaze.prototype.explode = function(){
     var angle = 0;
 
     if (this.alive){
-		this.sm.explosionMusic.play();
+		this.sm.turretneutretir.play();
         for (var i = 0; i < 10 ; i++) {
 
             spike = this.spikes.create(this.body.x,this.body.y, 'bullet');

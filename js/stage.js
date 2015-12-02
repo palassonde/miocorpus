@@ -98,7 +98,15 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 			enemiesByWave = enemiesByWave + 3;
 		}
 		this.timeWave = this.game.time.now + 15000; //A chaque 15 seconde
-		this.enemieToSpwan = enemiesByWave;
+		
+		if(this.waveCount === 11){
+			this.enemieToSpwan = 10;
+		}else if(this.waveCount === 14){
+			this.enemieToSpwan = 5;
+		}else{
+			this.enemieToSpwan = enemiesByWave;
+		}
+	
 		this.newWave = true;
 		
 		if(this.IsShoot){
@@ -255,7 +263,7 @@ Stage.prototype.createBirds = function(enemies) {
 	
 	var hpB = 10+ this.vieGeneral*(this.waveCount-1);
 
-	var chanceB = 0.3;
+	var chanceB = 0.5;
 	var nbItemB = 2;
 	var domageB = 1;
 			
@@ -379,7 +387,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 	}
 
 	//Ajout du Lapin
-	if(this.waveCount >= 12){
+	if(this.waveCount >= 15){
 			
 		if(!this.IsShoot && this.enemieToSpwan > 0){
 			this.createKamikaze(enemies);
@@ -389,7 +397,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 	}
 	
 	//Ajout du Boss
-	if(this.waveCount >= 15){	
+	if(this.waveCount >= 18){	
 		this.createBoss(enemies);
 	
 	}
