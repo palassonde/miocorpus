@@ -93,7 +93,7 @@ Enemy.prototype.displayHP = function(){
 
 Minion.prototype.slowDown = function(){
 
-	if(!ennemibouffecore.isPlaying){
+	if(!this.sm.ennemibouffecore.isPlaying){
 		this.sm.ennemibouffecore.play();
 	}
 
