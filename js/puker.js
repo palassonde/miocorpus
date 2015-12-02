@@ -64,8 +64,9 @@ Puker.prototype.fire = function(){
 	var missile = this.game.add.sprite(this.x,this.y, 'bullet');
 	
 	if(this.nbFire === 4){
-		this.sm.puke.play();
-		this.game.time.events.add(3000, this.stopSound, this);
+		var sound = this.sm.puke.play("puker3Sec");
+		sound.volume = 6;
+		//this.game.time.events.add(3000, this.stopSound, this);
 	}
 	
 	this.bullets.add(missile);
@@ -87,10 +88,6 @@ Puker.prototype.fire = function(){
 		this.nbFire=4;
 		
 	}
-}
-
-Puker.prototype.stopSound = function(){
-	puke.stop();
 }
 
 Puker.prototype.createResource = function(){

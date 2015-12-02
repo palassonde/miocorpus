@@ -20,7 +20,7 @@ SoundManager = function(game){
     this.warcry = game.add.audio('birds');
 	this.warcry.volume = 0.3;
 	this.puke = game.add.audio('puker');
-	this.puke.volume = 6;
+	this.puke.addMarker('puker3Sec', 0, 3);
 	this.puke.allowMultiple = true;
 
 	// DRUMS
