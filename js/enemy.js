@@ -30,7 +30,7 @@ Enemy = function (x, y, game, speed, hp, chanceDrop, nbDrop, domage, sm) {
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 
 Enemy.prototype.action = function(time, powerups, stage){
-
+	
     if ((time.now - this.jumpTimer) >= this.jumpTime){
         this.jump(time);
     }

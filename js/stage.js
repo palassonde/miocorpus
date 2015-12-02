@@ -48,6 +48,10 @@ Stage = function(game, player, enemy, sm){
 	//Kamikaze
 	this.IsShoot = false;
 	this.eventKami;
+	
+	//Enemie general
+	this.vieGeneral = 100;
+	this.maxEnemie = 104;
 }
 
 Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups){
@@ -89,9 +93,9 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 	//Si tout les ennemie son créer
 	if(enemies.children.length === 1 && !this.newWave && this.enemieToSpwan<=0){
 		
-		//Maximum de 105 ennemie a fois
-		if(enemiesByWave < 105){
-			enemiesByWave = enemiesByWave + 4;
+		//Maximum d'ennemie a fois
+		if(enemiesByWave < this.maxEnemie){
+			enemiesByWave = enemiesByWave + 3;
 		}
 		this.timeWave = this.game.time.now + 15000; //A chaque 15 seconde
 		this.enemieToSpwan = enemiesByWave;
@@ -230,107 +234,171 @@ Stage.prototype.createJungle = function(enemy) {
 
 }
 
+Stage.prototype.createZombie = function(enemies) {
+	
+	if(this.enemieToSpwan <= 0){
+		return
+	}
+	
+	var hpZ = 50+ this.vieGeneral*(this.waveCount-1);
+	var speedZ = 50;
+	var chanceD = 0.5;
+	var nbItem = 1;
+	var domageZ = 1;
+		
+	enemies.add(new Minion(2000, 1100, this.game, speedZ,hpZ,1, chanceD, nbItem,domageZ, this.sm));
+	this.enemieToSpwan--;
+
+}
+
+Stage.prototype.createBirds = function(enemies) {
+	
+	var hpB = 10+ this.vieGeneral*(this.waveCount-1);
+
+	var chanceB = 0.3;
+	var nbItemB = 2;
+	var domageB = 1;
+			
+	var numberEnemie = 3; 
+	if(this.enemieToSpwan < numberEnemie){
+		numberEnemie = this.enemieToSpwan;
+	}
+	for (var i = 0; i < numberEnemie; i++) {
+		var speedB = Math.floor(Math.random()*(21)+50); //50 - 70
+		enemies.add(new Minion(2000, 700 + 100*i, this.game, speedB,hpB,2, chanceB, nbItemB,domageB, this.sm));
+		this.enemieToSpwan--;
+	}
+
+}
+
+Stage.prototype.createJumper = function(enemies) {
+	
+	var numberEnemie = 3; //3 jumper a fois (si on peu apparaitre moins on change)
+	if(this.enemieToSpwan < numberEnemie){
+		numberEnemie = this.enemieToSpwan;
+	}
+			
+	var hpJ = 100+ this.vieGeneral*(this.waveCount-1);
+	var chanceJ = 0.7;
+	var nbJ = 3;
+	var domage = 1;
+			
+	for (var i = 0; i < numberEnemie; i++) {
+		var speed = Math.floor(Math.random()*(31)+40); //40 - 70			
+
+		enemies.add(new Enemy(2000, 700 + 100*i, this.game, speed,hpJ, chanceJ, nbJ,domage, this.sm));
+		this.enemieToSpwan--;
+	}
+
+}
+
+Stage.prototype.createPuker = function(enemies) {
+	
+	if(this.enemieToSpwan <= 0){
+		return; //Si le nombre ennemie est atteint
+	}
+			
+	var hpP = 200+ this.vieGeneral*(this.waveCount-1);
+	var speedP = 40;
+	var chanceP = 0.7;
+	var nbItemP = 4;
+	var domageP = 2;
+	enemies.add(new Puker(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP, this.sm));
+	this.enemieToSpwan--;
+
+}
+
+Stage.prototype.createBoss = function(enemies) {
+	
+	if(this.enemieToSpwan <= 4){
+		this.enemieToSpwan = 0;
+	}
+	
+	//Boss
+	var hpBoss = 1000*this.waveCount;
+
+	var speedBoss = 50;
+	var chanceBoss = 1;
+	this.nbItemBoss = 3;
+	var domageBoss = 3;
+		
+	enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss, this.sm));
+	this.enemieToSpwan -= 5;
+
+}
 
 Stage.prototype.createWave = function(enemies, GUI){
 	
-	//Wave boss
-	if(this.waveCount%10 ===0){
-
-		//Boss
-		var hpBoss = 100*this.waveCount;
-
-		var speedBoss = 50;
-		var chanceBoss = 1;
-		this.nbItemBoss += 10;
-		var domageBoss = 3;
-		
-		enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss, this.sm));
-		this.enemieToSpwan = 0;
-	}else{
-
-		//Zombie
-		var hpZ = 50+ 10*(this.waveCount-1);
-		var speedZ = 50;
-		var chanceD = 0.5;
-		var nbItem = 1;
-		var domageZ = 1;
-		
-		enemies.add(new Minion(2000, 1100, this.game, speedZ,hpZ,1, chanceD, nbItem,domageZ, this.sm));
-		this.enemieToSpwan--;
-		
-		//Ajout du Bird
-		if(this.waveCount>=3){
-			//Bird
-			var hpB = 10+ 10*(this.waveCount-1);
-
-			var chanceB = 0.3;
-			var nbItemB = 2;
-			var domageB = 1;
-			
-			var numberEnemie = 4; 
-			if(this.enemieToSpwan < numberEnemie){
-				numberEnemie = this.enemieToSpwan;
-			}
-			for (var i = 0; i < numberEnemie; i++) {
-				var speedB = Math.floor(Math.random()*(21)+50); //50 - 70
-				enemies.add(new Minion(2000, 700 + 100*i, this.game, speedB,hpB,2, chanceB, nbItemB,domageB, this.sm));
-				this.enemieToSpwan--;
-			}	
-		}
-
-		//Ajout du jumper
-		if(this.waveCount>=7){
-
-			var numberEnemie = 3; //5 jumper a fois (si on peu apparaitre moins on change)
-			if(this.enemieToSpwan < numberEnemie){
-				numberEnemie = this.enemieToSpwan;
-			}
-			
-			var hpJ = 100+ 10*(this.waveCount-1);
-			var chanceJ = 0.7;
-			var nbJ = 3;
-			var domage = 1;
-			
-			for (var i = 0; i < numberEnemie; i++) {
-				var speed = Math.floor(Math.random()*(31)+40); //40 - 70			
-
-				enemies.add(new Enemy(2000, 700 + 100*i, this.game, speed,hpB, chanceJ, nbJ,domage, this.sm));
-				this.enemieToSpwan--;
-			}	
-		}
-
-		//Ajout du Puker
-		if(this.waveCount>=12){
-			
-			if(this.enemieToSpwan < 1){
-				return; //Si le nombre ennemie est atteint
-			}
-			
-			var hpP = 200+ 10*(this.waveCount-1);
-			var speedP = 40;
-			var chanceP = 0.7;
-			var nbItemP = 4;
-			var domageP = 2;
-			enemies.add(new Puker(2050, 1000, this.game, speedP,hpP,this.player,chanceP,nbItemP,domageP, this.sm));
-			this.enemieToSpwan--;
-		}
-
-		//Ajout du Lapin
-		if(this.waveCount >= 12){
-			
-			if(!this.IsShoot && this.enemieToSpwan > 0){
-				this.createKamikaze(enemies);
-				this.IsShoot = true;
-			}
+	//Wave special
+	if(this.waveCount === 3){
+		this.createBirds(enemies);
+		return
+	}
 	
+	if(this.waveCount === 7){
+		this.createJumper(enemies);
+		return;
+	}
+	
+	if(this.waveCount === 12){
+		this.createPuker(enemies);
+		return;
+	}
+	
+	if(this.waveCount === 15){
+		if(!this.IsShoot && this.enemieToSpwan > 0){
+			this.createKamikaze(enemies);
+			this.IsShoot = true;
 		}
+		return;
+	}
+	
+	//Wave boss
+	if(this.waveCount === 10){
+		//Boss
+		this.createBoss(enemies);
+		return
+	}
+	
+	//Zombie
+	this.createZombie(enemies);
+		
+	if(this.waveCount>=3){
+		//Bird
+		this.createBirds(enemies);
+	}
+
+	//Ajout du jumper
+	if(this.waveCount>=7){
+		this.createJumper(enemies);
+	}
+
+	//Ajout du Puker
+	if(this.waveCount>=12){
+		this.createPuker(enemies);
+	}
+
+	//Ajout du Lapin
+	if(this.waveCount >= 12){
+			
+		if(!this.IsShoot && this.enemieToSpwan > 0){
+			this.createKamikaze(enemies);
+			this.IsShoot = true;
+		}
+	
+	}
+	
+	//Ajout du Boss
+	if(this.waveCount >= 15){	
+		this.createBoss(enemies);
+	
 	}
 
 }
 
 Stage.prototype.createKamikaze = function(enemies) {
 		this.enemieToSpwan--;		
-		var hpP = 70+ 10*(this.waveCount-1);
+		var hpP = 70+ this.vieGeneral*(this.waveCount-1);
 		var speedP = 500;
 		var chanceP = 1;
 		var nbItemP = 5;

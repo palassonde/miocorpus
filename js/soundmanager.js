@@ -2,17 +2,17 @@ SoundManager = function(game){
 
 	// TIRS
 	this.boomerang = game.add.audio('boomerang');
-	this.boomerang.volume = 2;
+	this.boomerang.addMarker('boomerangSec', 0, 3);
 	this.boomerang.allowMultiple = true;
-	this.lasers = game.add.audio('laser');
-	this.lasers.allowMultiple = true;
+	// this.lasers = game.add.audio('laser');
+	// this.lasers.allowMultiple = true;
 	this.turretneutretir = game.add.audio('turretneutretir');
 	this.turretneutretir.volume = 0.5;
 	this.turretneutretir.allowMultiple = true;
 	this.playertire = game.add.audio('playertire');
-	this.homingmissile = game.add.audio('homingmissile');
-	this.homingmissile.allowMultiple = true;
-
+	// this.homingmissile = game.add.audio('homingmissile');
+	// this.homingmissile.allowMultiple = true;
+	
 	// ENNEMIES
 	this.enemyhurt = game.add.audio('enemyhurt');
 	this.ennemibouffecore = game.add.audio('ennemibouffecore');

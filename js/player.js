@@ -12,7 +12,7 @@ Player = function (x, y, game, sm) {
 	this.numberStoneBlue = 0;
 	this.numberStoneRed = 0;
 	this.numberStoneGreen = 0;
-	this.health = 3;
+	this.health = 10;
 	this.shotTime = 0;
 	this.isRight = true;
 	this.timerDomage = 0;//Evite de recevoir trop de coup
@@ -334,7 +334,7 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 		case 'redstone':
 			if(turret.kind === 3){
 				if(turret.rayon < 1000){
-					turret.rayon = turret.rayon + 10; //80 boule pour atteindre 200 -> 1000 de rayon
+					turret.rayon = turret.rayon + 25; //40 boule pour atteindre 200 -> 1000 de rayon
 				}
 			}else{
 				turret.kind = 3;
@@ -343,8 +343,8 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 			break;
 		case 'greenstone':
 			if(turret.kind === 2){
-				if(turret.cooldown > 2000){
-					turret.cooldown = turret.cooldown-75; //80 boule pour 8000 -> 2000 (2sec) de cooldown
+				if(turret.cooldown > 1000){
+					turret.cooldown = turret.cooldown-125; //40 boule pour 6000 -> 1000 (2sec) de cooldown
 				}
 			}else{
 				turret.kind = 2;
@@ -354,7 +354,7 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 		case 'bluestone':
 			if(turret.kind === 1){
 				if(turret.numberEnemyShoot < 10){
-					turret.numberEnemyShoot += 0.1125; //80 boule pour 1 -> 10 target (MAX)
+					turret.numberEnemyShoot += 0.225; //40 boule pour 1 -> 10 target (MAX)
 				}
 			}else{
 				turret.kind = 1;
@@ -363,7 +363,7 @@ Player.prototype.upGradeTurret = function(turret, powerups){
 			break;
 	}
 	if(powerups.key !== "heart" && powerups.key !== "turret"){
-		turret.domage = turret.domage + 0.1; //2 boule = un wave 
+		turret.domage = turret.domage + 0.5; //2 boule = un wave 
 		powerups.alive = false;
 		this.sm.turretfeed.play();
 	}
@@ -381,7 +381,7 @@ Player.prototype.hurtPlayer = function(player, enemies){
         player.health -= enemies.domage / this.def;
         player.timerDomage = this.game.time.now + 1000;
         this.tint = 0xff0000;
-        this.sm.playerhurt.play(); 
+		this.sm.playerhurt.play();
     }
 }
 

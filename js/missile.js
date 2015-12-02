@@ -1,4 +1,4 @@
-Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDestination, facing){
+Bullet = function(sm,x,y,game, target, rayon, kind, domage, timeLive, pointDestination, facing){
 	
 	this.speed = 300;
     this.angleMax = 0.5;
@@ -13,7 +13,9 @@ Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDe
 
 	// sons
 	this.sm = sm;
-		
+	this.lasers = game.add.audio('laser');
+	homingmissile = game.add.audio('homingmissile');
+	
 	this.tween;
 	this.time = 0;
 	this.needDestroy = false;
@@ -24,7 +26,8 @@ Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDe
 	this.graphic = game.add.graphics(0, 0);
 	
 	if(kind === 2){
-		this.sm.boomerang.play();
+		var music = this.sm.boomerang.play('boomerangSec');
+		music.volume = 3;
 		Phaser.Sprite.call(this, game, x, y, 'boomerang');
 	}else if(kind === 4){
 		this.circle(game,x,y);
@@ -32,14 +35,14 @@ Bullet = function(sm, x, y, game, target, rayon, kind, domage, timeLive, pointDe
 		Phaser.Sprite.call(this, game, x, y, 'missile');
 		this.scale.setTo(0.15,0.15);
 		this.sm.turretneutretir.play();
-		this.sm.homingmissile.play();
+		this.trackSound = homingmissile.play();
 	}else{
 		Phaser.Sprite.call(this, game, x, y, 'bullet');
 		this.scale.setTo(0.6,0.6);
 	}
 	this.anchor.setTo(0.5, 0.5);
 	if(kind === 3){
-		this.sm.lasers.play();
+		this.trackLaser = this.lasers.play();
 		this.kill();
 	}
 
@@ -54,10 +57,11 @@ Bullet.prototype.actionMissile = function(){
 	this.graphic.clear();
 	this.graphic.position = new Phaser.Point();
 	if(this.time >= this.timeLive || this.needDestroy){
+
 		if(this.behavior === 1){
-			this.sm.homingmissile.stop();
+			this.trackSound.destroy();
 		}else if(this.behavior === 3){
-			this.sm.lasers.stop();
+			this.trackLaser.destroy();
 		}
 		this.destroy();
 		return;
@@ -208,17 +212,18 @@ Bullet.prototype.laser = function(){
 	
 	if(dis >= this.rayon || !this.target.alive){
 		this.needChangeTarget = true;
-		this.sm.lasers.pause();
+		this.trackLaser.stop();
 		return;
 	}
-	if(this.sm.lasers.paused){
-		this.sm.lasers.resume();
+
+	if(!this.trackLaser.isPlaying){
+		this.trackLaser.play();
 	}
 	
 	this.graphic.moveTo(this.x, this.y);
 	this.graphic.lineTo(this.target.x,this.target.y);
 	if(this.timeLaser < this.game.time.now){
-		this.target.hurt(this.domage*2.5, this.behavior);
+		this.target.hurt(this.domage*5, this.behavior);
 		this.timeLaser = this.game.time.now + 100;
 	}
 }

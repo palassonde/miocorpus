@@ -1,4 +1,4 @@
-MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax, sm){
+MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax,sm){
 
 	Phaser.Sprite.call(this, game, x, y, 'boss');
 	this.animations.add('left', [0,1,2], 5, true);
@@ -15,7 +15,7 @@ MasterTurret = function(x,y,game,domage,nbrMissile,cooldown,hp, rayon, nbResMax,
 	
 	this.time = 0;
 
-	// distance du sons
+	// sons
 	this.distance = 1000;
 	this.sm = sm;
 	
@@ -169,7 +169,7 @@ MasterTurret.prototype.action = function(a,b,stage,player){
 	
 	//Verifier une collision
 	this.game.physics.arcade.overlap(player, this.bullets, this.collisionMissile, null, this);
-	this.game.physics.arcade.overlap(player, this.spikes, this.collisionMissile, null, this);
+	this.game.physics.arcade.overlap(player, this.spikes, this.spikeCollision, null, this);
 	//this.game.physics.arcade.overlap(player.turrets, this.bullets, this.collisionMissile, null, this);
 	
 	//Restart annimation
@@ -199,6 +199,12 @@ MasterTurret.prototype.collisionMissile = function(cible,bullet){
 	}
 }
 
+MasterTurret.prototype.spikeCollision = function(target, spike){
+
+    target.hurt(this.domage * 100);
+    spike.destroy();
+
+}
 
 //Créer un missile s'il est a une bonne distance et remet un cooldown qui depend du nombre de missile lancé
 MasterTurret.prototype.shootMissile = function (player,cooldown){
