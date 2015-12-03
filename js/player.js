@@ -41,10 +41,12 @@ Player = function (x, y, game, sm) {
 	this.actionKey_T.onDown.add(this.creationTurret, this);
 	this.actionKey_Q = this.game.input.keyboard.addKey(Phaser.Keyboard.Q);
 	this.actionKey_W = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+	this.actionKey_R = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
 	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	this.actionKey_Z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
 	this.actionKey_Z.onDown.add(this.cheat, this);
-	this.cursors = this.game.input.keyboard.createCursorKeys();	
+	this.cursors = this.game.input.keyboard.createCursorKeys();
+
 	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -80,6 +82,7 @@ Player.prototype.action = function(platforms, enemy, powerups){
 	this.game.physics.arcade.collide(this, platforms);
 	//powerups
 	this.game.physics.arcade.overlap(player, powerups, this.collisionPlayerPowerUp, null, this);
+	this.game.physics.arcade.overlap(player, this.turrets, this.removeTurret, null, this);
 	this.game.physics.arcade.overlap(this.turrets, powerups, this.upGradeTurret, null, this);
 	//ennemie
 	this.game.physics.arcade.overlap(player, enemy, this.hurtPlayer, null, this);
@@ -404,4 +407,13 @@ Player.prototype.cheat = function(){
     this.numberStoneRed += 10;
     this.numberStoneGreen += 10;
     this.maxTurrets += 10;
+}
+
+Player.prototype.removeTurret = function(player, turret){ 
+
+    if (this.actionKey_R.isDown){
+
+    	turret.hp = 0;
+
+    }
 }
