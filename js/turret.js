@@ -15,7 +15,7 @@ Turret = function(x, y, game, bonus1, bonus2, bonus3, sm){
 	this.bonus1 = bonus1; //Creer un rond d'attaque
 	this.bonus2 = bonus2; //Met des missile dans le chemin
 	this.bonus3 = bonus3; //Invinsible
-	this.hp = 500;
+	this.hp = 400;
 	
 	//Missile
     this.bullets = this.game.add.group();

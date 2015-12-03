@@ -40,7 +40,7 @@ MyGame.Menu.prototype = {
         this.controlsButton.onInputOver.add(over, this);
         this.controlsButton.onInputOut.add(out, this);
 
-        this.backButton = this.add.button(1600, this.world.centerY + 220,'back-button', this.back, this,2, 1, 0, 2);
+        this.backButton = this.add.button(1600, this.world.centerY + 250,'back-button', this.back, this,2, 1, 0, 2);
         this.backButton.scale.setTo(4,2);
         this.backButton.anchor.setTo(0.5, 0.5);
         this.backButton.onInputOver.add(over, this);
