@@ -4,6 +4,7 @@ GUI = function (game, stage, player, sm) {
 	this.player = player;
 	this.stage = stage;
 	this.numberHeart = 10;
+	achat = 5;
 
 	this.sm = sm;
 	
@@ -227,9 +228,9 @@ GUI.prototype.legend = function(x){
 		if(tabLeg[i][0] == "player"){
 			this.game.add.text(x + 90 + 40, 60 + separation + distance * i, "X1", ressourceNbStyle);
 		}else{
-			this.game.add.text(x + 90 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
+			this.game.add.text(x + 90 + 35, 65 + separation + distance * i, "X"+achat, ressourceNbStyle);
 		}
-		this.game.add.text(x + 90*2 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
+		this.game.add.text(x + 90*2 + 35, 65 + separation + distance * i, "X"+achat, ressourceNbStyle);
 		
 		this.graphics.lineStyle(2, 0xf26c4f, 1);
 		this.graphics.moveTo(x+90-10,-45 + separation + distance * i);
@@ -261,7 +262,7 @@ GUI.prototype.legend = function(x){
 			this.graphics.lineTo(x+90*2-10,-40 + separation + distance * i);
 			this.graphics.lineTo(x+90*2-5,-35 + separation + distance * i);
 			
-			this.game.add.text(x + 90*3 + 35, 65 + separation + distance * i, "X10", ressourceNbStyle);
+			this.game.add.text(x + 90*3 + 35, 65 + separation + distance * i, "X"+achat, ressourceNbStyle);
 		}
 	}
 	
@@ -358,10 +359,10 @@ GUI.prototype.fusion = function(sprite){
 	
 	if(this.tabFusion.length ===3){
 		if(tabObject[0] && tabObject[1] && tabObject[2]){
-			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10 && this.player.numberStoneGreen >= 10){
-				this.player.numberStoneBlue -= 10;
-				this.player.numberStoneRed -= 10;
-				this.player.numberStoneGreen -= 10;
+			if(this.player.numberStoneBlue >= achat && this.player.numberStoneRed >= achat && this.player.numberStoneGreen >= achat){
+				this.player.numberStoneBlue -= achat;
+				this.player.numberStoneRed -= achat;
+				this.player.numberStoneGreen -= achat;
 				this.player.maxTurrets += 5;
 				works = true;
 				this.sm.capaciteaugmente.play();
@@ -369,9 +370,9 @@ GUI.prototype.fusion = function(sprite){
 		}
 	}else{
 		if (tabObject[0] && tabObject[1]){
-			if(this.player.numberStoneBlue >= 10 && this.player.numberStoneRed >= 10){
-				this.player.numberStoneBlue -= 10;
-				this.player.numberStoneRed -= 10;
+			if(this.player.numberStoneBlue >= achat && this.player.numberStoneRed >= achat){
+				this.player.numberStoneBlue -= achat;
+				this.player.numberStoneRed -= achat;
 				this.player.bonus2 = true; //Active un power au prochain turret
 				this.player.flash.visible = true;
 				works = true;
@@ -379,9 +380,9 @@ GUI.prototype.fusion = function(sprite){
 			}
 		}
 		if (tabObject[0] && tabObject[2]){
-			if(this.player.numberStoneGreen >= 10 && this.player.numberStoneRed >= 10){
-				this.player.numberStoneGreen -= 10;
-				this.player.numberStoneRed -= 10;
+			if(this.player.numberStoneGreen >= achat && this.player.numberStoneRed >= achat){
+				this.player.numberStoneGreen -= achat;
+				this.player.numberStoneRed -= achat;
 				this.player.bonus1 = true; //Active un power au prochain turret
 				works = true;
 				this.player.flash.visible = true;
@@ -389,9 +390,9 @@ GUI.prototype.fusion = function(sprite){
 			}
 		}
 		if (tabObject[1] && tabObject[2]){
-			if(this.player.numberStoneGreen >= 10 && this.player.numberStoneBlue >= 10){
-				this.player.numberStoneGreen -= 10;
-				this.player.numberStoneBlue -= 10;
+			if(this.player.numberStoneGreen >= achat && this.player.numberStoneBlue >= achat){
+				this.player.numberStoneGreen -= achat;
+				this.player.numberStoneBlue -= achat;
 				this.player.bonus3 = true; //Active un power au prochain turret	
 				works = true;
 				this.player.flash.visible = true;
@@ -399,24 +400,24 @@ GUI.prototype.fusion = function(sprite){
 			}
 		}
 		if (tabObject[3] && tabObject[0]){
-			if(this.player.numberStoneRed >= 10){
-				this.player.numberStoneRed -= 10;
+			if(this.player.numberStoneRed >= achat){
+				this.player.numberStoneRed -= achat;
 				this.player.domage++;
 				works = true;
 				this.sm.forceaugmente.play();
 			}
 		}
 		if (tabObject[3] && tabObject[1]){
-			if(this.player.numberStoneBlue >= 10){
-				this.player.numberStoneBlue -= 10;
+			if(this.player.numberStoneBlue >= achat){
+				this.player.numberStoneBlue -= achat;
 				this.player.def +=0.5;
 				works = true;
 				this.sm.peaudebelier.play();
 			}
 		}
 		if (tabObject[3] && tabObject[2]){
-			if(this.player.numberStoneGreen >= 10){
-				this.player.numberStoneGreen -= 10;
+			if(this.player.numberStoneGreen >= achat){
+				this.player.numberStoneGreen -= achat;
 				this.player.MAX_SPEED +=50;
 				this.sm.vitessedepegase.play();
 				works = true;

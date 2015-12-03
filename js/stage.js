@@ -250,7 +250,7 @@ Stage.prototype.createZombie = function(enemies) {
 	
 	var hpZ = 50+ this.vieGeneral*(this.waveCount-1);
 	var speedZ = 50;
-	var chanceD = 0.5;
+	var chanceD = 0.8;
 	var nbItem = 1;
 	var domageZ = 1;
 		
@@ -263,7 +263,7 @@ Stage.prototype.createBirds = function(enemies) {
 	
 	var hpB = 10+ this.vieGeneral*(this.waveCount-1);
 
-	var chanceB = 0.5;
+	var chanceB = 0.8;
 	var nbItemB = 2;
 	var domageB = 1;
 			
@@ -323,15 +323,15 @@ Stage.prototype.createBoss = function(enemies) {
 	}
 	
 	//Boss
-	var hpBoss = 1000*this.waveCount;
+	var hpBoss = 600*this.waveCount;
 
-	var speedBoss = 50;
+	var speedBoss = 40;
 	var chanceBoss = 1;
 	this.nbItemBoss = 3;
 	var domageBoss = 3;
 		
 	enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss, this.sm));
-	this.enemieToSpwan -= 5;
+	this.enemieToSpwan -= 10;
 
 }
 
