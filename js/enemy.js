@@ -71,7 +71,7 @@ Enemy.prototype.jump = function(time){
 
 Enemy.prototype.slowDown = function(){
 	
-	if(!ennemibouffecore.isPlaying){
+	if(!this.sm.ennemibouffecore.isPlaying){
 		this.sm.ennemibouffecore.play();
 	}
 	
