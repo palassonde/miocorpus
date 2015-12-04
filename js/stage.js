@@ -406,7 +406,7 @@ Stage.prototype.createWave = function(enemies, GUI){
 
 Stage.prototype.createKamikaze = function(enemies) {
 		this.enemieToSpwan--;		
-		var hpP = 70+ this.vieGeneral*(this.waveCount-1);
+		var hpP = 100+ this.vieGeneral*(this.waveCount-1);
 		var speedP = 500;
 		var chanceP = 1;
 		var nbItemP = 5;

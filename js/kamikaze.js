@@ -11,7 +11,7 @@ Kamikaze = function (x, y, game, speed, hp, player, chance, nbItem, domage, sm) 
     this.exploded = false;
 
     this.angleMax = 0.5;
-    this.distance = 200;
+    this.distance = 100;
 
 	//Son
 	this.sm = sm;
@@ -49,7 +49,7 @@ Kamikaze.prototype.action = function(time, powerups, stage){
     if ((Phaser.Point.distance(this.position, this.player.position) < this.distance) && !this.exploding){
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-        this.game.time.events.add(Phaser.Timer.SECOND * 1.5, this.explode, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 1, this.explode, this);
         this.exploding = true;
     }
     else if (!this.exploding){

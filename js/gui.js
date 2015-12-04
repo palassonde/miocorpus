@@ -359,7 +359,7 @@ GUI.prototype.fusion = function(sprite){
 	
 	if(this.tabFusion.length ===3){
 		if(tabObject[0] && tabObject[1] && tabObject[2]){
-			if(this.player.numberStoneBlue >= achat && this.player.numberStoneRed >= achat && this.player.numberStoneGreen >= achat){
+			if(this.player.numberStoneBlue >= achat && this.player.numberStoneRed >= achat && this.player.numberStoneGreen >= achat && this.player.maxTurrets < 30){
 				this.player.numberStoneBlue -= achat;
 				this.player.numberStoneRed -= achat;
 				this.player.numberStoneGreen -= achat;
