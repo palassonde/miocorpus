@@ -47,16 +47,12 @@ Player = function (x, y, game, sm) {
 	this.actionKey_Z.onDown.add(this.cheat, this);
 	this.cursors = this.game.input.keyboard.createCursorKeys();
 
-	
 	//Pistolet
 	this.actionKey_A = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
 	
 	//Turrets
 	this.maxTurrets = 5;
 	this.nbrTurrets = 0;
-
-	//this.turrets = this.game.add.group();
-
 	
 	this.bonus1 = false; //Creer un rond d'attaque
 	this.bonus2 = false; //Met des missile dans le chemin
