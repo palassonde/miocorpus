@@ -63,7 +63,7 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
     this.game.physics.arcade.overlap(enemies, this.skin, this.slowEnemy, null, this);
 
 	
-	if((player.health <= 0 || GUI.hearts === 0) && this.gameOver === false){
+	if(player.health <= 0 && this.gameOver === false){
         this.gameOver = true;
 		GUI.endGame(this.waveCount);
 	}
