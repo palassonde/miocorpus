@@ -3,7 +3,7 @@ GUI = function (game, stage, player, sm) {
 	this.game = game;
 	this.player = player;
 	this.stage = stage;
-	this.numberHeart = 5;
+	this.numberHeart = 10;
 	achat = 10;
 
 	this.sm = sm;
