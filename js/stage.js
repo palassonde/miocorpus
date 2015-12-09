@@ -44,6 +44,8 @@ Stage = function(game, player, enemy, sm){
 	
 	//Boss
 	this.nbItemBoss = 0;
+	this.IsShootBoss = false;
+	this.eventBoss;
 	
 	//Kamikaze
 	this.IsShoot = false;
@@ -112,6 +114,10 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 		if(this.IsShoot){
 			this.game.time.events.remove(this.eventKami);
 			this.IsShoot = false; //Kamiakaze
+		}
+		if(this.IsShootBoss){
+			this.game.time.events.remove(this.eventBoss);
+			this.IsShootBoss = false; //Kamiakaze
 		}
 
 	}
@@ -250,7 +256,7 @@ Stage.prototype.createZombie = function(enemies) {
 	
 	var hpZ = 50+ this.vieGeneral*(this.waveCount-1);
 	var speedZ = 50;
-	var chanceD = 0.8;
+	var chanceD = 0.5;
 	var nbItem = 1;
 	var domageZ = 1;
 		
@@ -263,7 +269,7 @@ Stage.prototype.createBirds = function(enemies) {
 	
 	var hpB = 10+ this.vieGeneral*(this.waveCount-1);
 
-	var chanceB = 0.8;
+	var chanceB = 0.5;
 	var nbItemB = 2;
 	var domageB = 1;
 			
@@ -320,6 +326,8 @@ Stage.prototype.createBoss = function(enemies) {
 	
 	if(this.enemieToSpwan <= 4){
 		this.enemieToSpwan = 0;
+	}else{
+		this.enemieToSpwan -= 5;
 	}
 	
 	//Boss
@@ -331,7 +339,7 @@ Stage.prototype.createBoss = function(enemies) {
 	var domageBoss = 3;
 		
 	enemies.add(new Minion(2000,800, this.game, speedBoss,hpBoss,3, chanceBoss, this.nbItemBoss, domageBoss, this.sm));
-	this.enemieToSpwan -= 10;
+	this.eventBoss = this.game.time.events.add(7000, this.createBoss,this,enemies);
 
 }
 
@@ -364,7 +372,11 @@ Stage.prototype.createWave = function(enemies, GUI){
 	//Wave boss
 	if(this.waveCount === 10){
 		//Boss
-		this.createBoss(enemies);
+		if(!this.IsShootBoss && this.enemieToSpwan > 0){
+			this.enemieToSpwan = 10; //mettre 2 boss
+			this.createBoss(enemies);
+			this.IsShootBoss = true;
+		}
 		return
 	}
 	
@@ -398,8 +410,11 @@ Stage.prototype.createWave = function(enemies, GUI){
 	
 	//Ajout du Boss
 	if(this.waveCount >= 18){	
-		this.createBoss(enemies);
-	
+		if(!this.IsShootBoss && this.enemieToSpwan > 0){
+			this.createBoss(enemies);
+
+			this.IsShootBoss = true;
+		}
 	}
 
 }

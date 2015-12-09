@@ -153,7 +153,7 @@ Kamikaze.prototype.spikeCollision = function(target, spike){
 
 Kamikaze.prototype.slowDown = function(){
 
-	if(!ennemibouffecore.isPlaying){
+	if(!this.sm.ennemibouffecore.isPlaying){
 		this.sm.ennemibouffecore.play();
 	}
 
