@@ -1,13 +1,13 @@
 Player = function (x, y, game, sm) {
 
 	// Constantes
-	MAX_SPEED = 300;
+	this.MAX_SPEED = 300;
 
 	// sons
 	this.sm = sm;
 
 	// Player attributes
-	this.maxspeed = MAX_SPEED;
+	this.maxspeed = this.MAX_SPEED;
 	this.friction = 20;
 	this.numberStoneBlue = 0;
 	this.numberStoneRed = 0;
@@ -272,10 +272,10 @@ Player.prototype.creationTurret = function(){
 Player.prototype.manageSpeed = function(){
 
 	if (this.actionKey_shift.isDown){
-		this.maxspeed = MAX_SPEED * 1.5
+		this.maxspeed = this.MAX_SPEED * 1.5
 	}
 	else{
-		this.maxspeed = MAX_SPEED;
+		this.maxspeed = this.MAX_SPEED;
 	}
 
 	if (this.body.velocity.x > this.maxspeed){

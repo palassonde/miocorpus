@@ -418,7 +418,7 @@ GUI.prototype.fusion = function(sprite){
 		if (tabObject[3] && tabObject[2]){
 			if(this.player.numberStoneGreen >= achat){
 				this.player.numberStoneGreen -= achat;
-				this.player.MAX_SPEED +=50;
+				this.player.MAX_SPEED += 100;
 				this.sm.vitessedepegase.play();
 				works = true;
 			}
