@@ -324,12 +324,15 @@ Stage.prototype.createPuker = function(enemies) {
 
 Stage.prototype.createBoss = function(enemies) {
 	
+	if(this.enemieToSpwan <= 0) return; //Si le nombre ennemie est atteint
+	
+	
 	if(this.enemieToSpwan <= 4){
 		this.enemieToSpwan = 0;
 	}else{
 		this.enemieToSpwan -= 5;
 	}
-	
+
 	//Boss
 	var hpBoss = 600*this.waveCount;
 
@@ -420,6 +423,9 @@ Stage.prototype.createWave = function(enemies, GUI){
 }
 
 Stage.prototype.createKamikaze = function(enemies) {
+	
+		if(this.enemieToSpwan <= 0) return; //Si le nombre ennemie est atteint
+	
 		this.enemieToSpwan--;		
 		var hpP = 100+ this.vieGeneral*(this.waveCount-1);
 		var speedP = 500;
