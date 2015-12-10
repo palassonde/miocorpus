@@ -115,7 +115,7 @@ Puker.prototype.hurtPlayer = function(cible,bullet){
 
 Puker.prototype.slowDown = function(){
 
-	if(!ennemibouffecore.isPlaying){
+	if(!this.sm.ennemibouffecore.isPlaying){
 		this.sm.ennemibouffecore.play();
 	}
 
