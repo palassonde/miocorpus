@@ -44,6 +44,9 @@ Enemy.prototype.action = function(time, powerups, stage){
 Enemy.prototype.createResource = function(){
 	if(Math.random() < this.chance){
 		powerups.add(new Powerups(this.x,this.y,this.game,getRandomStone(), true, this.nbrR));
+        if (Math.random() < this.chance) {
+            powerups.add(new Powerups(this.x + 5,this.y,this.game,getRandomStone(), true, this.nbrR));
+        }
 	}
 	if(Math.random() < 0.05){
 		powerups.add(new Powerups(this.x,this.y,this.game,'heart', true, 1));

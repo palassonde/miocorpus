@@ -4,7 +4,7 @@ GUI = function (game, stage, player, sm) {
 	this.player = player;
 	this.stage = stage;
 	this.numberHeart = 10;
-	achat = 10;
+	achat = 5;
 
 	this.sm = sm;
 	

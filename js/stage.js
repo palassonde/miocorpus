@@ -99,7 +99,7 @@ Stage.prototype.action = function(time, player, enemies, turrets, GUI, powerups)
 		if(enemiesByWave < this.maxEnemie){
 			enemiesByWave = enemiesByWave + 3;
 		}
-		this.timeWave = this.game.time.now + 15000; //A chaque 15 seconde
+		this.timeWave = this.game.time.now + 15000; //A chaque 20 seconde
 		
 		if(this.waveCount === 11){
 			this.enemieToSpwan = 10;
@@ -256,7 +256,7 @@ Stage.prototype.createZombie = function(enemies) {
 	
 	var hpZ = 50+ this.vieGeneral*(this.waveCount-1);
 	var speedZ = 50;
-	var chanceD = 0.5;
+	var chanceD = 0.6;
 	var nbItem = 1;
 	var domageZ = 1;
 		
