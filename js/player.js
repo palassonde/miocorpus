@@ -44,7 +44,7 @@ Player = function (x, y, game, sm) {
 	this.actionKey_R = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
 	this.actionKey_E = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
 	this.actionKey_Z = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
-	this.actionKey_Z.onDown.add(this.cheat, this);
+	// this.actionKey_Z.onDown.add(this.cheat, this);
 	this.cursors = this.game.input.keyboard.createCursorKeys();
 
 	//Pistolet
@@ -62,7 +62,7 @@ Player = function (x, y, game, sm) {
 	//this.bullets = this.game.add.group();
     
 
-}
+};
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 
